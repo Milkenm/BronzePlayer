@@ -4,9 +4,10 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 // => NuGet
-using NAudio.Wave;
+using NAudio.Wave; // NAudio
+
+
 
 namespace BronzePlayer
 {
@@ -328,6 +329,11 @@ namespace BronzePlayer
                 contextmenustrip.Visible = false;
                 contextmenustrip.Items.Add("Remover");
 
+                if (config.debug == true)
+                {
+                    debugToolStripMenuItem.Visible = true;
+                }
+
                 this.AllowDrop = true;
 
                 #region Events
@@ -493,7 +499,29 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
-        #endregion
+
+
+
+        // # ================================================================================================================================= #
+        private void openTestGoundsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TestingGround.TestingGround tg = new TestingGround.TestingGround();
+                tg.Show();
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                if (config.debug == true)
+                {
+                    MessageBox.Show(exception.ToString(), "DE3UG - openTestGroundsToolStripMenuItem_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            #endregion
+        }
+        // # ================================================================================================================================= #
+        #endregion Top Menu
 
 
 
@@ -1063,33 +1091,6 @@ namespace BronzePlayer
 
 
         // # ================================================================================================================================= #
-        private void button_ytdownload_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                folderdialog.ShowDialog();
-                if (folderdialog.SelectedPath != null)
-                {
-                    ytDownloadPath = folderdialog.SelectedPath;
-                    button_ytdownload.Enabled = false;
-                    background_ytdownloading.RunWorkerAsync();
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "button_ytdownload_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
         private void button_ytexpand_Click(object sender, EventArgs e)
         {
             try
@@ -1104,7 +1105,7 @@ namespace BronzePlayer
 
                 if (yt_expanded != true)
                 {
-                    this.Size = new Size(478, 315);
+                    this.Size = new Size(478, 329);
                     button_ytexpand.Text = "▲";
                     yt_expanded = true;
                 }
@@ -1126,9 +1127,37 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
+        
+            
+            
+        // # ================================================================================================================================= #
+        private void button_ytdownload_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                folderdialog.ShowDialog();
+                if (folderdialog.SelectedPath != null)
+                {
+                    ytDownloadPath = folderdialog.SelectedPath;
+                    button_ytdownload.Enabled = false;
+                    backgroundworker_ytdownloading.RunWorkerAsync();
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                if (config.debug == true)
+                {
+                    MessageBox.Show(exception.ToString(), "button_ytdownload_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            #endregion
+        }
+        // # ================================================================================================================================= #
 
 
 
+        #region Background Worker
         // # ================================================================================================================================= #
         private void background_ytdownloading_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -1170,6 +1199,17 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
+
+
+
+        // # ================================================================================================================================= #
+        private void background_ytdownloading_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            MessageBox.Show("hello");
+            progressbar_ytprogress.Value = Convert.ToInt32(e.ProgressPercentage);
+        }
+        // # ================================================================================================================================= #
+        #endregion Background Worker
         #endregion YouTube Downloader
     }
 }

@@ -13,7 +13,7 @@ namespace BronzePlayer {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
-    internal sealed partial class Config : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class Config : global::System.Configuration.ApplicationSettingsBase {
         
         private static Config defaultInstance = ((Config)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Config())));
         
@@ -25,7 +25,7 @@ namespace BronzePlayer {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool debug {
             get {
                 return ((bool)(this["debug"]));
@@ -34,7 +34,7 @@ namespace BronzePlayer {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("44")]
         public float volume {
             get {
                 return ((float)(this["volume"]));
@@ -58,10 +58,19 @@ namespace BronzePlayer {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BronzePlayer/temp")]
+        [global::System.Configuration.DefaultSettingValueAttribute("BronzePlayer/temp/")]
         public string temp {
             get {
                 return ((string)(this["temp"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.0.0")]
+        public string version {
+            get {
+                return ((string)(this["version"]));
             }
         }
     }

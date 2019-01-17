@@ -1,4 +1,4 @@
-﻿namespace TestingGround
+﻿﻿namespace TestingGround.YTDownloader
 {
     partial class YTDownloader
     {
@@ -69,4 +69,3 @@
         private System.Windows.Forms.Button button_download;
     }
 }
-

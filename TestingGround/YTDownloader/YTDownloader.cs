@@ -1,11 +1,14 @@
-﻿using System;
-using MediaToolkit;
-using MediaToolkit.Model;
+﻿﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using VideoLibrary;
+// => NuGet
+using VideoLibrary; // VideoLibrary
+using MediaToolkit; // MediaToolkit
+using MediaToolkit.Model; // MediaToolkit
 
-namespace TestingGround
+
+
+namespace TestingGround.YTDownloader
 {
     public partial class YTDownloader : Form
     {

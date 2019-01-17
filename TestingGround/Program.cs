@@ -16,7 +16,7 @@ namespace TestingGround
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new YTDownloader());
+            Application.Run(new TestingGround());
         }
     }
 }

@@ -4,12 +4,14 @@ using System.Data.OleDb;
 using System.Media;
 using System.IO;
 // => NuGet
-using NAudio.Wave;
-using VideoLibrary;
-using MediaToolkit.Model;
-using MediaToolkit;
-// => Libs
-using System.Windows.Controls; // => 'PresentationFramework.dll'
+using NAudio.Wave; // NAudio
+using VideoLibrary; // VideoLibrary
+using MediaToolkit; // MediaToolKit
+using MediaToolkit.Model; // MediaToolKit
+// => DLLs
+using System.Windows.Controls; // 'PresentationFramework.dll'
+// => Projects
+using BronzePlayer;
 
 public class Scripts
 {
@@ -21,9 +23,8 @@ public class Scripts
 
 
 
-    static BronzePlayer.Config config = new BronzePlayer.Config();
-
-
+    public static Config config = new Config();
+    
     public static DataBase dataBase = new DataBase();
     public static FileConverter fileConverter = new FileConverter();
     public static Tools tools = new Tools();

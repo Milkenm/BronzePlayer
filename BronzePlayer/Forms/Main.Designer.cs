@@ -35,6 +35,8 @@
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTestGoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_ficheiro = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_ficheiro_abrir = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_ficheiro_separador = new System.Windows.Forms.ToolStripSeparator();
@@ -62,9 +64,10 @@
             this.timer_playnext = new System.Windows.Forms.Timer(this.components);
             this.button_ytexpand = new System.Windows.Forms.Button();
             this.groupbox_ytdownloader = new System.Windows.Forms.GroupBox();
-            this.button_ytdownload = new System.Windows.Forms.Button();
-            this.background_ytdownloading = new System.ComponentModel.BackgroundWorker();
+            this.progressbar_ytprogress = new System.Windows.Forms.ProgressBar();
             this.combobox_ytformat = new System.Windows.Forms.ComboBox();
+            this.button_ytdownload = new System.Windows.Forms.Button();
+            this.backgroundworker_ytdownloading = new System.ComponentModel.BackgroundWorker();
             this.folderdialog = new System.Windows.Forms.FolderBrowserDialog();
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).BeginInit();
@@ -78,7 +81,8 @@
             this.menu.BackColor = System.Drawing.Color.Transparent;
             this.menu.BackgroundImage = global::BronzePlayer.Tralha.Background_Padron;
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ficheiroToolStripMenuItem});
+            this.ficheiroToolStripMenuItem,
+            this.debugToolStripMenuItem});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -122,6 +126,26 @@
             this.sairToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.sairToolStripMenuItem.Text = "Exit";
             this.sairToolStripMenuItem.Click += new System.EventHandler(this.sairToolStripMenuItem_Click);
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.BackColor = System.Drawing.Color.Lavender;
+            this.debugToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openTestGoundsToolStripMenuItem});
+            this.debugToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Bold);
+            this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.debugToolStripMenuItem.Text = "DE3UG";
+            this.debugToolStripMenuItem.Visible = false;
+            // 
+            // openTestGoundsToolStripMenuItem
+            // 
+            this.openTestGoundsToolStripMenuItem.Name = "openTestGoundsToolStripMenuItem";
+            this.openTestGoundsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openTestGoundsToolStripMenuItem.Text = "Open TestingGound";
+            this.openTestGoundsToolStripMenuItem.Click += new System.EventHandler(this.openTestGoundsToolStripMenuItem_Click);
             // 
             // menu_ficheiro
             // 
@@ -362,29 +386,22 @@
             // 
             // groupbox_ytdownloader
             // 
+            this.groupbox_ytdownloader.Controls.Add(this.progressbar_ytprogress);
             this.groupbox_ytdownloader.Controls.Add(this.combobox_ytformat);
             this.groupbox_ytdownloader.Controls.Add(this.button_ytdownload);
             this.groupbox_ytdownloader.Controls.Add(this.textbox_ytlink);
             this.groupbox_ytdownloader.Location = new System.Drawing.Point(1, 245);
             this.groupbox_ytdownloader.Name = "groupbox_ytdownloader";
-            this.groupbox_ytdownloader.Size = new System.Drawing.Size(460, 30);
+            this.groupbox_ytdownloader.Size = new System.Drawing.Size(460, 44);
             this.groupbox_ytdownloader.TabIndex = 10;
             this.groupbox_ytdownloader.TabStop = false;
             // 
-            // button_ytdownload
+            // progressbar_ytprogress
             // 
-            this.button_ytdownload.Location = new System.Drawing.Point(396, 7);
-            this.button_ytdownload.Name = "button_ytdownload";
-            this.button_ytdownload.Size = new System.Drawing.Size(63, 22);
-            this.button_ytdownload.TabIndex = 11;
-            this.button_ytdownload.Text = "Download";
-            this.button_ytdownload.UseVisualStyleBackColor = true;
-            this.button_ytdownload.Click += new System.EventHandler(this.button_ytdownload_Click);
-            // 
-            // background_ytdownloading
-            // 
-            this.background_ytdownloading.DoWork += new System.ComponentModel.DoWorkEventHandler(this.background_ytdownloading_DoWork);
-            this.background_ytdownloading.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.background_ytdownloading_RunWorkerCompleted);
+            this.progressbar_ytprogress.Location = new System.Drawing.Point(2, 29);
+            this.progressbar_ytprogress.Name = "progressbar_ytprogress";
+            this.progressbar_ytprogress.Size = new System.Drawing.Size(456, 13);
+            this.progressbar_ytprogress.TabIndex = 13;
             // 
             // combobox_ytformat
             // 
@@ -398,6 +415,23 @@
             this.combobox_ytformat.Size = new System.Drawing.Size(47, 21);
             this.combobox_ytformat.TabIndex = 12;
             // 
+            // button_ytdownload
+            // 
+            this.button_ytdownload.Location = new System.Drawing.Point(396, 7);
+            this.button_ytdownload.Name = "button_ytdownload";
+            this.button_ytdownload.Size = new System.Drawing.Size(63, 22);
+            this.button_ytdownload.TabIndex = 11;
+            this.button_ytdownload.Text = "Download";
+            this.button_ytdownload.UseVisualStyleBackColor = true;
+            this.button_ytdownload.Click += new System.EventHandler(this.button_ytdownload_Click);
+            // 
+            // backgroundworker_ytdownloading
+            // 
+            this.backgroundworker_ytdownloading.WorkerReportsProgress = true;
+            this.backgroundworker_ytdownloading.DoWork += new System.ComponentModel.DoWorkEventHandler(this.background_ytdownloading_DoWork);
+            this.backgroundworker_ytdownloading.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.background_ytdownloading_ProgressChanged);
+            this.backgroundworker_ytdownloading.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.background_ytdownloading_RunWorkerCompleted);
+            // 
             // Main
             // 
             this.AllowDrop = true;
@@ -405,7 +439,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(462, 276);
+            this.ClientSize = new System.Drawing.Size(462, 290);
             this.Controls.Add(this.groupbox_ytdownloader);
             this.Controls.Add(this.button_ytexpand);
             this.Controls.Add(this.checkbox_loop);
@@ -470,9 +504,12 @@
         private System.Windows.Forms.Button button_ytexpand;
         private System.Windows.Forms.GroupBox groupbox_ytdownloader;
         private System.Windows.Forms.Button button_ytdownload;
-        private System.ComponentModel.BackgroundWorker background_ytdownloading;
+        private System.ComponentModel.BackgroundWorker backgroundworker_ytdownloading;
         private System.Windows.Forms.ComboBox combobox_ytformat;
         private System.Windows.Forms.FolderBrowserDialog folderdialog;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openTestGoundsToolStripMenuItem;
+        private System.Windows.Forms.ProgressBar progressbar_ytprogress;
     }
 }
 

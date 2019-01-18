@@ -322,9 +322,27 @@ namespace BronzePlayer
                 button_backward.Enabled = false;
 
                 checkbox_loop.Checked = config.loop;
+
+
+                #region Load Volume Config
                 float volume = config.volume;
-                Scripts.waveOut.Volume = volume;
-                trackbar_volume.Value = Convert.ToInt32(volume * 100);
+
+                volume = volume / 100;
+
+                if (volume < 0 || volume > 1)
+                {
+                    Scripts.waveOut.Volume = Convert.ToSingle(0.5);
+                    Scripts.config.volume = Convert.ToSingle(0.5);
+                    Scripts.config.Save();
+                }
+                else
+                {
+                    Scripts.waveOut.Volume = volume;
+                }
+
+                trackbar_volume.Value = Convert.ToInt32(Scripts.waveOut.Volume * 100);
+                #endregion Load Voluem Config
+
 
                 contextmenustrip.Visible = false;
                 contextmenustrip.Items.Add("Remover");
@@ -382,7 +400,8 @@ namespace BronzePlayer
         {
             try
             {
-                config.volume = Scripts.waveOut.Volume; config.loop = checkbox_loop.Checked;
+                config.volume = Scripts.waveOut.Volume;
+                config.loop = checkbox_loop.Checked;
                 config.Save();
             }
             #region DE3UG
@@ -819,8 +838,11 @@ namespace BronzePlayer
                         Parar();
                     }
 
-                    string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                    Reproduzir(caminho);
+                    if (listbox_playlist.SelectedItem != null)
+                    {
+                        string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
+                        Reproduzir(caminho);
+                    }
                 }
             }
             #region DE3UG
@@ -917,21 +939,31 @@ namespace BronzePlayer
                         {
                             button_nexttrack.Enabled = true;
                         }
-
-
+                        
                         tocar = true;
-                    }
-                }
 
-                if (tocar == true)
-                {
-                    if (playing == false)
-                    {
-                        select = false; listbox_playlist.SelectedIndex = 0; string caminho = listbox_playlist.Text.Replace("\\", "\\\\"); Reproduzir(caminho);
-                    }
-                    else
-                    {
-                        select = true;
+                        if (tocar == true)
+                        {
+                            if (playing == false)
+                            {
+                                select = false;
+
+                                listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(file);
+        
+                                if (listbox_playlist.Items.Count > 1)
+                                {
+                                    button_previoustrack.Enabled = true;
+                                }
+                                button_nexttrack.Enabled = false;
+
+                                string caminho = listbox_playlist.Text.Replace("\\", "\\\\");
+                                Reproduzir(caminho);
+                            }
+                            else
+                            {
+                                select = true;
+                            }
+                        }
                     }
                 }
 
@@ -1059,35 +1091,7 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
-        private void textbox_ytlink_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (textbox_ytlink.Text.Length > 0)
-                {
-                    button_ytdownload.Enabled = true;
-                }
-                else
-                {
-                    button_ytdownload.Enabled = false;
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "textbox_ytlink_TextChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-
+        
 
 
         // # ================================================================================================================================= #
@@ -1099,8 +1103,6 @@ namespace BronzePlayer
                 {
                     SetComboBoxHeight(combobox_ytformat.Handle, 14);
                     combobox_ytformat.Refresh();
-
-                    button_ytdownload.Enabled = false;
                 }
 
                 if (yt_expanded != true)
@@ -1135,12 +1137,32 @@ namespace BronzePlayer
         {
             try
             {
-                folderdialog.ShowDialog();
-                if (folderdialog.SelectedPath != null)
+                if (textbox_ytlink.Text != null && textbox_ytlink.Text != "")
                 {
-                    ytDownloadPath = folderdialog.SelectedPath;
-                    button_ytdownload.Enabled = false;
-                    backgroundworker_ytdownloading.RunWorkerAsync();
+                    folderdialog.ShowDialog();
+                    if (folderdialog.SelectedPath != null)
+                    {
+                        ytDownloadPath = folderdialog.SelectedPath;
+                        button_ytdownload.Enabled = false;
+
+                        bool ytSuccess = Scripts.tools.YouTubeDownloader(textbox_ytlink.Text, ytDownloadPath + "\\", combobox_ytformat.Text);
+                        ytDownloadPath = null;
+                        
+                        if (ytSuccess == true)
+                        {
+                            MessageBox.Show("Download complete!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Something went wrong during the download...", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        ytSuccess = false;
+                        button_ytdownload.Enabled = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("You need to choose a directory for the download!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             #region DE3UG
@@ -1154,62 +1176,6 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
-
-
-
-        #region Background Worker
-        // # ================================================================================================================================= #
-        private void background_ytdownloading_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Scripts.tools.YouTubeDownloader(textbox_ytlink.Text, ytDownloadPath, combobox_ytformat.Text);
-                ytDownloadPath = null;
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "background_ytdownloading_DoWork()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
-        private void background_ytdownloading_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                button_ytdownload.Enabled = true;
-                MessageBox.Show("Download complete!");
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "background_ytdownloading_RunWorkerCompleted()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
-        private void background_ytdownloading_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            MessageBox.Show("hello");
-            progressbar_ytprogress.Value = Convert.ToInt32(e.ProgressPercentage);
-        }
-        // # ================================================================================================================================= #
-        #endregion Background Worker
         #endregion YouTube Downloader
     }
 }

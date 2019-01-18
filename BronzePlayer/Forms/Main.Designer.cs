@@ -67,7 +67,6 @@
             this.progressbar_ytprogress = new System.Windows.Forms.ProgressBar();
             this.combobox_ytformat = new System.Windows.Forms.ComboBox();
             this.button_ytdownload = new System.Windows.Forms.Button();
-            this.backgroundworker_ytdownloading = new System.ComponentModel.BackgroundWorker();
             this.folderdialog = new System.Windows.Forms.FolderBrowserDialog();
             this.menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).BeginInit();
@@ -198,7 +197,7 @@
             // trackbar_tempomusica
             // 
             this.trackbar_tempomusica.BackColor = System.Drawing.Color.Lavender;
-            this.trackbar_tempomusica.Location = new System.Drawing.Point(-4, 185);
+            this.trackbar_tempomusica.Location = new System.Drawing.Point(-4, 186);
             this.trackbar_tempomusica.Maximum = 0;
             this.trackbar_tempomusica.Name = "trackbar_tempomusica";
             this.trackbar_tempomusica.Size = new System.Drawing.Size(470, 45);
@@ -314,7 +313,6 @@
             this.textbox_ytlink.Name = "textbox_ytlink";
             this.textbox_ytlink.Size = new System.Drawing.Size(346, 20);
             this.textbox_ytlink.TabIndex = 0;
-            this.textbox_ytlink.TextChanged += new System.EventHandler(this.textbox_ytlink_TextChanged);
             // 
             // timer
             // 
@@ -355,7 +353,7 @@
             this.listbox_playlist.AllowDrop = true;
             this.listbox_playlist.BackColor = System.Drawing.Color.White;
             this.listbox_playlist.FormattingEnabled = true;
-            this.listbox_playlist.Location = new System.Drawing.Point(1, 24);
+            this.listbox_playlist.Location = new System.Drawing.Point(1, 25);
             this.listbox_playlist.Name = "listbox_playlist";
             this.listbox_playlist.Size = new System.Drawing.Size(460, 160);
             this.listbox_playlist.TabIndex = 0;
@@ -413,24 +411,17 @@
             this.combobox_ytformat.Location = new System.Drawing.Point(349, 8);
             this.combobox_ytformat.Name = "combobox_ytformat";
             this.combobox_ytformat.Size = new System.Drawing.Size(47, 21);
-            this.combobox_ytformat.TabIndex = 12;
+            this.combobox_ytformat.TabIndex = 0;
             // 
             // button_ytdownload
             // 
             this.button_ytdownload.Location = new System.Drawing.Point(396, 7);
             this.button_ytdownload.Name = "button_ytdownload";
             this.button_ytdownload.Size = new System.Drawing.Size(63, 22);
-            this.button_ytdownload.TabIndex = 11;
+            this.button_ytdownload.TabIndex = 0;
             this.button_ytdownload.Text = "Download";
             this.button_ytdownload.UseVisualStyleBackColor = true;
             this.button_ytdownload.Click += new System.EventHandler(this.button_ytdownload_Click);
-            // 
-            // backgroundworker_ytdownloading
-            // 
-            this.backgroundworker_ytdownloading.WorkerReportsProgress = true;
-            this.backgroundworker_ytdownloading.DoWork += new System.ComponentModel.DoWorkEventHandler(this.background_ytdownloading_DoWork);
-            this.backgroundworker_ytdownloading.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.background_ytdownloading_ProgressChanged);
-            this.backgroundworker_ytdownloading.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.background_ytdownloading_RunWorkerCompleted);
             // 
             // Main
             // 
@@ -504,7 +495,6 @@
         private System.Windows.Forms.Button button_ytexpand;
         private System.Windows.Forms.GroupBox groupbox_ytdownloader;
         private System.Windows.Forms.Button button_ytdownload;
-        private System.ComponentModel.BackgroundWorker backgroundworker_ytdownloading;
         private System.Windows.Forms.ComboBox combobox_ytformat;
         private System.Windows.Forms.FolderBrowserDialog folderdialog;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;

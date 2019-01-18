@@ -58,16 +58,7 @@ namespace BronzePlayer {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BronzePlayer/temp/")]
-        public string temp {
-            get {
-                return ((string)(this["temp"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.0.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.1")]
         public string version {
             get {
                 return ((string)(this["version"]));

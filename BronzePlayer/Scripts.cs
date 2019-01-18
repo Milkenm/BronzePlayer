@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using System.Media;
@@ -8,8 +9,6 @@ using NAudio.Wave; // NAudio
 using VideoLibrary; // VideoLibrary
 using MediaToolkit; // MediaToolKit
 using MediaToolkit.Model; // MediaToolKit
-// => DLLs
-using System.Windows.Controls; // 'PresentationFramework.dll'
 // => Projects
 using BronzePlayer;
 
@@ -285,20 +284,55 @@ public class Scripts
 
 
         #region YouTubeDownloader
-        public void YouTubeDownloader(string _videoUrl, string _outDir, string _format)
+        public bool YouTubeDownloader(string _videoUrl, string _outDir, string _format)
         {
-            var youtube = YouTube.Default;
-            var vid = youtube.GetVideo(_videoUrl);
-            File.WriteAllBytes(_outDir + vid.FullName, vid.GetBytes());
-
-            var inputfile = new MediaFile { Filename = _outDir + vid.FullName };
-            var outputfile = new MediaFile { Filename = $"{_outDir + vid.FullName}.mp3" };
-
-            using (var engine = new Engine())
+            try
             {
-                engine.GetMetadata(inputfile);
-                engine.Convert(inputfile, outputfile);
+                var youtube = YouTube.Default;
+                var vid = youtube.GetVideo(_videoUrl);
+
+                if (_format == ".mp4")
+                {
+                    File.WriteAllBytes(_outDir + vid.FullName, vid.GetBytes());
+                }
+                else if (_format == ".mp3")
+                {
+                    string tempPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Bronze Player\\temp\\";
+                    if (!Directory.Exists(tempPath)) // If NOT exists.
+                    {
+                        Directory.CreateDirectory(tempPath);
+                    }
+
+                    File.WriteAllBytes(tempPath + vid.FullName, vid.GetBytes());
+
+                    string outName = vid.FullName;
+                    outName.Replace(".mp4", "");
+
+                    var inputFile = new MediaFile { Filename = _outDir + vid.FullName };
+                    var outputFile = new MediaFile { Filename = _outDir + outName + ".mp3" };
+
+                    File.Delete(tempPath + vid.FullName);
+
+                    using (var engine = new Engine()) // Convert to .mp3.
+                    {
+                        engine.GetMetadata(inputFile);
+                        engine.Convert(inputFile, outputFile);
+                    }
+                }
+
+                return true;
             }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                if (config.debug == true)
+                {
+                    MessageBox.Show(exception.ToString(), "DE3UG - Scripts.Tools.YouTubeDownloader()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                return false;
+            }
+            #endregion DE3UG
         }
         #endregion YouTubeDownloader
     }

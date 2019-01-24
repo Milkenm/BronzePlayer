@@ -27,6 +27,7 @@ namespace TestingGround.YTDownloader
             var outputdir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             var youtube = YouTube.Default;
             var vid = youtube.GetVideo(textbox_url.Text);
+
             File.WriteAllBytes(outputdir + vid.FullName, vid.GetBytes());
 
             var inputfile = new MediaFile { Filename = outputdir + vid.FullName };

@@ -30,19 +30,6 @@
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.menu = new System.Windows.Forms.MenuStrip();
-            this.ficheiroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openTestGoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_ficheiro = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_ficheiro_abrir = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_ficheiro_separador = new System.Windows.Forms.ToolStripSeparator();
-            this.menu_ficheiro_sair = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_utilizador = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_utilizador_playlists = new System.Windows.Forms.ToolStripMenuItem();
             this.filedialog = new System.Windows.Forms.OpenFileDialog();
             this.trackbar_tempomusica = new System.Windows.Forms.TrackBar();
             this.panel_buttons = new System.Windows.Forms.Panel();
@@ -68,126 +55,22 @@
             this.combobox_ytformat = new System.Windows.Forms.ComboBox();
             this.button_ytdownload = new System.Windows.Forms.Button();
             this.folderdialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.menu.SuspendLayout();
+            this.menu = new System.Windows.Forms.MenuStrip();
+            this.menu_file = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_file_open = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_file_separator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_file_exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_debug = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_debug_opentestingground = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_other = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_other_options = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_debug_openinstaller = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).BeginInit();
             this.panel_buttons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_volume)).BeginInit();
             this.groupbox_ytdownloader.SuspendLayout();
+            this.menu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menu
-            // 
-            this.menu.BackColor = System.Drawing.Color.Transparent;
-            this.menu.BackgroundImage = global::BronzePlayer.Tralha.Background_Padron;
-            this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ficheiroToolStripMenuItem,
-            this.debugToolStripMenuItem});
-            this.menu.Location = new System.Drawing.Point(0, 0);
-            this.menu.Name = "menu";
-            this.menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menu.Size = new System.Drawing.Size(462, 24);
-            this.menu.TabIndex = 0;
-            this.menu.Text = "menuStrip1";
-            // 
-            // ficheiroToolStripMenuItem
-            // 
-            this.ficheiroToolStripMenuItem.BackColor = System.Drawing.Color.Lavender;
-            this.ficheiroToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ficheiroToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.abrirToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.sairToolStripMenuItem});
-            this.ficheiroToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ficheiroToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.ficheiroToolStripMenuItem.Name = "ficheiroToolStripMenuItem";
-            this.ficheiroToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
-            this.ficheiroToolStripMenuItem.Text = "File";
-            // 
-            // abrirToolStripMenuItem
-            // 
-            this.abrirToolStripMenuItem.Image = global::BronzePlayer.Tralha.Background_Cavern;
-            this.abrirToolStripMenuItem.Name = "abrirToolStripMenuItem";
-            this.abrirToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl + O";
-            this.abrirToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.abrirToolStripMenuItem.Text = "Open...";
-            this.abrirToolStripMenuItem.Click += new System.EventHandler(this.abrirToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
-            // 
-            // sairToolStripMenuItem
-            // 
-            this.sairToolStripMenuItem.Image = global::BronzePlayer.Tralha.Background_Cavern;
-            this.sairToolStripMenuItem.Name = "sairToolStripMenuItem";
-            this.sairToolStripMenuItem.ShortcutKeyDisplayString = "Alt + F4";
-            this.sairToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.sairToolStripMenuItem.Text = "Exit";
-            this.sairToolStripMenuItem.Click += new System.EventHandler(this.sairToolStripMenuItem_Click);
-            // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.BackColor = System.Drawing.Color.Lavender;
-            this.debugToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openTestGoundsToolStripMenuItem});
-            this.debugToolStripMenuItem.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Bold);
-            this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
-            this.debugToolStripMenuItem.Text = "DE3UG";
-            this.debugToolStripMenuItem.Visible = false;
-            // 
-            // openTestGoundsToolStripMenuItem
-            // 
-            this.openTestGoundsToolStripMenuItem.Name = "openTestGoundsToolStripMenuItem";
-            this.openTestGoundsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openTestGoundsToolStripMenuItem.Text = "Open TestingGound";
-            this.openTestGoundsToolStripMenuItem.Click += new System.EventHandler(this.openTestGoundsToolStripMenuItem_Click);
-            // 
-            // menu_ficheiro
-            // 
-            this.menu_ficheiro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_ficheiro_abrir,
-            this.menu_ficheiro_separador,
-            this.menu_ficheiro_sair});
-            this.menu_ficheiro.Name = "menu_ficheiro";
-            this.menu_ficheiro.Size = new System.Drawing.Size(61, 20);
-            this.menu_ficheiro.Text = "Ficheiro";
-            // 
-            // menu_ficheiro_abrir
-            // 
-            this.menu_ficheiro_abrir.Name = "menu_ficheiro_abrir";
-            this.menu_ficheiro_abrir.Size = new System.Drawing.Size(109, 22);
-            this.menu_ficheiro_abrir.Text = "Abrir...";
-            this.menu_ficheiro_abrir.Click += new System.EventHandler(this.abrirToolStripMenuItem_Click);
-            // 
-            // menu_ficheiro_separador
-            // 
-            this.menu_ficheiro_separador.Name = "menu_ficheiro_separador";
-            this.menu_ficheiro_separador.Size = new System.Drawing.Size(106, 6);
-            // 
-            // menu_ficheiro_sair
-            // 
-            this.menu_ficheiro_sair.Name = "menu_ficheiro_sair";
-            this.menu_ficheiro_sair.Size = new System.Drawing.Size(109, 22);
-            this.menu_ficheiro_sair.Text = "Sair";
-            this.menu_ficheiro_sair.Click += new System.EventHandler(this.sairToolStripMenuItem_Click);
-            // 
-            // menu_utilizador
-            // 
-            this.menu_utilizador.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_utilizador_playlists});
-            this.menu_utilizador.Name = "menu_utilizador";
-            this.menu_utilizador.Size = new System.Drawing.Size(69, 20);
-            this.menu_utilizador.Text = "Utilizador";
-            // 
-            // menu_utilizador_playlists
-            // 
-            this.menu_utilizador_playlists.Name = "menu_utilizador_playlists";
-            this.menu_utilizador_playlists.Size = new System.Drawing.Size(183, 22);
-            this.menu_utilizador_playlists.Text = "Listas de reprodução";
             // 
             // filedialog
             // 
@@ -311,7 +194,7 @@
             this.textbox_ytlink.BackColor = System.Drawing.Color.White;
             this.textbox_ytlink.Location = new System.Drawing.Point(2, 8);
             this.textbox_ytlink.Name = "textbox_ytlink";
-            this.textbox_ytlink.Size = new System.Drawing.Size(346, 20);
+            this.textbox_ytlink.Size = new System.Drawing.Size(336, 20);
             this.textbox_ytlink.TabIndex = 0;
             // 
             // timer
@@ -408,20 +291,112 @@
             this.combobox_ytformat.Items.AddRange(new object[] {
             ".mp3",
             ".mp4"});
-            this.combobox_ytformat.Location = new System.Drawing.Point(349, 8);
+            this.combobox_ytformat.Location = new System.Drawing.Point(339, 8);
             this.combobox_ytformat.Name = "combobox_ytformat";
             this.combobox_ytformat.Size = new System.Drawing.Size(47, 21);
             this.combobox_ytformat.TabIndex = 0;
             // 
             // button_ytdownload
             // 
-            this.button_ytdownload.Location = new System.Drawing.Point(396, 7);
+            this.button_ytdownload.Location = new System.Drawing.Point(386, 7);
             this.button_ytdownload.Name = "button_ytdownload";
-            this.button_ytdownload.Size = new System.Drawing.Size(63, 22);
+            this.button_ytdownload.Size = new System.Drawing.Size(73, 22);
             this.button_ytdownload.TabIndex = 0;
             this.button_ytdownload.Text = "Download";
             this.button_ytdownload.UseVisualStyleBackColor = true;
             this.button_ytdownload.Click += new System.EventHandler(this.button_ytdownload_Click);
+            // 
+            // menu
+            // 
+            this.menu.BackgroundImage = global::BronzePlayer.Tralha.Background_Padron;
+            this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_file,
+            this.menu_debug,
+            this.menu_other});
+            this.menu.Location = new System.Drawing.Point(0, 0);
+            this.menu.Name = "menu";
+            this.menu.Size = new System.Drawing.Size(462, 24);
+            this.menu.TabIndex = 11;
+            this.menu.Text = "menuStrip1";
+            // 
+            // menu_file
+            // 
+            this.menu_file.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.menu_file.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_file_open,
+            this.menu_file_separator1,
+            this.menu_file_exit});
+            this.menu_file.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_file.ForeColor = System.Drawing.Color.White;
+            this.menu_file.Name = "menu_file";
+            this.menu_file.Size = new System.Drawing.Size(40, 20);
+            this.menu_file.Text = "File";
+            // 
+            // menu_file_open
+            // 
+            this.menu_file_open.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_file_open.Name = "menu_file_open";
+            this.menu_file_open.ShortcutKeyDisplayString = "Ctrl + O";
+            this.menu_file_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.menu_file_open.Size = new System.Drawing.Size(171, 22);
+            this.menu_file_open.Text = "Open...";
+            this.menu_file_open.Click += new System.EventHandler(this.menu_file_open_Click);
+            // 
+            // menu_file_separator1
+            // 
+            this.menu_file_separator1.Name = "menu_file_separator1";
+            this.menu_file_separator1.Size = new System.Drawing.Size(168, 6);
+            // 
+            // menu_file_exit
+            // 
+            this.menu_file_exit.Name = "menu_file_exit";
+            this.menu_file_exit.ShortcutKeyDisplayString = "Alt + F4";
+            this.menu_file_exit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.menu_file_exit.Size = new System.Drawing.Size(171, 22);
+            this.menu_file_exit.Text = "Exit";
+            this.menu_file_exit.Click += new System.EventHandler(this.menu_file_exit_Click);
+            // 
+            // menu_debug
+            // 
+            this.menu_debug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_debug_opentestingground,
+            this.menu_debug_openinstaller});
+            this.menu_debug.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_debug.ForeColor = System.Drawing.Color.White;
+            this.menu_debug.Name = "menu_debug";
+            this.menu_debug.Size = new System.Drawing.Size(60, 20);
+            this.menu_debug.Text = "DE3UG";
+            // 
+            // menu_debug_opentestingground
+            // 
+            this.menu_debug_opentestingground.Name = "menu_debug_opentestingground";
+            this.menu_debug_opentestingground.Size = new System.Drawing.Size(201, 22);
+            this.menu_debug_opentestingground.Text = "Open TestingGround";
+            this.menu_debug_opentestingground.Click += new System.EventHandler(this.menu_debug_opentestingground_Click);
+            // 
+            // menu_other
+            // 
+            this.menu_other.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_other_options});
+            this.menu_other.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.menu_other.ForeColor = System.Drawing.Color.White;
+            this.menu_other.Name = "menu_other";
+            this.menu_other.Size = new System.Drawing.Size(52, 20);
+            this.menu_other.Text = "Other";
+            // 
+            // menu_other_options
+            // 
+            this.menu_other_options.Name = "menu_other_options";
+            this.menu_other_options.Size = new System.Drawing.Size(122, 22);
+            this.menu_other_options.Text = "Options";
+            this.menu_other_options.Click += new System.EventHandler(this.menu_other_options_Click);
+            // 
+            // menu_debug_openinstaller
+            // 
+            this.menu_debug_openinstaller.Name = "menu_debug_openinstaller";
+            this.menu_debug_openinstaller.Size = new System.Drawing.Size(201, 22);
+            this.menu_debug_openinstaller.Text = "Open Installer";
+            this.menu_debug_openinstaller.Click += new System.EventHandler(this.menu_debug_openinstaller_Click);
             // 
             // Main
             // 
@@ -431,10 +406,10 @@
             this.BackColor = System.Drawing.Color.Lavender;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(462, 290);
+            this.Controls.Add(this.menu);
             this.Controls.Add(this.groupbox_ytdownloader);
             this.Controls.Add(this.button_ytexpand);
             this.Controls.Add(this.checkbox_loop);
-            this.Controls.Add(this.menu);
             this.Controls.Add(this.trackbar_volume);
             this.Controls.Add(this.panel_buttons);
             this.Controls.Add(this.trackbar_tempomusica);
@@ -448,27 +423,19 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Bronze Player";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
-            this.menu.ResumeLayout(false);
-            this.menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).EndInit();
             this.panel_buttons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_volume)).EndInit();
             this.groupbox_ytdownloader.ResumeLayout(false);
             this.groupbox_ytdownloader.PerformLayout();
+            this.menu.ResumeLayout(false);
+            this.menu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.MenuStrip menu;
-		private System.Windows.Forms.ToolStripMenuItem menu_ficheiro;
-		private System.Windows.Forms.ToolStripMenuItem menu_ficheiro_abrir;
-		private System.Windows.Forms.ToolStripSeparator menu_ficheiro_separador;
-		private System.Windows.Forms.ToolStripMenuItem menu_ficheiro_sair;
-		private System.Windows.Forms.ToolStripMenuItem menu_utilizador;
-		private System.Windows.Forms.ToolStripMenuItem menu_utilizador_playlists;
 		private System.Windows.Forms.OpenFileDialog filedialog;
 		private System.Windows.Forms.TrackBar trackbar_tempomusica;
 		private System.Windows.Forms.Button button_play;
@@ -484,10 +451,6 @@
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.ContextMenuStrip contextmenustrip;
         private System.Windows.Forms.TrackBar trackbar_volume;
-        private System.Windows.Forms.ToolStripMenuItem ficheiroToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem abrirToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem sairToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkbox_loop;
         private System.Windows.Forms.ListBox listbox_playlist;
         private System.Windows.Forms.Timer timer_loopcheck;
@@ -497,9 +460,17 @@
         private System.Windows.Forms.Button button_ytdownload;
         private System.Windows.Forms.ComboBox combobox_ytformat;
         private System.Windows.Forms.FolderBrowserDialog folderdialog;
-        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openTestGoundsToolStripMenuItem;
         private System.Windows.Forms.ProgressBar progressbar_ytprogress;
+        private System.Windows.Forms.MenuStrip menu;
+        private System.Windows.Forms.ToolStripMenuItem menu_file;
+        private System.Windows.Forms.ToolStripMenuItem menu_file_open;
+        private System.Windows.Forms.ToolStripSeparator menu_file_separator1;
+        private System.Windows.Forms.ToolStripMenuItem menu_file_exit;
+        private System.Windows.Forms.ToolStripMenuItem menu_debug;
+        private System.Windows.Forms.ToolStripMenuItem menu_debug_opentestingground;
+        private System.Windows.Forms.ToolStripMenuItem menu_other;
+        private System.Windows.Forms.ToolStripMenuItem menu_other_options;
+        private System.Windows.Forms.ToolStripMenuItem menu_debug_openinstaller;
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿namespace TestingGround.Background_Worker_Progress
 {
-    partial class Background_Worker_Progress
+    partial class ProgressBar
     {
         /// <summary>
         /// Required designer variable.
@@ -32,13 +32,16 @@
             this.backgroundworker = new System.ComponentModel.BackgroundWorker();
             this.label_progress = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_download
             // 
-            this.button_download.Location = new System.Drawing.Point(268, 1);
+            this.button_download.Location = new System.Drawing.Point(515, 0);
             this.button_download.Name = "button_download";
-            this.button_download.Size = new System.Drawing.Size(75, 23);
+            this.button_download.Size = new System.Drawing.Size(75, 25);
             this.button_download.TabIndex = 0;
             this.button_download.Text = "Download";
             this.button_download.UseVisualStyleBackColor = true;
@@ -54,7 +57,8 @@
             // label_progress
             // 
             this.label_progress.AutoSize = true;
-            this.label_progress.Location = new System.Drawing.Point(180, 21);
+            this.label_progress.BackColor = System.Drawing.Color.Transparent;
+            this.label_progress.Location = new System.Drawing.Point(247, 5);
             this.label_progress.Name = "label_progress";
             this.label_progress.Size = new System.Drawing.Size(21, 13);
             this.label_progress.TabIndex = 1;
@@ -62,23 +66,42 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 54);
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(428, 23);
+            this.progressBar1.Size = new System.Drawing.Size(514, 23);
             this.progressBar1.TabIndex = 2;
             // 
-            // Background_Worker_Progress
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(1, 25);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(588, 251);
+            this.listBox1.TabIndex = 3;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label_progress);
+            this.panel1.Controls.Add(this.progressBar1);
+            this.panel1.Location = new System.Drawing.Point(1, 1);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(514, 23);
+            this.panel1.TabIndex = 4;
+            // 
+            // ProgressBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(762, 382);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.label_progress);
+            this.ClientSize = new System.Drawing.Size(590, 277);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button_download);
-            this.Name = "Background_Worker_Progress";
-            this.Text = "Background_Worker_Progress";
+            this.Name = "ProgressBar";
+            this.Text = "Progress Bar";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -88,5 +111,7 @@
         private System.ComponentModel.BackgroundWorker backgroundworker;
         private System.Windows.Forms.Label label_progress;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Panel panel1;
     }
 }

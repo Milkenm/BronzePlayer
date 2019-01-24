@@ -36,6 +36,26 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet />
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="libvideo, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VideoLibrary.2.0.3\lib\netstandard1.1\libvideo.dll</HintPath>
@@ -190,11 +210,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Background Worker Progress\Background Worker Progress.cs">
+    <Compile Include="ProgressBar\Progress Bar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Background Worker Progress\Background Worker Progress.Designer.cs">
-      <DependentUpon>Background Worker Progress.cs</DependentUpon>
+    <Compile Include="ProgressBar\Progress Bar.Designer.cs">
+      <DependentUpon>Progress Bar.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -228,8 +248,8 @@
     <Compile Include="YTDownloader\YTDownloader.Designer.cs">
       <DependentUpon>YTDownloader.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Background Worker Progress\Background Worker Progress.resx">
-      <DependentUpon>Background Worker Progress.cs</DependentUpon>
+    <EmbeddedResource Include="ProgressBar\Progress Bar.resx">
+      <DependentUpon>Progress Bar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

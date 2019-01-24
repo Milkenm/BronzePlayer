@@ -23,24 +23,15 @@ namespace BronzePlayer {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool debug {
             get {
                 return ((bool)(this["debug"]));
             }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("44")]
-        public float volume {
-            get {
-                return ((float)(this["volume"]));
-            }
             set {
-                this["volume"] = value;
+                this["debug"] = value;
             }
         }
         
@@ -56,12 +47,27 @@ namespace BronzePlayer {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.0.0.1")]
-        public string version {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public float volume {
             get {
-                return ((string)(this["version"]));
+                return ((float)(this["volume"]));
+            }
+            set {
+                this["volume"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lang {
+            get {
+                return ((string)(this["lang"]));
+            }
+            set {
+                this["lang"] = value;
             }
         }
     }

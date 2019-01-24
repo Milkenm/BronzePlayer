@@ -6,18 +6,18 @@ using System.IO;
 using System.Runtime.InteropServices;
 // => NuGet
 using NAudio.Wave; // NAudio
-
-
+// => Projects
+using BronzePlayer.Forms;
+using System.Threading;
 
 namespace BronzePlayer
 {
     public partial class Main : Form
     {
         #region Refers
-        // # ================================================================================================================================= #
         Config config = new Config();
-        // # ================================================================================================================================= #
-        #endregion
+        Lang lang = new Lang();
+        #endregion Refers
 
 
 
@@ -99,7 +99,7 @@ namespace BronzePlayer
 
         #region Functions
         // # ================================================================================================================================= #
-        void Reproduzir(string _fileDir)
+        void Play(string _fileDir)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace BronzePlayer
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Reproduzir()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.ToString(), "DE3UG - Play()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
@@ -168,7 +168,7 @@ namespace BronzePlayer
                         paused = false;
                         stopped = true;
 
-                        Parar();
+                        Stop();
                     }
 
                     if (currentindex + 1 == maxindex)
@@ -179,7 +179,7 @@ namespace BronzePlayer
 
                     listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex + 1;
                     string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                    Reproduzir(caminho);
+                    Play(caminho);
                 }
             }
             #region DE3UG
@@ -207,7 +207,7 @@ namespace BronzePlayer
                     if (playing == true)
                     {
                         playing = false;
-                        Parar();
+                        Stop();
                     }
 
                     if (currentindex - 1 == 0)
@@ -218,7 +218,7 @@ namespace BronzePlayer
 
                     listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex - 1;
                     string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                    Reproduzir(caminho);
+                    Play(caminho);
                 }
             }
             #region DE3UG
@@ -236,7 +236,7 @@ namespace BronzePlayer
 
 
         // # ================================================================================================================================= #
-        void Pausar()
+        void Pause()
         {
             try
             {
@@ -254,7 +254,7 @@ namespace BronzePlayer
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Pausar()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.ToString(), "DE3UG - Pause()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
@@ -264,7 +264,7 @@ namespace BronzePlayer
 
 
         // # ================================================================================================================================= #
-        void Parar()
+        void Stop()
         {
             try
             {
@@ -284,10 +284,33 @@ namespace BronzePlayer
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Parar()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.ToString(), "DE3UG - Stop()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
+        }
+        // # ================================================================================================================================= #
+
+
+
+        // # ================================================================================================================================= #
+        public void LoadLang()
+        {
+            config.Reload();
+            Thread.Sleep(1000);
+            lang.Load(config.lang);
+
+            // => Controls:
+            button_ytdownload.Text = lang.lang_main__button_ytdownload;
+            checkbox_loop.Text = lang.lang_main__checkbox_loop;
+            
+            // => Menu:
+            menu_file.Text = lang.lang_main__menu_file;
+            menu_file_open.Text = lang.lang_main__menu_file_open;
+            menu_file_exit.Text = lang.lang_main__menu_file_exit;
+            menu_debug_opentestingground.Text = lang.lang_main__menu_debug_opentestingground;
+            menu_other.Text = lang.lang_main__menu_other;
+            menu_other_options.Text = lang.lang_main__menu_other_options;
         }
         // # ================================================================================================================================= #
         #endregion
@@ -323,6 +346,15 @@ namespace BronzePlayer
 
                 checkbox_loop.Checked = config.loop;
 
+                #region Load Lang
+                if (config.lang == null || config.lang == "")
+                {
+                    config.lang = "en_EN";
+                    config.Save();
+                }
+
+                LoadLang();
+                #endregion Load Lang
 
                 #region Load Volume Config
                 float volume = config.volume;
@@ -332,8 +364,8 @@ namespace BronzePlayer
                 if (volume < 0 || volume > 1)
                 {
                     Scripts.waveOut.Volume = Convert.ToSingle(0.5);
-                    Scripts.config.volume = Convert.ToSingle(0.5);
-                    Scripts.config.Save();
+                    config.volume = Convert.ToSingle(0.5);
+                    config.Save();
                 }
                 else
                 {
@@ -345,11 +377,11 @@ namespace BronzePlayer
 
 
                 contextmenustrip.Visible = false;
-                contextmenustrip.Items.Add("Remover");
+                contextmenustrip.Items.Add(lang.lang_main__contextmenustrip_remove);
 
                 if (config.debug == true)
                 {
-                    debugToolStripMenuItem.Visible = true;
+                    menu_debug.Visible = true;
                 }
 
                 this.AllowDrop = true;
@@ -364,7 +396,7 @@ namespace BronzePlayer
 
                 if (_openWith == true)
                 {
-                    Reproduzir(_fileDir);
+                    Play(_fileDir);
                     listbox_playlist.Items.Add(_fileDir);
                     listbox_playlist.SelectedIndex = 0;
                     dirMusica = _fileDir;
@@ -421,7 +453,7 @@ namespace BronzePlayer
 
         #region Top Menu
         // # ================================================================================================================================= #
-        private void sairToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menu_file_exit_Click(object sender, EventArgs e)
         {
             try
             {
@@ -432,7 +464,7 @@ namespace BronzePlayer
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - sairToolStripMenuItem_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.ToString(), "DE3UG - menu_file_exit_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
@@ -442,7 +474,7 @@ namespace BronzePlayer
 
 
         // # ================================================================================================================================= #
-        private void abrirToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menu_file_open_Click(object sender, EventArgs e)
         {
             try
             {
@@ -453,7 +485,7 @@ namespace BronzePlayer
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - abrirToolStripMenuItem_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.ToString(), "DE3UG - menu_file_open_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
@@ -498,7 +530,7 @@ namespace BronzePlayer
 
                     if (playing == false)
                     {
-                        Reproduzir(fileDirectory);
+                        Play(fileDirectory);
                     }
                 }
 
@@ -522,7 +554,7 @@ namespace BronzePlayer
 
 
         // # ================================================================================================================================= #
-        private void openTestGoundsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menu_debug_opentestingground_Click(object sender, EventArgs e)
         {
             try
             {
@@ -534,7 +566,29 @@ namespace BronzePlayer
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - openTestGroundsToolStripMenuItem_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.ToString(), "DE3UG - menu_debug_opentestingground_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            #endregion
+        }
+        // # ================================================================================================================================= #
+
+
+
+        // # ================================================================================================================================= #
+        private void menu_other_options_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Options options = new Options();
+                options.Show();
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                if (config.debug == true)
+                {
+                    MessageBox.Show(exception.ToString(), "DE3UG - menu_other_options_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
@@ -554,7 +608,7 @@ namespace BronzePlayer
                 var caminho = listbox_playlist.Text;
                 caminho = caminho.Replace("\\", "\\\\");
 
-                Reproduzir(caminho);
+                Play(caminho);
             }
             #region DE3UG
             catch (Exception exception)
@@ -576,7 +630,7 @@ namespace BronzePlayer
             try
             {
                 button_pause.Enabled = false; button_play.Enabled = true;
-                Pausar();
+                Pause();
             }
             #region DE3UG
             catch (Exception exception)
@@ -598,7 +652,7 @@ namespace BronzePlayer
             try
             {
                 button_play.Enabled = true; button_pause.Enabled = false; button_stop.Enabled = false;
-                Parar();
+                Stop();
             }
             #region DE3UG
             catch (Exception exception)
@@ -702,7 +756,7 @@ namespace BronzePlayer
                 if (trackbar_tempomusica.Value + tenpercent > trackbar_tempomusica.Maximum)
                 {
                     trackbar_tempomusica.Value = trackbar_tempomusica.Maximum;
-                    Parar();
+                    Stop();
                 }
                 else
                 {
@@ -835,13 +889,13 @@ namespace BronzePlayer
                 {
                     if (playing == true)
                     {
-                        Parar();
+                        Stop();
                     }
 
                     if (listbox_playlist.SelectedItem != null)
                     {
                         string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                        Reproduzir(caminho);
+                        Play(caminho);
                     }
                 }
             }
@@ -939,7 +993,7 @@ namespace BronzePlayer
                         {
                             button_nexttrack.Enabled = true;
                         }
-                        
+
                         tocar = true;
 
                         if (tocar == true)
@@ -949,7 +1003,7 @@ namespace BronzePlayer
                                 select = false;
 
                                 listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(file);
-        
+
                                 if (listbox_playlist.Items.Count > 1)
                                 {
                                     button_previoustrack.Enabled = true;
@@ -957,7 +1011,7 @@ namespace BronzePlayer
                                 button_nexttrack.Enabled = false;
 
                                 string caminho = listbox_playlist.Text.Replace("\\", "\\\\");
-                                Reproduzir(caminho);
+                                Play(caminho);
                             }
                             else
                             {
@@ -1001,7 +1055,15 @@ namespace BronzePlayer
                 float x = trackbar_volume.Value;
                 x = x / 100;
 
-                Scripts.waveOut.Volume = x;
+                try
+                {
+                    // => Error when not playing, doesn't affect anything.
+                    Scripts.waveOut.Volume = x;
+                }
+                catch
+                {
+                    throw;
+                }
             }
             #region DE3UG
             catch (Exception exception)
@@ -1036,6 +1098,12 @@ namespace BronzePlayer
             }
             #endregion
         }
+
+        private void menu_debug_openinstaller_Click(object sender, EventArgs e)
+        {
+            Installer.Installer installer = new Installer.Installer();
+            installer.Show();
+        }
         // # ================================================================================================================================= #
 
 
@@ -1052,7 +1120,7 @@ namespace BronzePlayer
                     var caminho = dirMusica;
                     caminho = caminho.Replace("\\", "\\\\");
 
-                    Reproduzir(caminho);
+                    Play(caminho);
                     timer_loopcheck.Stop();
                 }
             }
@@ -1091,7 +1159,7 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
-        
+
 
 
         // # ================================================================================================================================= #
@@ -1129,9 +1197,9 @@ namespace BronzePlayer
             #endregion
         }
         // # ================================================================================================================================= #
-        
-            
-            
+
+
+
         // # ================================================================================================================================= #
         private void button_ytdownload_Click(object sender, EventArgs e)
         {
@@ -1147,21 +1215,21 @@ namespace BronzePlayer
 
                         bool ytSuccess = Scripts.tools.YouTubeDownloader(textbox_ytlink.Text, ytDownloadPath + "\\", combobox_ytformat.Text);
                         ytDownloadPath = null;
-                        
+
                         if (ytSuccess == true)
                         {
-                            MessageBox.Show("Download complete!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show(lang.lang_main__msgbox_ytsuccess_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
-                            MessageBox.Show("Something went wrong during the download...", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(lang.lang_main__msgbox_ytfail_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                         ytSuccess = false;
                         button_ytdownload.Enabled = true;
                     }
                     else
                     {
-                        MessageBox.Show("You need to choose a directory for the download!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(lang.lang_main__msgbox_ytnodirectory_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

@@ -37,13 +37,13 @@ namespace TestingGround
             }
             #endregion UserControls
 
-            #region Background Worker Progress
+            #region ProgressBar
             else if (listbox_programs.SelectedIndex == 2)
             {
-                Background_Worker_Progress.Background_Worker_Progress BWP = new Background_Worker_Progress.Background_Worker_Progress();
+                Background_Worker_Progress.ProgressBar BWP = new Background_Worker_Progress.ProgressBar();
                 BWP.Show();
             }
-            #endregion
+            #endregion ProgressBar
         }
         #endregion Program Selector
     }

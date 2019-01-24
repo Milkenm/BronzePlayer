@@ -21,9 +21,11 @@ public class Scripts
     #endregion Database Connection
 
 
-
+    #region Project Items
     public static Config config = new Config();
-    
+    public static Lang lang = new Lang();
+    #endregion Project Items
+
     public static DataBase dataBase = new DataBase();
     public static FileConverter fileConverter = new FileConverter();
     public static Tools tools = new Tools();
@@ -306,18 +308,18 @@ public class Scripts
                     File.WriteAllBytes(tempPath + vid.FullName, vid.GetBytes());
 
                     string outName = vid.FullName;
-                    outName.Replace(".mp4", "");
+                    outName = outName.Replace(" - YouTube.mp4", null);
 
-                    var inputFile = new MediaFile { Filename = _outDir + vid.FullName };
+                    var inputFile = new MediaFile { Filename = tempPath + vid.FullName };
                     var outputFile = new MediaFile { Filename = _outDir + outName + ".mp3" };
-
-                    File.Delete(tempPath + vid.FullName);
-
+                
                     using (var engine = new Engine()) // Convert to .mp3.
                     {
                         engine.GetMetadata(inputFile);
                         engine.Convert(inputFile, outputFile);
                     }
+
+                    File.Delete(tempPath + vid.FullName);
                 }
 
                 return true;

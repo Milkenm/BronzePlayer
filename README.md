@@ -40,6 +40,7 @@ If  you find any, [you can report it here](https://github.com/Milkenm/BronzePlay
 
 ### Abbreviations
 * **WIP**: **W**ork **I**n **P**rogress (when something isn't finished yet).
+* **YTD**: **Y**ou**T**ube **D**ownloader (the YTD inside the project).
 
 
 

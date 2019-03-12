@@ -16,7 +16,8 @@ Bronze Player is a program I made for school projects and probably will continue
 
 
 # Releases
-So, so... How my releases work... even I don't know.
+So, so... How my releases work... even I don't know.\
+Releases are found [here](https://goo.gl/yWPT2H).
 
 
 

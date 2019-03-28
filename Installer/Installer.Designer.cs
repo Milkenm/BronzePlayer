@@ -39,6 +39,7 @@
             this.radioButton_32 = new System.Windows.Forms.RadioButton();
             this.radioButton_64 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -99,7 +100,6 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(268, 21);
             this.progressBar.TabIndex = 7;
-            this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
             // 
             // radioButton_32
             // 
@@ -133,6 +133,10 @@
             this.panel1.Size = new System.Drawing.Size(77, 35);
             this.panel1.TabIndex = 10;
             // 
+            // backgroundWorker
+            // 
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+            // 
             // Installer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,6 +150,7 @@
             this.Controls.Add(this.checkBox_desktopIcon);
             this.Controls.Add(this.checkBox_startShortcut);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Installer";
             this.Text = "Installer";
             this.panel1.ResumeLayout(false);
@@ -166,5 +171,6 @@
         private System.Windows.Forms.RadioButton radioButton_32;
         private System.Windows.Forms.RadioButton radioButton_64;
         private System.Windows.Forms.Panel panel1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
     }
 }

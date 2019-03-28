@@ -160,10 +160,80 @@ namespace Installer
         {
             try
             {
+                backgroundWorker.RunWorkerAsync();
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                progressBar.Style = ProgressBarStyle.Blocks;
+                if (debug == true)
+                {
+                    var st = new StackTrace(exception, true);
+                    var frame = st.GetFrame(0);
+                    var line = frame.GetFileLineNumber();
+                    MessageBox.Show(exception.Message.ToString() + "\n\n\nLinha: " + line.ToString(), "DE3UG - button_install_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            #endregion
+        }
+
+        private void radioButton_32_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (radioButton_64.Checked == false)
+                {
+                    radioButton_64.Checked = false;
+                    if (arch == "x32")
+                    {
+                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
+                    }
+                    else
+                    {
+                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Milkenm\Bronze Player\";
+                    }
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                if (debug == true)
+                {
+                    MessageBox.Show(exception.ToString(), "DE3UG - radioButton_32_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            #endregion
+        }
+
+        private void radioButton_64_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (radioButton_32.Checked == false)
+                {
+                    radioButton_32.Checked = false;
+                    textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                if (debug == true)
+                {
+                    MessageBox.Show(exception.ToString(), "DE3UG - radioButton_64_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            #endregion
+        }
+
+        private void backgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                this.Enabled = false;
+                progressBar.Style = ProgressBarStyle.Marquee;
                 if (Registry.LocalMachine.OpenSubKey(regPath) == null)
                 {
-                    progressBar.Style = ProgressBarStyle.Marquee;
-
                     if (Directory.Exists(textBox_path.Text) == false)
                     {
                         Directory.CreateDirectory(textBox_path.Text);
@@ -195,8 +265,6 @@ namespace Installer
                     string path = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString();
                     var listA = new List<byte>();
                     var listB = new List<byte>();
-
-                    progressBar.Style = ProgressBarStyle.Marquee;
 
                     Registry.LocalMachine.CreateSubKey(regPath, true);
                     Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Version", version, RegistryValueKind.String);
@@ -310,74 +378,10 @@ namespace Installer
                 MessageBox.Show("Bronze Player (v" + version + ") has been installed!");
                 Environment.Exit(0);
             }
-            #region DE3UG
             catch (Exception exception)
             {
-                progressBar.Style = ProgressBarStyle.Blocks;
-                if (debug == true)
-                {
-                    var st = new StackTrace(exception, true);
-                    var frame = st.GetFrame(0);
-                    var line = frame.GetFileLineNumber();
-                    MessageBox.Show(exception.Message.ToString() + "\n\n\nLinha: " + line.ToString(), "DE3UG - button_install_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show(exception.ToString(), "DE3UG - backgroundWorker_DoWork()");
             }
-            #endregion
-        }
-
-        private void radioButton_32_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (radioButton_64.Checked == false)
-                {
-                    radioButton_64.Checked = false;
-                    if (arch == "x32")
-                    {
-                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
-                    }
-                    else
-                    {
-                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Milkenm\Bronze Player\";
-                    }
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - radioButton_32_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-
-        private void radioButton_64_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (radioButton_32.Checked == false)
-                {
-                    radioButton_32.Checked = false;
-                    textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - radioButton_64_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-
-        private void progressBar_Click(object sender, EventArgs e)
-        {
-
-            MessageBox.Show(Environment.Is64BitOperatingSystem.ToString());
         }
     }
 }

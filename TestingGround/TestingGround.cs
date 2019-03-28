@@ -13,6 +13,8 @@ namespace TestingGround
             listbox_programs.Items.Add("YTDownloader");
             listbox_programs.Items.Add("UserControls");
             listbox_programs.Items.Add("Background Worker Progress");
+            listbox_programs.Items.Add("Regedit Values");
+            listbox_programs.Items.Add("Timer");
         }
         #endregion Load / Unload
 
@@ -44,6 +46,22 @@ namespace TestingGround
                 BWP.Show();
             }
             #endregion ProgressBar
+
+            #region REGValues
+            else if (listbox_programs.SelectedIndex == 3)
+            {
+                var REGV = new REGValues.REGValues();
+                REGV.Show();
+            }
+            #endregion REGValue
+
+            #region Timer
+            else if (listbox_programs.SelectedIndex == 4)
+            {
+                var T = new Timer.Timer();
+                T.Show();
+            }
+            #endregion Timer
         }
         #endregion Program Selector
     }

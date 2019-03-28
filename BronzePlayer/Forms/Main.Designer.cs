@@ -60,11 +60,10 @@
             this.menu_file_open = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_file_separator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menu_file_exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_debug = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_debug_opentestingground = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_favorits = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_other = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_other_options = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_debug_openinstaller = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer_listentime = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).BeginInit();
             this.panel_buttons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackbar_volume)).BeginInit();
@@ -80,7 +79,7 @@
             // trackbar_tempomusica
             // 
             this.trackbar_tempomusica.BackColor = System.Drawing.Color.Lavender;
-            this.trackbar_tempomusica.Location = new System.Drawing.Point(-4, 186);
+            this.trackbar_tempomusica.Location = new System.Drawing.Point(-4, 185);
             this.trackbar_tempomusica.Maximum = 0;
             this.trackbar_tempomusica.Name = "trackbar_tempomusica";
             this.trackbar_tempomusica.Size = new System.Drawing.Size(470, 45);
@@ -212,10 +211,10 @@
             // 
             this.trackbar_volume.BackColor = System.Drawing.Color.Lavender;
             this.trackbar_volume.LargeChange = 10;
-            this.trackbar_volume.Location = new System.Drawing.Point(306, 212);
+            this.trackbar_volume.Location = new System.Drawing.Point(312, 212);
             this.trackbar_volume.Maximum = 100;
             this.trackbar_volume.Name = "trackbar_volume";
-            this.trackbar_volume.Size = new System.Drawing.Size(133, 45);
+            this.trackbar_volume.Size = new System.Drawing.Size(127, 45);
             this.trackbar_volume.TabIndex = 0;
             this.trackbar_volume.Scroll += new System.EventHandler(this.trackBar_volume_Scroll);
             // 
@@ -236,9 +235,9 @@
             this.listbox_playlist.AllowDrop = true;
             this.listbox_playlist.BackColor = System.Drawing.Color.White;
             this.listbox_playlist.FormattingEnabled = true;
-            this.listbox_playlist.Location = new System.Drawing.Point(1, 25);
+            this.listbox_playlist.Location = new System.Drawing.Point(-1, 24);
             this.listbox_playlist.Name = "listbox_playlist";
-            this.listbox_playlist.Size = new System.Drawing.Size(460, 160);
+            this.listbox_playlist.Size = new System.Drawing.Size(464, 160);
             this.listbox_playlist.TabIndex = 0;
             this.listbox_playlist.Click += new System.EventHandler(this.listbox_playlist_Click);
             this.listbox_playlist.DragDrop += new System.Windows.Forms.DragEventHandler(this.listbox_playlist_DragDrop);
@@ -311,7 +310,7 @@
             this.menu.BackgroundImage = global::BronzePlayer.Tralha.Background_Padron;
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_file,
-            this.menu_debug,
+            this.menu_favorits,
             this.menu_other});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
@@ -356,23 +355,14 @@
             this.menu_file_exit.Text = "Exit";
             this.menu_file_exit.Click += new System.EventHandler(this.menu_file_exit_Click);
             // 
-            // menu_debug
+            // menu_favorits
             // 
-            this.menu_debug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_debug_opentestingground,
-            this.menu_debug_openinstaller});
-            this.menu_debug.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.menu_debug.ForeColor = System.Drawing.Color.White;
-            this.menu_debug.Name = "menu_debug";
-            this.menu_debug.Size = new System.Drawing.Size(60, 20);
-            this.menu_debug.Text = "DE3UG";
-            // 
-            // menu_debug_opentestingground
-            // 
-            this.menu_debug_opentestingground.Name = "menu_debug_opentestingground";
-            this.menu_debug_opentestingground.Size = new System.Drawing.Size(201, 22);
-            this.menu_debug_opentestingground.Text = "Open TestingGround";
-            this.menu_debug_opentestingground.Click += new System.EventHandler(this.menu_debug_opentestingground_Click);
+            this.menu_favorits.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold);
+            this.menu_favorits.ForeColor = System.Drawing.Color.White;
+            this.menu_favorits.Name = "menu_favorits";
+            this.menu_favorits.Size = new System.Drawing.Size(74, 20);
+            this.menu_favorits.Text = "Favorites";
+            this.menu_favorits.Click += new System.EventHandler(this.menu_playlists_Click);
             // 
             // menu_other
             // 
@@ -391,12 +381,10 @@
             this.menu_other_options.Text = "Options";
             this.menu_other_options.Click += new System.EventHandler(this.menu_other_options_Click);
             // 
-            // menu_debug_openinstaller
+            // timer_listentime
             // 
-            this.menu_debug_openinstaller.Name = "menu_debug_openinstaller";
-            this.menu_debug_openinstaller.Size = new System.Drawing.Size(201, 22);
-            this.menu_debug_openinstaller.Text = "Open Installer";
-            this.menu_debug_openinstaller.Click += new System.EventHandler(this.menu_debug_openinstaller_Click);
+            this.timer_listentime.Interval = 1000;
+            this.timer_listentime.Tick += new System.EventHandler(this.timer_listentime_Tick);
             // 
             // Main
             // 
@@ -466,11 +454,10 @@
         private System.Windows.Forms.ToolStripMenuItem menu_file_open;
         private System.Windows.Forms.ToolStripSeparator menu_file_separator1;
         private System.Windows.Forms.ToolStripMenuItem menu_file_exit;
-        private System.Windows.Forms.ToolStripMenuItem menu_debug;
-        private System.Windows.Forms.ToolStripMenuItem menu_debug_opentestingground;
         private System.Windows.Forms.ToolStripMenuItem menu_other;
         private System.Windows.Forms.ToolStripMenuItem menu_other_options;
-        private System.Windows.Forms.ToolStripMenuItem menu_debug_openinstaller;
+        private System.Windows.Forms.ToolStripMenuItem menu_favorits;
+        private System.Windows.Forms.Timer timer_listentime;
     }
 }
 

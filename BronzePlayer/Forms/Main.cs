@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
 // => NuGet
 using NAudio.Wave; // NAudio
 // => Projects
 using BronzePlayer.Forms;
-using System.Threading;
 
 namespace BronzePlayer
 {
@@ -117,7 +117,8 @@ namespace BronzePlayer
                     }
                     else
                     {
-                        paused = false; audioFile.Position = tempoMusica;
+                        paused = false;
+                        audioFile.Position = tempoMusica;
                     }
 
                     if (stopped == true)
@@ -134,6 +135,10 @@ namespace BronzePlayer
                             audioFile = new AudioFileReader(dirMusica);
                         }
                     }
+
+                    string musicName;
+                    musicName = Path.GetFileNameWithoutExtension(audioFile.FileName);
+                    this.Text = "Bronze Player - " + musicName;
 
                     playing = true;
                     Scripts.waveOut.Init(audioFile); Scripts.waveOut.Play();
@@ -276,6 +281,8 @@ namespace BronzePlayer
                 trackbar_tempomusica.Maximum = 1;
                 trackbar_tempomusica.Value = 0;
 
+                this.Text = "Bronze Player";
+
                 timer.Stop();
                 Scripts.waveOut.Dispose();
             }
@@ -303,14 +310,14 @@ namespace BronzePlayer
             // => Controls:
             button_ytdownload.Text = lang.lang_main__button_ytdownload;
             checkbox_loop.Text = lang.lang_main__checkbox_loop;
-            
             // => Menu:
             menu_file.Text = lang.lang_main__menu_file;
             menu_file_open.Text = lang.lang_main__menu_file_open;
             menu_file_exit.Text = lang.lang_main__menu_file_exit;
-            menu_debug_opentestingground.Text = lang.lang_main__menu_debug_opentestingground;
             menu_other.Text = lang.lang_main__menu_other;
             menu_other_options.Text = lang.lang_main__menu_other_options;
+
+            this.Refresh();
         }
         // # ================================================================================================================================= #
         #endregion
@@ -359,9 +366,7 @@ namespace BronzePlayer
                 #region Load Volume Config
                 float volume = config.volume;
 
-                volume = volume / 100;
-
-                if (volume < 0 || volume > 1)
+                if (volume < 0 || volume > 1 || volume.ToString() == null)
                 {
                     Scripts.waveOut.Volume = Convert.ToSingle(0.5);
                     config.volume = Convert.ToSingle(0.5);
@@ -378,11 +383,6 @@ namespace BronzePlayer
 
                 contextmenustrip.Visible = false;
                 contextmenustrip.Items.Add(lang.lang_main__contextmenustrip_remove);
-
-                if (config.debug == true)
-                {
-                    menu_debug.Visible = true;
-                }
 
                 this.AllowDrop = true;
 
@@ -545,28 +545,6 @@ namespace BronzePlayer
                 if (config.debug == true)
                 {
                     MessageBox.Show(exception.ToString(), "DE3UG - filedialog_FileOk()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
-        private void menu_debug_opentestingground_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                TestingGround.TestingGround tg = new TestingGround.TestingGround();
-                tg.Show();
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - menu_debug_opentestingground_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             #endregion
@@ -965,7 +943,7 @@ namespace BronzePlayer
             try
             {
                 listBox_index = listbox_playlist.SelectedIndex;
-                bool tocar = false; bool select = false;
+                bool select = false;
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string file in files)
                 {
@@ -994,29 +972,24 @@ namespace BronzePlayer
                             button_nexttrack.Enabled = true;
                         }
 
-                        tocar = true;
-
-                        if (tocar == true)
+                        if (playing == false)
                         {
-                            if (playing == false)
+                            listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(file);
+
+                            if (listbox_playlist.Items.Count > 1)
                             {
-                                select = false;
-
-                                listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(file);
-
-                                if (listbox_playlist.Items.Count > 1)
-                                {
-                                    button_previoustrack.Enabled = true;
-                                }
-                                button_nexttrack.Enabled = false;
-
-                                string caminho = listbox_playlist.Text.Replace("\\", "\\\\");
-                                Play(caminho);
+                                button_previoustrack.Enabled = true;
                             }
-                            else
-                            {
-                                select = true;
-                            }
+                            button_nexttrack.Enabled = false;
+
+                            string caminho = listbox_playlist.Text.Replace("\\", "\\\\");
+                            Play(caminho);
+
+                            select = false;
+                        }
+                        else
+                        {
+                            select = true;
                         }
                     }
                 }
@@ -1099,10 +1072,19 @@ namespace BronzePlayer
             #endregion
         }
 
-        private void menu_debug_openinstaller_Click(object sender, EventArgs e)
+        private void menu_playlists_Click(object sender, EventArgs e)
         {
-            Installer.Installer installer = new Installer.Installer();
-            installer.Show();
+            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string playlistsDir = appdata + @"\Milkenm\Bronze Player\Playlists\";
+            if (!Directory.Exists(playlistsDir)) // If NOT exists.
+            {
+                Directory.CreateDirectory(playlistsDir);
+            }
+
+            foreach (var folder in Directory.GetDirectories(playlistsDir))
+            {
+                menu_favorits.DropDownItems.Add(folder);
+            }
         }
         // # ================================================================================================================================= #
 
@@ -1131,10 +1113,28 @@ namespace BronzePlayer
             }
             #endregion DE3UG
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                /*
+                Scripts.DataBase.Insert("INSERT INTO Historico(Nome, Diretorio) VALUES ('lol', 'lel')");
+                */
+                
+                var valor = Scripts.DataBase.Select("SELECT * FROM Historico WHERE ID=6");
+                MessageBox.Show(valor.ToString(), "valor sql");
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString(), "button1_Click()");
+            }
+        }
+
+
+
         // # ================================================================================================================================= #
         #endregion Loop
-
-
 
         #region YouTube Downloader
         // # ================================================================================================================================= #
@@ -1245,5 +1245,26 @@ namespace BronzePlayer
         }
         // # ================================================================================================================================= #
         #endregion YouTube Downloader
+
+
+
+
+
+
+
+
+
+
+
+
+        #region WIP
+        private void timer_listentime_Tick(object sender, EventArgs e)
+        {
+            if (playing == true)
+            {
+                // Adiciona 1 segundo ao tempo total de reprodução na base de dados. =)
+            }
+        }
+        #endregion WIP
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BronzePlayer.Forms
@@ -36,6 +37,24 @@ namespace BronzePlayer.Forms
             }
         }
         // # ================================================================================================================================= #
+
+
+
+        // # ================================================================================================================================= #
+        void LoadLang()
+        {
+            config.Reload();
+            Thread.Sleep(1000);
+            lang.Load(config.lang);
+
+            // => Language
+            groupbox_lang.Text = lang.lang_options__groupbox_lang;
+            // => D3BUG
+            checkbox_debug.Text = lang.lang_options__groupbox_debug_enabledebug;
+
+            this.Refresh();
+        }
+        // # ================================================================================================================================= #
         #endregion Functions
 
 
@@ -52,6 +71,8 @@ namespace BronzePlayer.Forms
         public Options()
         {
             InitializeComponent();
+
+            LoadLang();
 
             initialize = true;
 
@@ -109,9 +130,11 @@ namespace BronzePlayer.Forms
 
                 config.lang = langCode;
                 config.Save();
+                LoadLang();
 
                 new Main(false, null).LoadLang();
-                //MessageBox.Show("You'll need to restart the program for the changes to be applied.", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                new Main(false, null).Refresh();
+                MessageBox.Show(lang.lang_options__msgbox_langchange_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         // # ================================================================================================================================= #
@@ -121,6 +144,11 @@ namespace BronzePlayer.Forms
         {
             config.debug = checkbox_debug.Checked;
             config.Save();
+        }
+
+        private void Options_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

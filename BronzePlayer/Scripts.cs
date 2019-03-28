@@ -16,7 +16,7 @@ public class Scripts
 {
     #region Refers
     #region Database Connection
-    private static string connection_string = null;
+    private static string connection_string = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=BD.mdb";
     private static OleDbConnection database_connection = new OleDbConnection(connection_string);
     #endregion Database Connection
 
@@ -292,10 +292,11 @@ public class Scripts
             {
                 var youtube = YouTube.Default;
                 var vid = youtube.GetVideo(_videoUrl);
+                var vidbytes = vid.GetBytes();
 
                 if (_format == ".mp4")
                 {
-                    File.WriteAllBytes(_outDir + vid.FullName, vid.GetBytes());
+                    File.WriteAllBytes(_outDir, vidbytes);
                 }
                 else if (_format == ".mp3")
                 {
@@ -337,5 +338,19 @@ public class Scripts
             #endregion DE3UG
         }
         #endregion YouTubeDownloader
+
+
+        #region ListBAddItem
+        public class ListBAddItem
+        {
+            public string name;
+            public string value;
+
+            public override string ToString()
+            {
+                return this.name;
+            }
+        }
+        #endregion ListBAddItem
     }
 }

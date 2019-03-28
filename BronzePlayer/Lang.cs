@@ -19,7 +19,7 @@ public class Lang
     public string lang_main__menu_file { get; private set; }
     public string lang_main__menu_file_open { get; private set; }
     public string lang_main__menu_file_exit { get; private set; }
-    public string lang_main__menu_debug_opentestingground { get; private set; }
+    public string lang_main__menu_favorites { get; private set; }
     public string lang_main__menu_other { get; private set; }
     public string lang_main__menu_other_options { get; private set; }
     public string lang_main__contextmenustrip_remove { get; private set; }
@@ -29,6 +29,7 @@ public class Lang
 
     public string lang_options__groupbox_lang { get; private set; }
     public string lang_options__groupbox_debug_enabledebug { get; private set; }
+    public string lang_options__msgbox_langchange_text { get; private set; }
     #endregion Get / Set
 
 
@@ -43,7 +44,7 @@ public class Lang
             lang_main__menu_file = "Ficheiro";
             lang_main__menu_file_open = "Abrir...";
             lang_main__menu_file_exit = "Fechar";
-            lang_main__menu_debug_opentestingground = "Abrir o TestingGround";
+            lang_main__menu_favorites = "Favoritos";
             lang_main__menu_other = "Outros";
             lang_main__menu_other_options = "Configurações";
             lang_main__contextmenustrip_remove = "Remover";
@@ -52,7 +53,8 @@ public class Lang
             lang_main__msgbox_ytnodirectory_text = "Tens de escolher uma pasta para o download!";
 
             lang_options__groupbox_lang = "Idioma:";
-            lang_options__groupbox_debug_enabledebug = "Ativar modo DE3UG.";
+            lang_options__groupbox_debug_enabledebug = "Mostrar erros.";
+            lang_options__msgbox_langchange_text = "Provavelmente, vais ter de fechar a voltar a abrir a aplicação para as alterações serem aplicadas.";
         }
         #endregion pt-PT
 
@@ -63,8 +65,8 @@ public class Lang
             lang_main__checkbox_loop = "Loop";
             lang_main__menu_file = "File";
             lang_main__menu_file_open = "Open...";
-            lang_main__menu_file_exit = "Exit";
-            lang_main__menu_debug_opentestingground = "Open TestingGround";
+            lang_main__menu_file_exit = "Close";
+            lang_main__menu_favorites = "Favorites";
             lang_main__menu_other = "Other";
             lang_main__menu_other_options = "Options";
             lang_main__contextmenustrip_remove = "Remove";
@@ -73,7 +75,8 @@ public class Lang
             lang_main__msgbox_ytnodirectory_text = "You need to choose a folder for the download!";
 
             lang_options__groupbox_lang = "Language:";
-            lang_options__groupbox_debug_enabledebug = "Enable DE3UG mode.";
+            lang_options__groupbox_debug_enabledebug = "Show errors.";
+            lang_options__msgbox_langchange_text = "Probably, you'll have to restart the application for changes to be applied.";
         }
         #endregion en-EN
     }

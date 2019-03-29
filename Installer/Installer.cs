@@ -13,7 +13,7 @@ namespace Installer
     {
         #region Vars
         // # ================================================================================================================================= #
-        string version = "0.1.0";
+        string version = "0.1.1";
         string regPath = @"Software\Milkenm\Bronze Player";
         bool debug = true;
         string arch;
@@ -27,27 +27,33 @@ namespace Installer
         // # ================================================================================================================================= #
         void AddStartMenuShortcut()
         {
-            ///
-            // https://stackoverflow.com/questions/25024785/how-to-create-start-menu-shortcut
-            ///
-
-            string pathToExe = textBox_path.Text + @"\BronzePlayer.exe";
-            string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
-            string appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "Milkenm");
-
-            if (!Directory.Exists(appStartMenuPath)) // If NOT exists.
+            try
             {
-                Directory.CreateDirectory(appStartMenuPath);
+                ///
+                // https://stackoverflow.com/questions/25024785/how-to-create-start-menu-shortcut
+                ///
+
+                string pathToExe = textBox_path.Text + @"\BronzePlayer.exe";
+                string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+                string appStartMenuPath = Path.Combine(commonStartMenuPath, "Programs", "Milkenm");
+
+                if (!Directory.Exists(appStartMenuPath)) // If NOT exists.
+                {
+                    Directory.CreateDirectory(appStartMenuPath);
+                }
+
+                string shortcutLocation = Path.Combine(appStartMenuPath, "Bronze Player.lnk");
+                WshShell shell = new WshShell();
+                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+
+                shortcut.Description = "Bronze Player";
+                shortcut.IconLocation = textBox_path.Text + @"\icon.ico";
+                shortcut.TargetPath = pathToExe;
+                shortcut.Save();
             }
-
-            string shortcutLocation = Path.Combine(appStartMenuPath, "Bronze Player.lnk");
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-
-            shortcut.Description = "Bronze Player";
-            shortcut.IconLocation = textBox_path.Text + @"\icon.ico";
-            shortcut.TargetPath = pathToExe;
-            shortcut.Save();
+            #region DE3UG
+            catch { }
+            #endregion
         }
         // # ================================================================================================================================= #
 
@@ -56,18 +62,24 @@ namespace Installer
         // # ================================================================================================================================= #
         void AddDesktopShortcut()
         {
-            string pathToExe = textBox_path.Text + @"\BronzePlayer.exe";
-            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            try
+            {
+                string pathToExe = textBox_path.Text + @"\BronzePlayer.exe";
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
 
-            string shortcutLocation = Path.Combine(desktopPath, "Bronze Player.lnk");
-            WshShell shell = new WshShell();
-            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
+                string shortcutLocation = Path.Combine(desktopPath, "Bronze Player.lnk");
+                WshShell shell = new WshShell();
+                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
 
-            shortcut.Description = "Bronze Player";
-            shortcut.IconLocation = textBox_path.Text + @"\Icon.ico";
-            shortcut.TargetPath = pathToExe;
-            shortcut.Save();
+                shortcut.Description = "Bronze Player";
+                shortcut.IconLocation = textBox_path.Text + @"\Icon.ico";
+                shortcut.TargetPath = pathToExe;
+                shortcut.Save();
+            }
+            #region DE3UG
+            catch { }
+            #endregion
         }
         // # ================================================================================================================================= #
         #endregion Functions
@@ -101,14 +113,28 @@ namespace Installer
                     }
                     if (newerInstalled == true)
                     {
-                        MessageBox.Show("A newer version is installed!");
+                        MessageBox.Show("A newer version is installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.Close();
                     }
                     else if (install == false)
                     {
-                        MessageBox.Show("This version is already installed!");
+                        MessageBox.Show("This version is already installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.Close();
                     }
+
+                    if (Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString() == "x32")
+                    {
+                        radioButton_32.Checked = true;
+                        radioButton_64.Enabled = false;
+                    }
+                    else if (Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString() == "x64")
+                    {
+                        radioButton_64.Checked = true;
+                        radioButton_32.Enabled = false;
+                    }
+
+                    button_path.Enabled = false;
+                    textBox_path.ReadOnly = true;
                 }
                 this.Enabled = true;
 
@@ -125,13 +151,7 @@ namespace Installer
                 }
             }
             #region DE3UG
-            catch (Exception exception)
-            {
-                if (debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Installer()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            catch { }
             #endregion
         }
 
@@ -146,13 +166,7 @@ namespace Installer
                 }
             }
             #region DE3UG
-            catch (Exception exception)
-            {
-                if (debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - button_path_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            catch { }
             #endregion
         }
 
@@ -160,19 +174,88 @@ namespace Installer
         {
             try
             {
-                backgroundWorker.RunWorkerAsync();
+                this.Enabled = false;
+                progressBar.Style = ProgressBarStyle.Marquee;
+
+                if (Registry.LocalMachine.OpenSubKey(regPath) == null)
+                {
+                    if (Directory.Exists(textBox_path.Text) == false)
+                    {
+                        Directory.CreateDirectory(textBox_path.Text);
+                    }
+
+                    Registry.LocalMachine.CreateSubKey(regPath, true);
+                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Installed", "true", RegistryValueKind.String);
+                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Path", textBox_path.Text, RegistryValueKind.String);
+                    if (radioButton_32.Checked == true)
+                    {
+                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x32", RegistryValueKind.String);
+                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", textBox_path.Text);
+                    }
+                    else if (radioButton_64.Checked == true)
+                    {
+                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x64", RegistryValueKind.String);
+                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", textBox_path.Text);
+                    }
+                    System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip");
+                    System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip");
+
+                    progressBar.Style = ProgressBarStyle.Blocks;
+                }
+                else // If installed
+                {
+                    string path = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString();
+                    string arch = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString();
+
+                    foreach (string filePath in Directory.GetFiles(path))
+                    {
+                        if (Path.GetFileName(filePath) != "BD.mdb" && Path.GetFileName(filePath) != "BronzePlayer.exe.config")
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                    }
+                    foreach (string dir in Directory.GetDirectories(path))
+                    {
+                        Directory.Delete(dir);
+                    }
+
+                    if (arch == "x32")
+                    {
+                        try
+                        {
+                            ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32zip", path);
+                        }
+                        catch { }
+                    }
+                    else if (arch == "x64")
+                    {
+                        try
+                        {
+                            ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", path);
+                        }
+                        catch { }
+                    }
+                }
+
+                if (checkBox_startShortcut.Checked == true)
+                {
+                    AddStartMenuShortcut();
+                }
+                if (checkBox_desktopIcon.Checked == true)
+                {
+                    AddDesktopShortcut();
+                }
+
+                Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Version", version, RegistryValueKind.String);
+                progressBar.Style = ProgressBarStyle.Blocks;
+                MessageBox.Show("Bronze Player (v" + version + ") has been installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                Environment.Exit(0);
             }
             #region DE3UG
-            catch (Exception exception)
+            catch
             {
-                progressBar.Style = ProgressBarStyle.Blocks;
-                if (debug == true)
-                {
-                    var st = new StackTrace(exception, true);
-                    var frame = st.GetFrame(0);
-                    var line = frame.GetFileLineNumber();
-                    MessageBox.Show(exception.Message.ToString() + "\n\n\nLinha: " + line.ToString(), "DE3UG - button_install_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Environment.Exit(0);
             }
             #endregion
         }
@@ -195,13 +278,7 @@ namespace Installer
                 }
             }
             #region DE3UG
-            catch (Exception exception)
-            {
-                if (debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - radioButton_32_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            catch { }
             #endregion
         }
 
@@ -216,172 +293,8 @@ namespace Installer
                 }
             }
             #region DE3UG
-            catch (Exception exception)
-            {
-                if (debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - radioButton_64_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            catch { }
             #endregion
-        }
-
-        private void backgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                this.Enabled = false;
-                progressBar.Style = ProgressBarStyle.Marquee;
-                if (Registry.LocalMachine.OpenSubKey(regPath) == null)
-                {
-                    if (Directory.Exists(textBox_path.Text) == false)
-                    {
-                        Directory.CreateDirectory(textBox_path.Text);
-                    }
-
-                    Registry.LocalMachine.CreateSubKey(regPath, true);
-                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Installed", "true", RegistryValueKind.String);
-                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Version", version, RegistryValueKind.String);
-                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Path", textBox_path.Text, RegistryValueKind.String);
-                    if (radioButton_32.Checked == true)
-                    {
-                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x32", RegistryValueKind.String);
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip");
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", textBox_path.Text);
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip");
-                    }
-                    else if (radioButton_64.Checked == true)
-                    {
-                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x64", RegistryValueKind.String);
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip");
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", textBox_path.Text);
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip");
-                    }
-
-                    progressBar.Style = ProgressBarStyle.Blocks;
-                }
-                else // If installed
-                {
-                    string path = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString();
-                    var listA = new List<byte>();
-                    var listB = new List<byte>();
-
-                    Registry.LocalMachine.CreateSubKey(regPath, true);
-                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Version", version, RegistryValueKind.String);
-                    if (radioButton_32.Checked == true)
-                    {
-                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x32", RegistryValueKind.String);
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip");
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", "Files32");
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip");
-                        foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\Files32"))
-                        {
-                            string[] fileName = file.Split('\\');
-
-                            if (System.IO.File.Exists(path + fileName[1]) == true)
-                            {
-                                listA.Clear();
-                                listB.Clear();
-
-                                foreach (byte byte1 in System.IO.File.ReadAllBytes(file))
-                                {
-                                    listA.Add(byte1);
-                                }
-                                foreach (byte byte2 in System.IO.File.ReadAllBytes(path + fileName[1]))
-                                {
-                                    listB.Add(byte2);
-                                }
-
-                                int loop = 0;
-                                bool dif = false;
-                                while (loop < listA.Count)
-                                {
-                                    if (listA[loop].ToString() != listB[loop].ToString())
-                                    {
-                                        dif = true;
-                                    }
-                                    loop++;
-                                }
-                                if (dif == true)
-                                {
-                                    System.IO.File.Delete(path + fileName[1]);
-                                    System.IO.File.Move(file, path + fileName[1]);
-                                }
-                            }
-                            else
-                            {
-                                System.IO.File.Move(file, path + fileName[1]);
-                            }
-                        }
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32");
-                    }
-                    else if (radioButton_64.Checked == true)
-                    {
-                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x64", RegistryValueKind.String);
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip");
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", "Files64");
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip");
-                        foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "Files64"))
-                        {
-                            string[] fileName = file.Split('\\');
-
-                            if (System.IO.File.Exists(path + fileName[1]) == true)
-                            {
-                                listA.Clear();
-                                listB.Clear();
-
-                                foreach (byte byte1 in System.IO.File.ReadAllBytes(file))
-                                {
-                                    listA.Add(byte1);
-                                }
-                                foreach (byte byte2 in System.IO.File.ReadAllBytes(path + fileName[1]))
-                                {
-                                    listB.Add(byte2);
-                                }
-
-                                int loop = 0;
-                                bool dif = false;
-                                while (loop < listA.Count)
-                                {
-                                    if (listA[loop].ToString() != listB[loop].ToString())
-                                    {
-                                        dif = true;
-                                    }
-                                    loop++;
-                                }
-                                if (dif == true)
-                                {
-                                    System.IO.File.Delete(path + fileName[1]);
-                                    System.IO.File.Move(file, path + fileName[1]);
-                                }
-                            }
-                            else
-                            {
-                                System.IO.File.Move(file, path + fileName[1]);
-                            }
-                        }
-                        System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64");
-                    }
-                }
-
-                progressBar.Style = ProgressBarStyle.Blocks;
-
-                if (checkBox_startShortcut.Checked == true)
-                {
-                    AddStartMenuShortcut();
-                }
-                if (checkBox_desktopIcon.Checked == true)
-                {
-                    AddDesktopShortcut();
-                }
-
-                MessageBox.Show("Bronze Player (v" + version + ") has been installed!");
-                Environment.Exit(0);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.ToString(), "DE3UG - backgroundWorker_DoWork()");
-            }
         }
     }
 }

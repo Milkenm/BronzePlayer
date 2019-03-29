@@ -133,10 +133,6 @@
             this.panel1.Size = new System.Drawing.Size(77, 35);
             this.panel1.TabIndex = 10;
             // 
-            // backgroundWorker
-            // 
-            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
-            // 
             // Installer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

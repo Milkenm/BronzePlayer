@@ -173,8 +173,26 @@ namespace Installer
         {
             try
             {
+                backgroundWorker.RunWorkerAsync();
+            }
+            catch { }
+        }
+
+        private void backgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
                 this.Enabled = false;
                 progressBar.Style = ProgressBarStyle.Marquee;
+
+                if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\Files32"))
+                {
+                    Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32", true);
+                }
+                if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\Files64"))
+                {
+                    Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64", true);
+                }
 
                 if (Registry.LocalMachine.OpenSubKey(regPath) == null)
                 {
@@ -220,19 +238,33 @@ namespace Installer
 
                     if (arch == "x32")
                     {
-                        try
+                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32zip", AppDomain.CurrentDomain.BaseDirectory + @"\Files32");
+                        foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\Files32"))
                         {
-                            ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32zip", path);
+                            string fileName = Path.GetFileName(file);
+                            if (System.IO.File.Exists(path + fileName) == false)
+                            {
+                                System.IO.File.Copy(file, path + fileName);
+                            }
+
+                            Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32", true);
                         }
-                        catch { }
                     }
                     else if (arch == "x64")
                     {
-                        try
+
+                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", AppDomain.CurrentDomain.BaseDirectory + @"\Files64");
+
+                        foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\Files64"))
                         {
-                            ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", path);
+                            string fileName = Path.GetFileName(file);
+                            if (System.IO.File.Exists(path + fileName) == false)
+                            {
+                                System.IO.File.Copy(file, path + fileName);
+                            }
                         }
-                        catch { }
+
+                        Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64", true);
                     }
                 }
 
@@ -249,14 +281,17 @@ namespace Installer
                 progressBar.Style = ProgressBarStyle.Blocks;
                 MessageBox.Show("Bronze Player (v" + version + ") has been installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory))
+                {
+                    if (file != AppDomain.CurrentDomain.BaseDirectory + "Installer.exe")
+                    {
+                        System.IO.File.Delete(file);
+                    }
+                }
+
                 Environment.Exit(0);
             }
-            #region DE3UG
-            catch
-            {
-                Environment.Exit(0);
-            }
-            #endregion
+            catch { }
         }
 
         private void radioButton_32_CheckedChanged(object sender, EventArgs e)

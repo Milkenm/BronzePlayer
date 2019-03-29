@@ -4,19 +4,22 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using System.Media;
 using System.IO;
+using System.Threading;
 // => NuGet
 using NAudio.Wave; // NAudio
-using VideoLibrary; // VideoLibrary
 using MediaToolkit; // MediaToolKit
 using MediaToolkit.Model; // MediaToolKit
 // => Projects
 using BronzePlayer;
+using NYoutubeDL;
+using System.Net;
+using System.Threading.Tasks;
 
 public class Scripts
 {
     #region Refers
     #region Database Connection
-    private static string connection_string = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=BD.mdb";
+    private static readonly string connection_string = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=BD.mdb";
     private static OleDbConnection database_connection = new OleDbConnection(connection_string);
     #endregion Database Connection
 
@@ -109,10 +112,11 @@ public class Scripts
             {
                 database_connection.Open();
 
-                OleDbCommand cmd = new OleDbCommand();
-
-                cmd.Connection = database_connection;
-                cmd.CommandText = _query;
+                var cmd = new OleDbCommand
+                {
+                    Connection = database_connection,
+                    CommandText = _query
+                };
                 cmd.ExecuteNonQuery();
 
                 database_connection.Close();
@@ -138,9 +142,11 @@ public class Scripts
             {
                 database_connection.Open();
 
-                OleDbCommand cmd = new OleDbCommand();
-                cmd.Connection = database_connection;
-                cmd.CommandText = _query;
+                var cmd = new OleDbCommand
+                {
+                    Connection = database_connection,
+                    CommandText = _query
+                };
                 cmd.ExecuteNonQuery();
 
                 database_connection.Close();
@@ -172,10 +178,11 @@ public class Scripts
 
                 string sql = "SELECT COUNT(*) FROM Login_Funcionario WHERE Login = '" + _user + "' AND Password = '" + _password + "'";
 
-                OleDbCommand cmd = new OleDbCommand();
-
-                cmd.Connection = database_connection;
-                cmd.CommandText = sql;
+                var cmd = new OleDbCommand
+                {
+                    Connection = database_connection,
+                    CommandText = sql
+                };
 
                 int codigo_ID = Convert.ToInt32(cmd.ExecuteScalar().ToString());
 
@@ -286,54 +293,47 @@ public class Scripts
 
 
         #region YouTubeDownloader
-        public bool YouTubeDownloader(string _videoUrl, string _outDir, string _format)
+        public async Task YouTubeDownloader(string _link, string _extension, string _path)
         {
             try
             {
-                var youtube = YouTube.Default;
-                var vid = youtube.GetVideo(_videoUrl);
-                var vidbytes = vid.GetBytes();
+                ///
+                // https://github.com/BrianAllred/NYoutubeDL/commit/2bd39515eebb8c5fb866687781165804e3b0579f
+                ///
 
-                if (_format == ".mp4")
+                string name = "";
+                bool loop = true;
+
+                while (loop != false)
                 {
-                    File.WriteAllBytes(_outDir, vidbytes);
-                }
-                else if (_format == ".mp3")
-                {
-                    string tempPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Bronze Player\\temp\\";
-                    if (!Directory.Exists(tempPath)) // If NOT exists.
+                    name = Convert.ToString(tools.Random(100000, 999999));
+                    if (!File.Exists(_path + @"\" + name + _extension))
                     {
-                        Directory.CreateDirectory(tempPath);
+                        loop = false;
                     }
-
-                    File.WriteAllBytes(tempPath + vid.FullName, vid.GetBytes());
-
-                    string outName = vid.FullName;
-                    outName = outName.Replace(" - YouTube.mp4", null);
-
-                    var inputFile = new MediaFile { Filename = tempPath + vid.FullName };
-                    var outputFile = new MediaFile { Filename = _outDir + outName + ".mp3" };
-                
-                    using (var engine = new Engine()) // Convert to .mp3.
-                    {
-                        engine.GetMetadata(inputFile);
-                        engine.Convert(inputFile, outputFile);
-                    }
-
-                    File.Delete(tempPath + vid.FullName);
                 }
 
-                return true;
+                var youtubeDl = new YoutubeDL();
+
+                youtubeDl.Options.FilesystemOptions.Output = _path + @"\" + name + _extension;
+                if (_extension == ".mp3")
+                {
+                    youtubeDl.Options.PostProcessingOptions.ExtractAudio = true;
+                    
+                }
+                youtubeDl.VideoUrl = _link;
+                await youtubeDl.PrepareDownloadAsync();
+                await youtubeDl.DownloadAsync();
+
+                while (!File.Exists(_path + @"\" + name + _extension)) { }
             }
             #region DE3UG
             catch (Exception exception)
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Scripts.Tools.YouTubeDownloader()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(exception.Message.ToString(), "DE3UG - Scripts.Tools.YouTubeDownloader()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                return false;
             }
             #endregion DE3UG
         }

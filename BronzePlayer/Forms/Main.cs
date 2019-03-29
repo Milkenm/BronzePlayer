@@ -7,8 +7,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 // => NuGet
 using NAudio.Wave; // NAudio
+using NYoutubeDL;
 // => Projects
 using BronzePlayer.Forms;
+using System.Linq;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace BronzePlayer
 {
@@ -25,7 +29,7 @@ namespace BronzePlayer
         // # ================================================================================================================================= #
         bool playing = false, stopped = false, paused = false, looping = false, doloop = false, yt_expanded = false;
         long tempoMusica;
-        string dirMusica, ytDownloadPath;
+        string dirMusica;
         object listBox_item;
         int listBox_index;
         // # ================================================================================================================================= #
@@ -1113,36 +1117,18 @@ namespace BronzePlayer
             }
             #endregion DE3UG
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                /*
-                Scripts.DataBase.Insert("INSERT INTO Historico(Nome, Diretorio) VALUES ('lol', 'lel')");
-                */
-                
-                var valor = Scripts.DataBase.Select("SELECT * FROM Historico WHERE ID=6");
-                MessageBox.Show(valor.ToString(), "valor sql");
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.ToString(), "button1_Click()");
-            }
-        }
-
-
-
         // # ================================================================================================================================= #
         #endregion Loop
+
+
 
         #region YouTube Downloader
         // # ================================================================================================================================= #
         [DllImport("user32.dll")]
-        static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, Int32 wParam, Int32 lParam);
-        private const Int32 CB_SETITEMHEIGHT = 0x153;
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+        private const int CB_SETITEMHEIGHT = 0x153;
 
-        private void SetComboBoxHeight(IntPtr comboBoxHandle, Int32 comboBoxDesiredHeight)
+        private void SetComboBoxHeight(IntPtr comboBoxHandle, int comboBoxDesiredHeight)
         {
             try
             {
@@ -1175,7 +1161,7 @@ namespace BronzePlayer
 
                 if (yt_expanded != true)
                 {
-                    this.Size = new Size(478, 329);
+                    Size = new Size(478, 329);
                     button_ytexpand.Text = "▲";
                     yt_expanded = true;
                 }
@@ -1201,7 +1187,7 @@ namespace BronzePlayer
 
 
         // # ================================================================================================================================= #
-        private void button_ytdownload_Click(object sender, EventArgs e)
+        private async void button_ytdownload_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1210,21 +1196,12 @@ namespace BronzePlayer
                     folderdialog.ShowDialog();
                     if (folderdialog.SelectedPath != null)
                     {
-                        ytDownloadPath = folderdialog.SelectedPath;
                         button_ytdownload.Enabled = false;
+                        panel_ytDownloading.Visible = true;
 
-                        bool ytSuccess = Scripts.tools.YouTubeDownloader(textbox_ytlink.Text, ytDownloadPath + "\\", combobox_ytformat.Text);
-                        ytDownloadPath = null;
+                        await Scripts.tools.YouTubeDownloader(textbox_ytlink.Text, combobox_ytformat.Text, folderdialog.SelectedPath);
 
-                        if (ytSuccess == true)
-                        {
-                            MessageBox.Show(lang.lang_main__msgbox_ytsuccess_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            MessageBox.Show(lang.lang_main__msgbox_ytfail_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        ytSuccess = false;
+                        panel_ytDownloading.Visible = false;
                         button_ytdownload.Enabled = true;
                     }
                     else
@@ -1251,6 +1228,18 @@ namespace BronzePlayer
 
 
 
+
+
+        private void progressbar_ytprogress_Click(object sender, EventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message.ToString());
+            }
+        }
 
 
 

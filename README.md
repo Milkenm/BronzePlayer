@@ -22,11 +22,10 @@ Releases are found [here](https://goo.gl/yWPT2H).
 
 
 ### This is the way im currently doing it:
-**v.1.2.3.4-x**
+**v.1.2.3-x**
 * **1** is a major release, where there was a big big extremely big change in the program.
 * **2**: is a big release, like when new stuff is added.
 * **3**: is when that big stuff is fixed.
-* **4**: only for *alpha* releases.
 * **x**: replaced with *alpha* (the program is completly broken or some functionalities are WIP) or *beta* (there are known issues that impact main tasks (for example: after playing a song the program crashes)) release.
 # Other stuff
 ### Typos

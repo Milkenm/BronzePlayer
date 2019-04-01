@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 using System.Windows.Forms;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
@@ -19,8 +20,6 @@ namespace Installer
         bool install = false, newerInstalled = false;
         // # ================================================================================================================================= #
         #endregion Vars
-
-
 
         #region Functions
         // # ================================================================================================================================= #
@@ -85,6 +84,10 @@ namespace Installer
 
 
 
+
+
+        #region Load
+        // # ================================================================================================================================= #
         public Installer()
         {
             try
@@ -153,7 +156,13 @@ namespace Installer
             catch { }
             #endregion
         }
+        // # ================================================================================================================================= #
+        #endregion Load
 
+
+
+        #region Path
+        // # ================================================================================================================================= #
         private void button_path_Click(object sender, EventArgs e)
         {
             try
@@ -168,23 +177,21 @@ namespace Installer
             catch { }
             #endregion
         }
+        // # ================================================================================================================================= #
+        #endregion Path
 
+
+
+        #region Install Button
+        // # ================================================================================================================================= #
         private void button_install_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                backgroundWorker.RunWorkerAsync();
-            }
-            catch { }
-        }
-
-        private void backgroundWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
             {
                 this.Enabled = false;
                 progressBar.Style = ProgressBarStyle.Marquee;
 
+                #region ???
                 if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\Files32"))
                 {
                     Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32", true);
@@ -193,7 +200,11 @@ namespace Installer
                 {
                     Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64", true);
                 }
+                #endregion ???
 
+
+
+                #region Fresh Install
                 if (Registry.LocalMachine.OpenSubKey(regPath) == null)
                 {
                     if (Directory.Exists(textBox_path.Text) == false)
@@ -204,12 +215,12 @@ namespace Installer
                     Registry.LocalMachine.CreateSubKey(regPath, true);
                     Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Installed", "true", RegistryValueKind.String);
                     Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Path", textBox_path.Text, RegistryValueKind.String);
-                    if (radioButton_32.Checked == true)
+                    if (radioButton_32.Checked == true) // x32
                     {
                         Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x32", RegistryValueKind.String);
                         ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", textBox_path.Text);
                     }
-                    else if (radioButton_64.Checked == true)
+                    else if (radioButton_64.Checked == true) // x64
                     {
                         Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x64", RegistryValueKind.String);
                         ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", textBox_path.Text);
@@ -219,23 +230,25 @@ namespace Installer
 
                     progressBar.Style = ProgressBarStyle.Blocks;
                 }
+                #endregion Fresh Install
+                #region Update Install
                 else // If installed
                 {
                     string path = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString();
                     string arch = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString();
 
-                    foreach (string filePath in Directory.GetFiles(path))
+                    #region Remove Old Installation Files
+                    foreach (var filePath in Directory.GetFiles(path))
                     {
-                        if (Path.GetFileName(filePath) != "BD.mdb" && Path.GetFileName(filePath) != "BronzePlayer.exe.config")
+                        if (Path.GetFileNameWithoutExtension(filePath) != "BD" && Path.GetFileNameWithoutExtension(filePath) != "BronzePlayer.exe")
                         {
                             System.IO.File.Delete(filePath);
                         }
                     }
-                    foreach (string dir in Directory.GetDirectories(path))
-                    {
-                        Directory.Delete(dir);
-                    }
+                    Thread.Sleep(2000);
+                    #endregion Remove Old Installation Files
 
+                    #region Install x32
                     if (arch == "x32")
                     {
                         ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32zip", AppDomain.CurrentDomain.BaseDirectory + @"\Files32");
@@ -250,6 +263,8 @@ namespace Installer
                             Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32", true);
                         }
                     }
+                    #endregion Install x32
+                    #region Install x64
                     else if (arch == "x64")
                     {
 
@@ -266,8 +281,13 @@ namespace Installer
 
                         Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64", true);
                     }
+                    #endregion Install x64
                 }
+                #endregion Update Install
 
+
+
+                #region Create Shortcuts
                 if (checkBox_startShortcut.Checked == true)
                 {
                     AddStartMenuShortcut();
@@ -276,11 +296,13 @@ namespace Installer
                 {
                     AddDesktopShortcut();
                 }
+                #endregion Create Shortcuts
 
                 Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Version", version, RegistryValueKind.String);
                 progressBar.Style = ProgressBarStyle.Blocks;
                 MessageBox.Show("Bronze Player (v" + version + ") has been installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                #region Delete Installation Files
                 foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory))
                 {
                     if (file != AppDomain.CurrentDomain.BaseDirectory + "Installer.exe")
@@ -288,12 +310,18 @@ namespace Installer
                         System.IO.File.Delete(file);
                     }
                 }
-
+                #endregion Delete Installation Files
                 Environment.Exit(0);
             }
             catch { }
         }
+        // # ================================================================================================================================= #
+        #endregion Install Button
 
+
+
+        #region 32/64 Picker
+        // # ================================================================================================================================= #
         private void radioButton_32_CheckedChanged(object sender, EventArgs e)
         {
             try
@@ -315,7 +343,11 @@ namespace Installer
             catch { }
             #endregion
         }
+        // # ================================================================================================================================= #
 
+
+
+        // # ================================================================================================================================= #
         private void radioButton_64_CheckedChanged(object sender, EventArgs e)
         {
             try
@@ -330,5 +362,7 @@ namespace Installer
             catch { }
             #endregion
         }
+        // # ================================================================================================================================= #
+        #endregion 32/64 Picker
     }
 }

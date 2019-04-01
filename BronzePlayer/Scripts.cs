@@ -14,9 +14,15 @@ using BronzePlayer;
 using NYoutubeDL;
 using System.Net;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using Microsoft.Win32;
 
 public class Scripts
 {
+    #region Vars
+    string regPath = @"Software\Milkenm\Bronze Player";
+    #endregion Vars
+
     #region Refers
     #region Database Connection
     private static readonly string connection_string = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=BD.mdb";
@@ -52,7 +58,7 @@ public class Scripts
             try
             {
                 database_connection.Open();
-                OleDbCommand cmd = new OleDbCommand(_query, database_connection);
+                var cmd = new OleDbCommand(_query, database_connection);
                 cmd.ExecuteNonQuery();
                 database_connection.Close();
             }
@@ -112,11 +118,7 @@ public class Scripts
             {
                 database_connection.Open();
 
-                var cmd = new OleDbCommand
-                {
-                    Connection = database_connection,
-                    CommandText = _query
-                };
+                var cmd = new OleDbCommand(_query, database_connection);
                 cmd.ExecuteNonQuery();
 
                 database_connection.Close();
@@ -142,12 +144,7 @@ public class Scripts
             {
                 database_connection.Open();
 
-                var cmd = new OleDbCommand
-                {
-                    Connection = database_connection,
-                    CommandText = _query
-                };
-                cmd.ExecuteNonQuery();
+                var cmd = new OleDbCommand(_query, database_connection);
 
                 database_connection.Close();
             }
@@ -163,9 +160,7 @@ public class Scripts
         }
         #endregion Delete(_query)
         #endregion Commands
-
-
-
+        
         #region Login(_user, _password)
         public bool Login(string _user, string _password)
         {
@@ -173,16 +168,9 @@ public class Scripts
             {
                 database_connection.Open();
 
-                _user = SQLIFilter(_user);
-                _password = SQLIFilter(_password);
+                string sql = "SELECT COUNT(*) FROM Login_Funcionario WHERE Login = '" + SQLIFilter(_user) + "' AND Password = '" + SQLIFilter(_password) + "'";
 
-                string sql = "SELECT COUNT(*) FROM Login_Funcionario WHERE Login = '" + _user + "' AND Password = '" + _password + "'";
-
-                var cmd = new OleDbCommand
-                {
-                    Connection = database_connection,
-                    CommandText = sql
-                };
+                var cmd = new OleDbCommand(sql, database_connection);
 
                 int codigo_ID = Convert.ToInt32(cmd.ExecuteScalar().ToString());
 
@@ -209,9 +197,7 @@ public class Scripts
             #endregion DE3UG
         }
         #endregion Login(_user, _password)
-
-
-
+        
         #region SQLIFilter(_string)
         public string SQLIFilter(string _string)
         {
@@ -245,13 +231,9 @@ public class Scripts
         {
             try
             {
-                using (Mp3FileReader mp3 = new Mp3FileReader(_indir))
-                {
-                    using (WaveStream wavestream = WaveFormatConversionStream.CreatePcmStream(mp3))
-                    {
-                        WaveFileWriter.CreateWaveFile(_outdir, wavestream);
-                    }
-                }
+                var mp3 = new Mp3FileReader(_indir);
+                var wavestream = WaveFormatConversionStream.CreatePcmStream(mp3);
+                WaveFileWriter.CreateWaveFile(_outdir, wavestream);
             }
             #region DE3UG
             catch (Exception exception)
@@ -289,57 +271,47 @@ public class Scripts
             #endregion DE3UG
         }
         #endregion
-
-
-
+        
         #region YouTubeDownloader
+        /// https://github.com/BrianAllred/NYoutubeDL/commit/2bd39515eebb8c5fb866687781165804e3b0579f ///
+
         public async Task YouTubeDownloader(string _link, string _extension, string _path)
         {
             try
             {
-                ///
-                // https://github.com/BrianAllred/NYoutubeDL/commit/2bd39515eebb8c5fb866687781165804e3b0579f
-                ///
-
-                string name = "";
-                bool loop = true;
-
-                while (loop != false)
-                {
-                    name = Convert.ToString(tools.Random(100000, 999999));
-                    if (!File.Exists(_path + @"\" + name + _extension))
-                    {
-                        loop = false;
-                    }
-                }
-
                 var youtubeDl = new YoutubeDL();
+
+                #region File Name
+                string name = Random(100000, 999999).ToString();
+                while (File.Exists(_path + @"\" + name + _extension))
+                {
+                    name = Random(100000, 999999).ToString();
+                }
+                #endregion File Name
+
 
                 youtubeDl.Options.FilesystemOptions.Output = _path + @"\" + name + _extension;
                 if (_extension == ".mp3")
                 {
                     youtubeDl.Options.PostProcessingOptions.ExtractAudio = true;
-                    
                 }
                 youtubeDl.VideoUrl = _link;
+                youtubeDl.YoutubeDlPath = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString() + "youtube-dl.exe";
                 await youtubeDl.PrepareDownloadAsync();
                 await youtubeDl.DownloadAsync();
-
-                while (!File.Exists(_path + @"\" + name + _extension)) { }
             }
             #region DE3UG
             catch (Exception exception)
             {
                 if (config.debug == true)
                 {
-                    MessageBox.Show(exception.Message.ToString(), "DE3UG - Scripts.Tools.YouTubeDownloader()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    tools.Exception(exception);
                 }
             }
             #endregion DE3UG
         }
         #endregion YouTubeDownloader
-
-
+        
         #region ListBAddItem
         public class ListBAddItem
         {
@@ -352,5 +324,23 @@ public class Scripts
             }
         }
         #endregion ListBAddItem
+        
+        #region Exception
+        public void Exception(Exception _exception)
+        {
+            var stackTrace = new StackTrace(_exception, true);
+            var frame = stackTrace.GetFrame(0);
+
+            MessageBox.Show(_exception.Message + "\n\n\nMethod: " + frame.GetMethod().Name + "" +
+                "\nLinha: " + frame.GetFileLineNumber(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        #endregion Exception
+        
+        #region FakeError
+        public void FakeError(string _cause)
+        {
+            throw new Exception(_cause);
+        }
+        #endregion FakeError
     }
 }

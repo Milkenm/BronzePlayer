@@ -13,6 +13,7 @@ using BronzePlayer.Forms;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BronzePlayer
 {
@@ -159,11 +160,8 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
-
-
-        // # ================================================================================================================================= #
         void PlayNext()
         {
             try
@@ -201,11 +199,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         void PlayPrevious()
         {
             try
@@ -240,11 +236,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         void Pause()
         {
             try
@@ -268,11 +262,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         void Stop()
         {
             try
@@ -300,11 +292,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         public void LoadLang()
         {
             config.Reload();
@@ -318,10 +308,21 @@ namespace BronzePlayer
             menu_file.Text = lang.lang_main__menu_file;
             menu_file_open.Text = lang.lang_main__menu_file_open;
             menu_file_exit.Text = lang.lang_main__menu_file_exit;
+            menu_favorites.Text = lang.lang_main__menu_favorites;
             menu_other.Text = lang.lang_main__menu_other;
             menu_other_options.Text = lang.lang_main__menu_other_options;
 
             this.Refresh();
+        }
+
+
+
+        public void Ex(Exception _exception)
+        {
+            if (Scripts.config.debug == true)
+            {
+                Scripts.tools.Exception(_exception);
+            }
         }
         // # ================================================================================================================================= #
         #endregion
@@ -427,11 +428,9 @@ namespace BronzePlayer
             }
             #endregion DE3UG
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
@@ -473,11 +472,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void menu_file_open_Click(object sender, EventArgs e)
         {
             try
@@ -494,11 +491,8 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
 
 
-
-        // # ================================================================================================================================= #
         private void filedialog_FileOk(object sender, CancelEventArgs e)
         {
             try
@@ -553,11 +547,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void menu_other_options_Click(object sender, EventArgs e)
         {
             try
@@ -602,11 +594,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void button_pause_Click(object sender, EventArgs e)
         {
             try
@@ -624,11 +614,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void button_stop_Click(object sender, EventArgs e)
         {
             try
@@ -781,11 +769,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void trackBar_tempoMusica_Scroll(object sender, EventArgs e)
         {
             try
@@ -834,11 +820,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void contextMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             try
@@ -858,11 +842,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void listbox_playlist_Click(object sender, EventArgs e)
         {
             try
@@ -891,11 +873,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void timer_playnext_Tick(object sender, EventArgs e)
         {
             try
@@ -1076,6 +1056,8 @@ namespace BronzePlayer
             #endregion
         }
 
+
+
         private void menu_playlists_Click(object sender, EventArgs e)
         {
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -1087,14 +1069,12 @@ namespace BronzePlayer
 
             foreach (var folder in Directory.GetDirectories(playlistsDir))
             {
-                menu_favorits.DropDownItems.Add(folder);
+                menu_favorites.DropDownItems.Add(folder);
             }
         }
-        // # ================================================================================================================================= #
+        
 
 
-
-        // # ================================================================================================================================= #
         private void timer_loopcheck_Tick(object sender, EventArgs e)
         {
             try
@@ -1144,11 +1124,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
 
-
-
-        // # ================================================================================================================================= #
+       
+        
         private void button_ytexpand_Click(object sender, EventArgs e)
         {
             try
@@ -1182,11 +1160,9 @@ namespace BronzePlayer
             }
             #endregion
         }
-        // # ================================================================================================================================= #
+        
+ 
 
-
-
-        // # ================================================================================================================================= #
         private async void button_ytdownload_Click(object sender, EventArgs e)
         {
             try
@@ -1225,28 +1201,54 @@ namespace BronzePlayer
 
 
 
-
-
-
-
-
-        private void progressbar_ytprogress_Click(object sender, EventArgs e)
+        #region Favorites
+        // # ================================================================================================================================= #
+        private void menu_favorites_add_Click(object sender, EventArgs e)
         {
             try
             {
+                if (listbox_playlist.Text != null && listbox_playlist.Text != "")
+                {
+                    var item = new ToolStripMenuItem();
+                    item.Text = listbox_playlist.Text;
+                    item.Click += new EventHandler(favorites_Click);
+                    menu_favorites.DropDownItems.Add(item);
+                }
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message.ToString());
+                Ex(exception);
             }
         }
 
+
+
+        private void favorites_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var item = (ToolStripMenuItem)sender;
+                var name = item.Text;
+
+                if (File.Exists(name))
+                {
+                    Play(name);
+                }
+            }
+            catch (Exception exception)
+            {
+                Ex(exception);
+            }
+        }
+        // # ================================================================================================================================= #
+        #endregion Favorites
 
 
 
 
 
         #region WIP
+        // # ================================================================================================================================= #
         private void timer_listentime_Tick(object sender, EventArgs e)
         {
             if (playing == true)
@@ -1254,6 +1256,7 @@ namespace BronzePlayer
                 // Adiciona 1 segundo ao tempo total de reprodução na base de dados. =)
             }
         }
+        // # ================================================================================================================================= #
         #endregion WIP
     }
 }

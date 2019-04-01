@@ -47,4 +47,8 @@ If  you find any, [you can report it here](https://github.com/Milkenm/BronzePlay
 
 
 ### Links
-Website I used to edit Markdowns: [StackEdit](https://stackedit.io/)
+Website I used to edit Markdowns: [StackEdit](https://stackedit.io/)\
+**Packages:**
+[NYoutubeDL](https://www.nuget.org/packages/NYoutubeDL),
+[MediaToolkit](https://www.nuget.org/packages/MediaToolkit),
+[NAudio](https://www.nuget.org/packages/NAudio/1.9.0-preview2)

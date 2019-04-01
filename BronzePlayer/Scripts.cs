@@ -5,17 +5,17 @@ using System.Data.OleDb;
 using System.Media;
 using System.IO;
 using System.Threading;
-// => NuGet
-using NAudio.Wave; // NAudio
-using MediaToolkit; // MediaToolKit
-using MediaToolkit.Model; // MediaToolKit
-// => Projects
-using BronzePlayer;
-using NYoutubeDL;
 using System.Net;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.Win32;
+// => NuGet
+using NAudio.Wave; // NAudio (Media Player)
+using MediaToolkit; // MediaToolKit (Converter)
+using MediaToolkit.Model; // MediaToolKit (Converter)
+using NYoutubeDL; // NYouTubeDL (YouTube Extractor)
+// => Projects
+using BronzePlayer;
 
 public class Scripts
 {
@@ -289,14 +289,13 @@ public class Scripts
                 }
                 #endregion File Name
 
-
                 youtubeDl.Options.FilesystemOptions.Output = _path + @"\" + name + _extension;
                 if (_extension == ".mp3")
                 {
                     youtubeDl.Options.PostProcessingOptions.ExtractAudio = true;
                 }
                 youtubeDl.VideoUrl = _link;
-                youtubeDl.YoutubeDlPath = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString() + "youtube-dl.exe";
+                youtubeDl.YoutubeDlPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\Software\Milkenm\Bronze Player", "Path", null).ToString() + "youtube-dl.exe";
                 await youtubeDl.PrepareDownloadAsync();
                 await youtubeDl.DownloadAsync();
             }

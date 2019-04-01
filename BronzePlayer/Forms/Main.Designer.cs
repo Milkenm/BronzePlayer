@@ -376,14 +376,14 @@
 			// menu_favorites_add
 			// 
 			this.menu_favorites_add.Name = "menu_favorites_add";
-			this.menu_favorites_add.Size = new System.Drawing.Size(180, 22);
+			this.menu_favorites_add.Size = new System.Drawing.Size(99, 22);
 			this.menu_favorites_add.Text = "Add";
 			this.menu_favorites_add.Click += new System.EventHandler(this.menu_favorites_add_Click);
 			// 
 			// menu_favorites_separator1
 			// 
 			this.menu_favorites_separator1.Name = "menu_favorites_separator1";
-			this.menu_favorites_separator1.Size = new System.Drawing.Size(177, 6);
+			this.menu_favorites_separator1.Size = new System.Drawing.Size(96, 6);
 			// 
 			// menu_other
 			// 

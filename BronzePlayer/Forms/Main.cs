@@ -21,25 +21,13 @@ namespace BronzePlayer
         Lang lang = new Lang();
         #endregion Refers
 
-
-
         #region Vars
         // # ================================================================================================================================= #
-        bool playing = false, stopped = false, paused = false, looping = false, doloop = false, yt_expanded = false;
-        long tempoMusica;
-        string dirMusica;
+        bool looping = false, doLoop = false, ytExpanded = false, ignoreSkip = false;
         object listBox_item;
         int listBox_index;
         // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
-        AudioFileReader audioFile;
-        // # ================================================================================================================================= #
         #endregion
-
-
 
         #region Events
         // # ================================================================================================================================= #
@@ -47,249 +35,201 @@ namespace BronzePlayer
         {
             try
             {
-                dirMusica = audioFile.FileName;
-                if (playing == true && paused == false && stopped == false)
+                if (Scripts.music.state == Scripts.Music.State.Playing)
                 {
                     timer.Stop();
-                    playing = false; paused = false; stopped = true;
-                    #region Loop
-                    if (looping == true)
+                    if (ignoreSkip != true)
                     {
-                        this.Invoke(new Action(() =>
-                        {
-                            timer_loopcheck.Start();
-                        }));
-                        doloop = true;
-                    }
-                    #endregion Loop
-                    else
-                    {
-                        int maxindex = listbox_playlist.Items.Count - 1; int currentindex = listbox_playlist.SelectedIndex;
-                        if (currentindex < maxindex)
+                        #region Loop
+                        if (looping == true)
                         {
                             this.Invoke(new Action(() =>
                             {
-                                timer_playnext.Start();
+                                timer_loopcheck.Start();
                             }));
+                            doLoop = true;
                         }
+                        #endregion Loop
                         else
                         {
-                            this.Invoke(new Action(() =>
+                            int maxindex = listbox_playlist.Items.Count - 1;
+                            int currentindex = listbox_playlist.SelectedIndex;
+
+                            if (currentindex < maxindex)
                             {
-                                button_play.Enabled = true;
-                                button_pause.Enabled = false;
-                                button_stop.Enabled = false;
-                            }));
+                                this.Invoke(new Action(() =>
+                                {
+                                    timer_playnext.Start();
+                                }));
+                            }
+                            else
+                            {
+                                this.Invoke(new Action(() =>
+                                {
+                                    ToggleButtons(true, false, false, null, null, null, null);
+                                }));
+                            }
                         }
+                    }
+                    else
+                    {
+                        ignoreSkip = false;
                     }
                 }
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - WaveOut_PlaybackStopped()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
         // # ================================================================================================================================= #
         #endregion
 
-
-
         #region Functions
         // # ================================================================================================================================= #
-        void Play(string _fileDir)
+        void Play(string _file)
         {
             try
             {
-                if (playing == false)
-                {
-                    button_forward.Enabled = true;
-                    button_backward.Enabled = true;
+                trackbar_tempomusica.Enabled = true;
+                ToggleButtons(false, true, true, null, null, true, true);
+                
+                Scripts.music.Play(_file);
 
-                    if (paused == false && stopped == false)
-                    {
-                        if (_fileDir != null)
-                        {
-                            audioFile = new AudioFileReader(_fileDir); stopped = false; paused = false;
-                        }
-                    }
-                    else
-                    {
-                        paused = false;
-                        audioFile.Position = tempoMusica;
-                    }
-
-                    if (stopped == true)
-                    {
-                        if (_fileDir != null)
-                        {
-                            stopped = false;
-                            audioFile = new AudioFileReader(_fileDir);
-                            dirMusica = _fileDir;
-                        }
-                        else
-                        {
-                            stopped = false;
-                            audioFile = new AudioFileReader(dirMusica);
-                        }
-                    }
-
-                    string musicName;
-                    musicName = Path.GetFileNameWithoutExtension(audioFile.FileName);
-                    this.Text = "Bronze Player - " + musicName;
-
-                    playing = true;
-                    Scripts.waveOut.Init(audioFile); Scripts.waveOut.Play();
-                    trackbar_tempomusica.Maximum = Convert.ToInt32(audioFile.Length); trackbar_tempomusica.Value = Convert.ToInt32(audioFile.Position); timer.Start();
-                }
+                this.Text = "Bronze Player - " + Path.GetFileNameWithoutExtension(Scripts.music.audioFile.FileName);
+                
+                trackbar_tempomusica.Maximum = Convert.ToInt32(Scripts.music.audioFile.Length);
+                trackbar_tempomusica.Value = Convert.ToInt32(Scripts.music.audioFile.Position);
+                timer.Start();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Play()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
 
-        void PlayNext()
-        {
-            try
-            {
-                int maxindex = listbox_playlist.Items.Count - 1; int currentindex = listbox_playlist.SelectedIndex;
-                if (currentindex < maxindex)
-                {
-                    if (playing == true)
-                    {
-                        playing = false;
-                        paused = false;
-                        stopped = true;
-
-                        Stop();
-                    }
-
-                    if (currentindex + 1 == maxindex)
-                    {
-                        button_nexttrack.Enabled = false;
-                    }
-                    button_previoustrack.Enabled = true;
-
-                    listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex + 1;
-                    string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                    Play(caminho);
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - PlayNext()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        
-
-
-        void PlayPrevious()
-        {
-            try
-            {
-                int currentindex = listbox_playlist.SelectedIndex;
-                if (currentindex > 0)
-                {
-                    if (playing == true)
-                    {
-                        playing = false;
-                        Stop();
-                    }
-
-                    if (currentindex - 1 == 0)
-                    {
-                        button_previoustrack.Enabled = false;
-                    }
-                    button_nexttrack.Enabled = true;
-
-                    listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex - 1;
-                    string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                    Play(caminho);
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - PlayPrevious()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            #endregion
-        }
-        
 
 
         void Pause()
         {
             try
             {
-                button_forward.Enabled = false;
-                button_backward.Enabled = false;
+                trackbar_tempomusica.Enabled = true;
+                ToggleButtons(true, false, true, null, null, false, false);
 
-                tempoMusica = audioFile.Position;
-                paused = true;
-                playing = false; stopped = false;
+                ignoreSkip = true;
+
+                Scripts.music.Pause();
+
                 timer.Stop();
-                Scripts.waveOut.Dispose();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Pause()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         void Stop()
         {
             try
             {
-                button_forward.Enabled = false;
-                button_backward.Enabled = false;
+                ToggleButtons(true, false, false, null, null, false, false);
 
-                stopped = true;
-                playing = false; paused = false;
-                trackbar_tempomusica.Maximum = 1;
+                trackbar_tempomusica.Maximum = 0;
                 trackbar_tempomusica.Value = 0;
+                trackbar_tempomusica.Enabled = false;
+
+                ignoreSkip = true;
+
+                Scripts.music.Stop();
 
                 this.Text = "Bronze Player";
 
                 timer.Stop();
-                Scripts.waveOut.Dispose();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Stop()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
+
+
+        void PlayNext()
+        {
+            try
+            {
+                ignoreSkip = true;
+
+                int maxindex = listbox_playlist.Items.Count - 1;
+                int currentindex = listbox_playlist.SelectedIndex;
+
+                if (currentindex < maxindex)
+                {
+                    if (Scripts.music.state == Scripts.Music.State.Playing)
+                    {
+                        ToggleButtons(false, false, true, null, null, null, null);
+                    }
+                    if (currentindex + 1 == maxindex)
+                    {
+                        ToggleButtons(null, null, null, null, false, null, null);
+                    }
+                    ToggleButtons(null, null, null, true, null, null, null);
+
+                    listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex + 1;
+                    listBox_index = listbox_playlist.SelectedIndex;
+
+                    Play(listbox_playlist.Text);
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Ex(exception);
+            }
+            #endregion
+        }
+
+
+
+        void PlayPrevious()
+        {
+            try
+            {
+                ignoreSkip = true;
+
+                int currentindex = listbox_playlist.SelectedIndex;
+                if (currentindex > 0)
+                {
+                    if (currentindex - 1 == 0)
+                    {
+                        ToggleButtons(null, null, null, false, null, null, null);
+                    }
+                    ToggleButtons(null, null, null, null, true, null, null);
+
+                    listBox_index = listbox_playlist.SelectedIndex;
+                    listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex - 1;
+                    Play(listbox_playlist.Text);
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Ex(exception);
+            }
+            #endregion
+        }
+
 
 
         public void LoadLang()
@@ -321,6 +261,42 @@ namespace BronzePlayer
                 Scripts.tools.Exception(_exception);
             }
         }
+
+
+
+        public void ToggleButtons(bool? _play, bool? _pause, bool? _stop, bool? _previousTrack, bool? _nextTrack, bool? _backward, bool? _forward)
+        {
+            if (_play != null)
+            {
+                button_play.Enabled = (bool)_play;
+            }
+            if (_pause != null)
+            {
+                button_pause.Enabled = (bool)_pause;
+            }
+            if (_stop != null)
+            {
+                button_stop.Enabled = (bool)_stop;
+            }
+
+            if (_previousTrack != null)
+            {
+                button_previoustrack.Enabled = (bool)_previousTrack;
+            }
+            if (_nextTrack != null)
+            {
+                button_nexttrack.Enabled = (bool)_nextTrack;
+            }
+
+            if (_backward != null)
+            {
+                button_backward.Enabled = (bool)_backward;
+            }
+            if (_forward != null)
+            {
+                button_forward.Enabled = (bool)_forward;
+            }
+        }
         // # ================================================================================================================================= #
         #endregion
 
@@ -338,20 +314,20 @@ namespace BronzePlayer
 
 
 
+
+
         #region Load / Unload
         // # ================================================================================================================================= #
-        public Main(bool _openWith, string _fileDir)
+        public Main(bool _openWith, string _file)
         {
             try
             {
                 InitializeComponent();
-
+                ToggleButtons(false, false, false, false, false, false, false);
+                trackbar_tempomusica.Enabled = false;
                 this.Size = new Size(478, 284);
 
                 combobox_ytformat.SelectedIndex = 0;
-
-                button_forward.Enabled = false;
-                button_backward.Enabled = false;
 
                 checkbox_loop.Checked = config.loop;
 
@@ -370,79 +346,65 @@ namespace BronzePlayer
 
                 if (volume < 0 || volume > 1 || volume.ToString() == null)
                 {
-                    Scripts.waveOut.Volume = Convert.ToSingle(0.5);
+                    Scripts.jukebox.Volume = Convert.ToSingle(0.5);
                     config.volume = Convert.ToSingle(0.5);
                     config.Save();
                 }
                 else
                 {
-                    Scripts.waveOut.Volume = volume;
+                    Scripts.jukebox.Volume = volume;
                 }
 
-                trackbar_volume.Value = Convert.ToInt32(Scripts.waveOut.Volume * 100);
+                trackbar_volume.Value = Convert.ToInt32(Scripts.jukebox.Volume * 100);
                 #endregion Load Voluem Config
 
 
                 contextmenustrip.Visible = false;
                 contextmenustrip.Items.Add(lang.lang_main__contextmenustrip_remove);
 
-                this.AllowDrop = true;
-
                 #region Events
                 this.DragEnter += new DragEventHandler(listbox_playlist_DragEnter);
                 this.DragDrop += new DragEventHandler(listbox_playlist_DragDrop);
 
-                Scripts.waveOut.PlaybackStopped += WaveOut_PlaybackStopped;
+                Scripts.jukebox.PlaybackStopped += WaveOut_PlaybackStopped;
                 trackbar_tempomusica.ValueChanged += trackBar_tempoMusica_Scroll;
                 #endregion
 
                 if (_openWith == true)
                 {
-                    Play(_fileDir);
-                    listbox_playlist.Items.Add(_fileDir);
+                    Play(_file);
+                    listbox_playlist.Items.Add(_file);
                     listbox_playlist.SelectedIndex = 0;
-                    dirMusica = _fileDir;
-                    button_play.Enabled = false;
                 }
 
-
-                int currentindex = listbox_playlist.SelectedIndex;
-                int maxindex = listbox_playlist.Items.Count;
-
-                if (currentindex + 1 == maxindex)
+                if (listbox_playlist.SelectedIndex + 1 == listbox_playlist.Items.Count)
                 {
-                    button_nexttrack.Enabled = false;
+                    ToggleButtons(null, null, null, null, false, null, null);
                 }
-                button_previoustrack.Enabled = false;
+                ToggleButtons(null, null, null, false, null, null, null);
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Main()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion DE3UG
         }
-        
+
 
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
             {
-                config.volume = Scripts.waveOut.Volume;
+                config.volume = Scripts.jukebox.Volume;
                 config.loop = checkbox_loop.Checked;
                 config.Save();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - Main_FormClosing()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion DE3UG
         }
@@ -457,19 +419,16 @@ namespace BronzePlayer
         {
             try
             {
-                this.Close();
+                Environment.Exit(0);
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - menu_file_exit_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void menu_file_open_Click(object sender, EventArgs e)
@@ -481,70 +440,57 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - menu_file_open_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
+
 
 
         private void filedialog_FileOk(object sender, CancelEventArgs e)
         {
             try
             {
-                int lastIndex = listbox_playlist.SelectedIndex;
-
-                string fileDirectory = filedialog.FileName;
-                if (fileDirectory != null)
+                if (filedialog.FileName != null)
                 {
                     bool empty = false;
-
-                    audioFile = new AudioFileReader(fileDirectory);
 
                     if (listbox_playlist.Items.Count == 0)
                     {
                         empty = true;
                     }
 
-                    listbox_playlist.Items.Add(fileDirectory);
+                    listbox_playlist.Items.Add(filedialog.FileName);
                     if (empty == true)
                     {
                         empty = false;
                         listbox_playlist.SelectedIndex = 0;
                     }
 
-                    int currentindex = listbox_playlist.SelectedIndex;
-                    int maxindex = listbox_playlist.Items.Count - 1;
-
-                    if (currentindex < maxindex)
+                    if (listbox_playlist.SelectedIndex < listbox_playlist.Items.Count - 1)
                     {
-                        button_nexttrack.Enabled = true;
+                        ToggleButtons(null, null, null, null, true, null, null);
                     }
 
-                    if (playing == false)
+                    if (Scripts.music.state != Scripts.Music.State.Playing)
                     {
-                        Play(fileDirectory);
+                        Play(filedialog.FileName);
                     }
                 }
 
-                if (lastIndex >= 0)
+                if (listbox_playlist.SelectedIndex >= 0)
                 {
-                    listbox_playlist.SelectedIndex = lastIndex;
+                    listbox_playlist.SelectedIndex = listbox_playlist.SelectedIndex;
                 }
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - filedialog_FileOk()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void menu_other_options_Click(object sender, EventArgs e)
@@ -557,10 +503,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - menu_other_options_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -575,59 +518,44 @@ namespace BronzePlayer
         {
             try
             {
-                button_play.Enabled = false; button_pause.Enabled = true; button_stop.Enabled = true;
-                var caminho = listbox_playlist.Text;
-                caminho = caminho.Replace("\\", "\\\\");
-
-                Play(caminho);
+                Play(listbox_playlist.Text);
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - button_play_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void button_pause_Click(object sender, EventArgs e)
         {
             try
             {
-                button_pause.Enabled = false; button_play.Enabled = true;
                 Pause();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "button_pause_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void button_stop_Click(object sender, EventArgs e)
         {
             try
             {
-                button_play.Enabled = true; button_pause.Enabled = false; button_stop.Enabled = false;
                 Stop();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - button_stop_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -646,10 +574,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - button_nexttrack_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -667,10 +592,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - button_previoustrack_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -698,12 +620,12 @@ namespace BronzePlayer
                     trackbar_tempomusica.Value = trackbar_tempomusica.Value - tenpercent;
                 }
 
-                audioFile.Position = trackbar_tempomusica.Value;
+                Scripts.music.audioFile.Position = trackbar_tempomusica.Value;
             }
             #region D3BUG
             catch (Exception exception)
             {
-                MessageBox.Show(exception.ToString(), "DE3UG - button_backward_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Ex(exception);
             }
             #endregion
         }
@@ -730,12 +652,12 @@ namespace BronzePlayer
                     trackbar_tempomusica.Value = trackbar_tempomusica.Value + tenpercent;
                 }
 
-                audioFile.Position = trackbar_tempomusica.Value;
+                Scripts.music.audioFile.Position = trackbar_tempomusica.Value;
             }
             #region D3BUG
             catch (Exception exception)
             {
-                MessageBox.Show(exception.ToString(), "DE3UG - button_forward_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Ex(exception);
             }
             #endregion
         }
@@ -751,37 +673,34 @@ namespace BronzePlayer
         {
             try
             {
-                if (playing == true)
+                if (Scripts.music.state == Scripts.Music.State.Playing)
                 {
-                    if (audioFile.Position <= trackbar_tempomusica.Maximum)
+                    if (Scripts.music.audioFile.Position <= trackbar_tempomusica.Maximum)
                     {
-                        trackbar_tempomusica.Value = Convert.ToInt32(audioFile.Position);
+                        trackbar_tempomusica.Value = Convert.ToInt32(Scripts.music.audioFile.Position);
                     }
                 }
             }
             #region D3BUG
             catch (Exception exception)
             {
-                MessageBox.Show(exception.ToString(), "DE3UG - timer_Tick()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void trackBar_tempoMusica_Scroll(object sender, EventArgs e)
         {
             try
             {
-                audioFile.Position = trackbar_tempomusica.Value;
+                Scripts.music.audioFile.Position = trackbar_tempomusica.Value;
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - trackBar_tempoMusica_Scroll()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -810,14 +729,11 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - listBox_playlist_MouseDown()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void contextMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -832,14 +748,11 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - contextMenuStrip_ItemClicked()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void listbox_playlist_Click(object sender, EventArgs e)
@@ -848,44 +761,59 @@ namespace BronzePlayer
             {
                 if (listbox_playlist.SelectedIndex != listBox_index)
                 {
-                    if (playing == true)
-                    {
-                        Stop();
-                    }
-
                     if (listbox_playlist.SelectedItem != null)
                     {
-                        string caminho = listbox_playlist.SelectedItem.ToString().Replace("\\", "\\\\");
-                        Play(caminho);
+                        #region Toggle Buttons
+                        int currentindex = listbox_playlist.SelectedIndex;
+                        int maxindex = listbox_playlist.Items.Count - 1;
+
+                        // Previous Track
+                        if (currentindex - 1 < 0)
+                        {
+                            ToggleButtons(null, null, null, false, null, null, null);
+                        }
+                        else
+                        {
+                            ToggleButtons(null, null, null, true, null, null, null);
+                        }
+                        // Next Track
+                        if (currentindex + 1 > maxindex)
+                        {
+                            ToggleButtons(null, null, null, null, false, null, null);
+                        }
+                        else
+                        {
+                            ToggleButtons(null, null, null, null, true, null, null);
+                        }
+                        #endregion Toggle Buttons
+
+                        ignoreSkip = true;
+                        listBox_index = listbox_playlist.SelectedIndex;
+                        Play(listbox_playlist.Text);
                     }
                 }
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - listbox_playlist_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
+
 
 
         private void timer_playnext_Tick(object sender, EventArgs e)
         {
             try
             {
-                PlayNext(); timer_playnext.Stop();
+                PlayNext();
+                timer_playnext.Stop();
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - timer_playnext_Tick()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -907,10 +835,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - listbox_playlist_DragEnter", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -953,7 +878,7 @@ namespace BronzePlayer
                             button_nexttrack.Enabled = true;
                         }
 
-                        if (playing == false)
+                        if (Scripts.music.state != Scripts.Music.State.Playing)
                         {
                             listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(file);
 
@@ -986,10 +911,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - listbox_playlist_DragDrop()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -1006,26 +928,20 @@ namespace BronzePlayer
         {
             try
             {
-                float x = trackbar_volume.Value;
-                x = x / 100;
+                float volume = trackbar_volume.Value;
+                volume = volume / 100;
 
                 try
                 {
                     // => Error when not playing, doesn't affect anything.
-                    Scripts.waveOut.Volume = x;
+                    Scripts.jukebox.Volume = volume;
                 }
-                catch
-                {
-                    throw;
-                }
+                catch { throw; }
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "DE3UG - trackBar_volume_Scroll()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion DE3UG
         }
@@ -1045,52 +961,29 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "checbox_loop_CheckedChanged()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
 
 
 
-        private void menu_playlists_Click(object sender, EventArgs e)
-        {
-            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string playlistsDir = appdata + @"\Milkenm\Bronze Player\Playlists\";
-            if (!Directory.Exists(playlistsDir)) // If NOT exists.
-            {
-                Directory.CreateDirectory(playlistsDir);
-            }
-
-            foreach (var folder in Directory.GetDirectories(playlistsDir))
-            {
-                menu_favorites.DropDownItems.Add(folder);
-            }
-        }
-        
-
-
         private void timer_loopcheck_Tick(object sender, EventArgs e)
         {
             try
             {
-                if (doloop == true)
+                if (doLoop == true)
                 {
-                    doloop = false;
-                    button_play.Enabled = false; button_pause.Enabled = true; button_stop.Enabled = true;
-                    var caminho = dirMusica;
-                    caminho = caminho.Replace("\\", "\\\\");
-
-                    Play(caminho);
+                    doLoop = false;
+                    ToggleButtons(false, true, true, null, null, null, null);
+                    Play(null);
                     timer_loopcheck.Stop();
                 }
             }
             #region DE3UG
             catch (Exception exception)
             {
-                MessageBox.Show(exception.ToString(), "DE3UG - timer_loopcheck_Tick()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Ex(exception);
             }
             #endregion DE3UG
         }
@@ -1114,10 +1007,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "SetComboBoxHeight()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -1134,31 +1024,28 @@ namespace BronzePlayer
                     combobox_ytformat.Refresh();
                 }
 
-                if (yt_expanded != true)
+                if (ytExpanded != true)
                 {
                     Size = new Size(478, 329);
                     button_ytexpand.Text = "▲";
-                    yt_expanded = true;
+                    ytExpanded = true;
                 }
                 else
                 {
                     this.Size = new Size(478, 284);
                     button_ytexpand.Text = "▼";
-                    yt_expanded = false;
+                    ytExpanded = false;
                 }
             }
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "button_ytexpand_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
-        
- 
+
+
 
         private async void button_ytdownload_Click(object sender, EventArgs e)
         {
@@ -1186,10 +1073,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                if (config.debug == true)
-                {
-                    MessageBox.Show(exception.ToString(), "button_ytdownload_Click()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Ex(exception);
             }
             #endregion
         }
@@ -1206,8 +1090,7 @@ namespace BronzePlayer
             {
                 if (listbox_playlist.Text != null && listbox_playlist.Text != "")
                 {
-                    var item = new ToolStripMenuItem();
-                    item.Text = listbox_playlist.Text;
+                    var item = new ToolStripMenuItem { Text = listbox_playlist.Text };
                     item.Click += new EventHandler(favorites_Click);
                     menu_favorites.DropDownItems.Add(item);
                 }
@@ -1225,11 +1108,10 @@ namespace BronzePlayer
             try
             {
                 var item = (ToolStripMenuItem)sender;
-                var name = item.Text;
 
-                if (File.Exists(name))
+                if (File.Exists(item.Text))
                 {
-                    Play(name);
+                    Play(item.Text);
                 }
             }
             catch (Exception exception)
@@ -1241,14 +1123,19 @@ namespace BronzePlayer
         #endregion Favorites
 
 
-        
+
+
+
+
+
+
 
 
         #region WIP
         // # ================================================================================================================================= #
         private void timer_listentime_Tick(object sender, EventArgs e)
         {
-            if (playing == true)
+            if (Scripts.music.state == Scripts.Music.State.Playing)
             {
                 // Adiciona 1 segundo ao tempo total de reprodução na base de dados. =)
             }

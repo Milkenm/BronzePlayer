@@ -24,10 +24,6 @@ using NYoutubeDL; // [NuGet] NYouTubeDL
 
 public class Scripts
 {
-    #region Vars
-    string regPath = @"Software\Milkenm\Bronze Player";
-    #endregion Vars
-
     #region Refers
     #region Database Connection
     private static readonly string connection_string = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=BD.mdb";
@@ -41,13 +37,14 @@ public class Scripts
     #endregion Project Items
 
     public static DataBase dataBase = new DataBase();
-    public static FileConverter fileConverter = new FileConverter();
+    public static FileConverters fileConverter = new FileConverters();
     public static Tools tools = new Tools();
+    public static Music music = new Music();
 
     public static Random random = new Random();
     public static SoundPlayer soundPlayer = new SoundPlayer();
     public static MediaElement mediaElement = new MediaElement();
-    public static WaveOut waveOut = new WaveOut();
+    public static WaveOut jukebox = new WaveOut();
     #endregion Refers
 
 
@@ -229,7 +226,7 @@ public class Scripts
 
 
 
-    public class FileConverter : Scripts
+    public class FileConverters : Scripts
     {
         #region Mp3ToWav(_indir, _outdir)
         public void Mp3ToWav(string _indir, string _outdir)
@@ -335,16 +332,101 @@ public class Scripts
             var stackTrace = new StackTrace(_exception, true);
             var frame = stackTrace.GetFrame(0);
 
-            MessageBox.Show(_exception.Message + "\n\n\nMethod: " + frame.GetMethod().Name + "" +
-                "\nLinha: " + frame.GetFileLineNumber(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(_exception.Message + "\n\n\nMethod: " + frame.GetMethod().Name + "" + "\nLinha: " + frame.GetFileLineNumber(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         #endregion Exception
         
-        #region FakeError
-        public void FakeError(string _cause)
+        #region Error
+        public void Error(string _cause)
         {
             throw new Exception(_cause);
         }
-        #endregion FakeError
+        #endregion Error
+    }
+
+
+
+    public class Music : Scripts
+    {
+        #region State / Vars
+        public AudioFileReader audioFile;
+        long position;
+
+        public State state = State.Stopped;
+        public enum State
+        {
+            Playing,
+            Paused,
+            Stopped,
+        }
+        #endregion State / Vars
+
+
+
+        #region Play
+        public void Play(string _file)
+        {
+            if (state == State.Paused)
+            {
+                audioFile.Position = position;
+                jukebox.Play();
+                state = State.Playing;
+            }
+            else
+            {
+                if (_file != "" && _file != null)
+                {
+                    audioFile = new AudioFileReader(_file);
+                    if (state == State.Playing || state == State.Paused)
+                    {
+                        Stop();
+                    }
+                    jukebox.Init(audioFile);
+                    jukebox.Play();
+                    state = State.Playing;
+                }
+                else
+                {
+                    if (audioFile.FileName != "" && audioFile.FileName != null)
+                    {
+                        if (state == State.Playing || state == State.Paused)
+                        {
+                            jukebox.Stop();
+                        }
+                        jukebox.Init(audioFile);
+                        jukebox.Play();
+                        state = State.Playing;
+                    }
+                }
+            }
+            
+        }
+        #endregion Play
+
+        #region Pause
+        public void Pause()
+        {
+            if (state == State.Playing)
+            {
+                position = audioFile.Position;
+                jukebox.Stop();
+                state = State.Paused;
+            }
+        }
+        #endregion Pause
+
+        #region Stop
+        public void Stop()
+        {
+            if (state == State.Playing || state == State.Paused)
+            {
+                if (state == State.Playing)
+                {
+                    jukebox.Stop();
+                }
+                state = State.Stopped;
+            }
+        }
+        #endregion Stop
     }
 }

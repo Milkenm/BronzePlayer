@@ -343,21 +343,21 @@
 			this.menu_file_open.Name = "menu_file_open";
 			this.menu_file_open.ShortcutKeyDisplayString = "Ctrl + O";
 			this.menu_file_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.menu_file_open.Size = new System.Drawing.Size(171, 22);
+			this.menu_file_open.Size = new System.Drawing.Size(180, 22);
 			this.menu_file_open.Text = "Open...";
 			this.menu_file_open.Click += new System.EventHandler(this.menu_file_open_Click);
 			// 
 			// menu_file_separator1
 			// 
 			this.menu_file_separator1.Name = "menu_file_separator1";
-			this.menu_file_separator1.Size = new System.Drawing.Size(168, 6);
+			this.menu_file_separator1.Size = new System.Drawing.Size(177, 6);
 			// 
 			// menu_file_exit
 			// 
 			this.menu_file_exit.Name = "menu_file_exit";
 			this.menu_file_exit.ShortcutKeyDisplayString = "Alt + F4";
 			this.menu_file_exit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-			this.menu_file_exit.Size = new System.Drawing.Size(171, 22);
+			this.menu_file_exit.Size = new System.Drawing.Size(180, 22);
 			this.menu_file_exit.Text = "Exit";
 			this.menu_file_exit.Click += new System.EventHandler(this.menu_file_exit_Click);
 			// 
@@ -371,19 +371,18 @@
 			this.menu_favorites.Name = "menu_favorites";
 			this.menu_favorites.Size = new System.Drawing.Size(74, 20);
 			this.menu_favorites.Text = "Favorites";
-			this.menu_favorites.Click += new System.EventHandler(this.menu_playlists_Click);
 			// 
 			// menu_favorites_add
 			// 
 			this.menu_favorites_add.Name = "menu_favorites_add";
-			this.menu_favorites_add.Size = new System.Drawing.Size(99, 22);
+			this.menu_favorites_add.Size = new System.Drawing.Size(180, 22);
 			this.menu_favorites_add.Text = "Add";
 			this.menu_favorites_add.Click += new System.EventHandler(this.menu_favorites_add_Click);
 			// 
 			// menu_favorites_separator1
 			// 
 			this.menu_favorites_separator1.Name = "menu_favorites_separator1";
-			this.menu_favorites_separator1.Size = new System.Drawing.Size(96, 6);
+			this.menu_favorites_separator1.Size = new System.Drawing.Size(177, 6);
 			// 
 			// menu_other
 			// 
@@ -398,7 +397,7 @@
 			// menu_other_options
 			// 
 			this.menu_other_options.Name = "menu_other_options";
-			this.menu_other_options.Size = new System.Drawing.Size(122, 22);
+			this.menu_other_options.Size = new System.Drawing.Size(180, 22);
 			this.menu_other_options.Text = "Options";
 			this.menu_other_options.Click += new System.EventHandler(this.menu_other_options_Click);
 			// 

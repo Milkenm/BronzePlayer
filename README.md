@@ -1,6 +1,7 @@
 
 # Bronze Player
-
+![Release](https://img.shields.io/github/release-pre/Milkenm/BronzePlayer.svg?style=flat-square)
+![Issues](https://img.shields.io/github/issues/Milkenm/BronzePlayer.svg?style=flat-square)
 
 
 ### What is Bronze Player?

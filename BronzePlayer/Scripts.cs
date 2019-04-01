@@ -1,21 +1,26 @@
-﻿using System;
+﻿#region Using
+using System;
+using System.Data.OleDb;
+using System.Diagnostics;
+using System.IO;
+using System.Media;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Data.OleDb;
-using System.Media;
-using System.IO;
-using System.Threading;
-using System.Net;
-using System.Threading.Tasks;
-using System.Diagnostics;
+
+using BronzePlayer; // [Project] Bronze Player
+
+using MediaToolkit; // [NuGet] MediaToolKit
+using MediaToolkit.Model; // [NuGet] MediaToolKit
+
 using Microsoft.Win32;
-// => NuGet
-using NAudio.Wave; // NAudio (Media Player)
-using MediaToolkit; // MediaToolKit (Converter)
-using MediaToolkit.Model; // MediaToolKit (Converter)
-using NYoutubeDL; // NYouTubeDL (YouTube Extractor)
-// => Projects
-using BronzePlayer;
+
+using NAudio.Wave; // [NuGet] NAudio
+
+using NYoutubeDL; // [NuGet] NYouTubeDL
+#endregion Using
 
 public class Scripts
 {

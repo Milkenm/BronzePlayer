@@ -1,20 +1,16 @@
-﻿using System;
+﻿#region Using
+using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Threading;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Linq;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Win32;
-// => NuGet
-using NAudio.Wave; // NAudio (Media Player)
-using NYoutubeDL; // NYouTubeDL (YouTube Extractor)
-// => Projects
-using BronzePlayer.Forms;
+using System.Threading;
+using System.Windows.Forms;
+
+using BronzePlayer.Forms; // [Project] Bronze Player
+
+using NAudio.Wave; // [NuGet] NAudio
+#endregion Using
 
 namespace BronzePlayer
 {

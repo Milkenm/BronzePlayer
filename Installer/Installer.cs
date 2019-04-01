@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿#region Using
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Windows.Forms;
+
 using IWshRuntimeLibrary;
+
 using Microsoft.Win32;
+#endregion Using
 
 namespace Installer
 {

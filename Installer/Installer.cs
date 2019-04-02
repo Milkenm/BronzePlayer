@@ -105,11 +105,12 @@ namespace Installer
                     {
                         for (int loop = 0; loop < 3; loop++) // Loop 3 times
                         {
-                            if (Convert.ToInt16(newVersion[loop]) > Convert.ToInt16(installedVersion[loop]))
+                            if (Convert.ToInt32(newVersion[loop]) > Convert.ToInt32(installedVersion[loop]))
                             {
                                 install = true;
+                                break;
                             }
-                            else if (Convert.ToInt16(newVersion[loop]) < Convert.ToInt16(installedVersion[loop]))
+                            else if (Convert.ToInt32(newVersion[loop]) < Convert.ToInt32(installedVersion[loop]))
                             {
                                 newerInstalled = true;
                             }

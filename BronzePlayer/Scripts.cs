@@ -162,7 +162,7 @@ public class Scripts
         }
         #endregion Delete(_query)
         #endregion Commands
-        
+
         #region Login(_user, _password)
         public bool Login(string _user, string _password)
         {
@@ -199,7 +199,7 @@ public class Scripts
             #endregion DE3UG
         }
         #endregion Login(_user, _password)
-        
+
         #region SQLIFilter(_string)
         public string SQLIFilter(string _string)
         {
@@ -273,7 +273,7 @@ public class Scripts
             #endregion DE3UG
         }
         #endregion
-        
+
         #region YouTubeDownloader
         /// https://github.com/BrianAllred/NYoutubeDL/commit/2bd39515eebb8c5fb866687781165804e3b0579f ///
 
@@ -312,7 +312,7 @@ public class Scripts
             #endregion DE3UG
         }
         #endregion YouTubeDownloader
-        
+
         #region ListBAddItem
         public class ListBAddItem
         {
@@ -325,7 +325,7 @@ public class Scripts
             }
         }
         #endregion ListBAddItem
-        
+
         #region Exception
         public void Exception(Exception _exception)
         {
@@ -335,7 +335,7 @@ public class Scripts
             MessageBox.Show(_exception.Message + "\n\n\nMethod: " + frame.GetMethod().Name + "" + "\nLinha: " + frame.GetFileLineNumber(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         #endregion Exception
-        
+
         #region Error
         public void Error(string _cause)
         {
@@ -352,12 +352,13 @@ public class Scripts
         public AudioFileReader audioFile;
         long position;
 
-        public State state = State.Stopped;
+        public State state = State.Null;
         public enum State
         {
             Playing,
             Paused,
             Stopped,
+            Null,
         }
         #endregion State / Vars
 
@@ -393,13 +394,14 @@ public class Scripts
                         {
                             jukebox.Stop();
                         }
+                        audioFile.Position = 0;
                         jukebox.Init(audioFile);
                         jukebox.Play();
                         state = State.Playing;
                     }
                 }
             }
-            
+
         }
         #endregion Play
 

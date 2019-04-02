@@ -29,64 +29,6 @@ namespace BronzePlayer
         // # ================================================================================================================================= #
         #endregion
 
-        #region Events
-        // # ================================================================================================================================= #
-        private void WaveOut_PlaybackStopped(object sender, StoppedEventArgs e)
-        {
-            try
-            {
-                if (Scripts.music.state == Scripts.Music.State.Playing)
-                {
-                    timer.Stop();
-                    if (ignoreSkip != true)
-                    {
-                        #region Loop
-                        if (looping == true)
-                        {
-                            this.Invoke(new Action(() =>
-                            {
-                                timer_loopcheck.Start();
-                            }));
-                            doLoop = true;
-                        }
-                        #endregion Loop
-                        else
-                        {
-                            int maxindex = listbox_playlist.Items.Count - 1;
-                            int currentindex = listbox_playlist.SelectedIndex;
-
-                            if (currentindex < maxindex)
-                            {
-                                this.Invoke(new Action(() =>
-                                {
-                                    timer_playnext.Start();
-                                }));
-                            }
-                            else
-                            {
-                                this.Invoke(new Action(() =>
-                                {
-                                    ToggleButtons(true, false, false, null, null, null, null);
-                                }));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ignoreSkip = false;
-                    }
-                }
-            }
-            #region DE3UG
-            catch (Exception exception)
-            {
-                Ex(exception);
-            }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-        #endregion
-
         #region Functions
         // # ================================================================================================================================= #
         void Play(string _file)
@@ -146,8 +88,6 @@ namespace BronzePlayer
                 trackbar_tempomusica.Maximum = 0;
                 trackbar_tempomusica.Value = 0;
                 trackbar_tempomusica.Enabled = false;
-
-                ignoreSkip = true;
 
                 Scripts.music.Stop();
 
@@ -518,7 +458,14 @@ namespace BronzePlayer
         {
             try
             {
-                Play(listbox_playlist.Text);
+                if (Scripts.music.state == Scripts.Music.State.Stopped && Scripts.music.state == Scripts.Music.State.Null)
+                {
+                    Play(null);
+                }
+                else
+                {
+                    Play(listbox_playlist.Text);
+                }
             }
             #region DE3UG
             catch (Exception exception)
@@ -534,6 +481,7 @@ namespace BronzePlayer
         {
             try
             {
+                ignoreSkip = true;
                 Pause();
             }
             #region DE3UG
@@ -550,6 +498,7 @@ namespace BronzePlayer
         {
             try
             {
+                ignoreSkip = true;
                 Stop();
             }
             #region DE3UG
@@ -644,7 +593,6 @@ namespace BronzePlayer
 
                 if (trackbar_tempomusica.Value + tenpercent > trackbar_tempomusica.Maximum)
                 {
-                    trackbar_tempomusica.Value = trackbar_tempomusica.Maximum;
                     Stop();
                 }
                 else
@@ -957,6 +905,62 @@ namespace BronzePlayer
             try
             {
                 looping = checkbox_loop.Checked;
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Ex(exception);
+            }
+            #endregion
+        }
+
+
+
+        private void WaveOut_PlaybackStopped(object sender, StoppedEventArgs e)
+        {
+            try
+            {
+                if (Scripts.music.state == Scripts.Music.State.Playing)
+                {
+                    timer.Stop();
+                    if (ignoreSkip != true)
+                    {
+                        #region Loop
+                        if (looping == true)
+                        {
+                            doLoop = true;
+                            this.Invoke(new Action(() =>
+                            {
+                                timer_loopcheck.Start();
+                            }));
+                        }
+                        #endregion Loop
+                        else
+                        {
+                            int maxindex = listbox_playlist.Items.Count - 1;
+                            int currentindex = listbox_playlist.SelectedIndex;
+
+                            if (currentindex < maxindex)
+                            {
+                                this.Invoke(new Action(() =>
+                                {
+                                    timer_playnext.Start();
+                                }));
+                            }
+                            else
+                            {
+                                this.Invoke(new Action(() =>
+                                {
+                                    ToggleButtons(true, false, false, null, null, null, null);
+                                }));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ignoreSkip = false;
+                    }
+                }
             }
             #region DE3UG
             catch (Exception exception)

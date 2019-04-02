@@ -1,9 +1,6 @@
-﻿using System;
+﻿#region Using
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+#endregion Using
 
 public class Lang
 {
@@ -26,6 +23,7 @@ public class Lang
     public string lang_main__msgbox_ytsuccess_text { get; private set; }
     public string lang_main__msgbox_ytfail_text { get; private set; }
     public string lang_main__msgbox_ytnodirectory_text { get; private set; }
+    public string lang_main__label_ytdownloading { get; set; }
 
     public string lang_options__groupbox_lang { get; private set; }
     public string lang_options__groupbox_debug_enabledebug { get; private set; }
@@ -51,6 +49,7 @@ public class Lang
             lang_main__msgbox_ytsuccess_text = "Download completo!";
             lang_main__msgbox_ytfail_text = "Algo de errado aconteceu durante o download...";
             lang_main__msgbox_ytnodirectory_text = "Tens de escolher uma pasta para o download!";
+            lang_main__label_ytdownloading = "A transferir...";
 
             lang_options__groupbox_lang = "Idioma:";
             lang_options__groupbox_debug_enabledebug = "Mostrar erros.";
@@ -73,6 +72,7 @@ public class Lang
             lang_main__msgbox_ytsuccess_text = "Download complete!";
             lang_main__msgbox_ytfail_text = "Something went wrong during the download...";
             lang_main__msgbox_ytnodirectory_text = "You need to choose a folder for the download!";
+            lang_main__label_ytdownloading = "Downloading...";
 
             lang_options__groupbox_lang = "Language:";
             lang_options__groupbox_debug_enabledebug = "Show errors.";

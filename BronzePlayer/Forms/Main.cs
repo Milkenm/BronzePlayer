@@ -188,6 +188,8 @@ namespace BronzePlayer
             menu_favorites.Text = lang.lang_main__menu_favorites;
             menu_other.Text = lang.lang_main__menu_other;
             menu_other_options.Text = lang.lang_main__menu_other_options;
+            // => Labels:
+            label_ytDownloading.Text = lang.lang_main__label_ytdownloading;
 
             this.Refresh();
         }
@@ -1061,11 +1063,13 @@ namespace BronzePlayer
                     if (folderdialog.SelectedPath != null)
                     {
                         button_ytdownload.Enabled = false;
-                        panel_ytDownloading.Visible = true;
+                        label_ytDownloading.Visible = true;
+                        progressbar_ytDownloading.Style = ProgressBarStyle.Marquee;
 
                         await Scripts.tools.YouTubeDownloader(textbox_ytlink.Text, combobox_ytformat.Text, folderdialog.SelectedPath);
 
-                        panel_ytDownloading.Visible = false;
+                        progressbar_ytDownloading.Style = ProgressBarStyle.Blocks;
+                        label_ytDownloading.Visible = false;
                         button_ytdownload.Enabled = true;
                     }
                     else

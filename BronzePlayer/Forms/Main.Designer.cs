@@ -51,7 +51,7 @@
 			this.timer_playnext = new System.Windows.Forms.Timer(this.components);
 			this.button_ytexpand = new System.Windows.Forms.Button();
 			this.groupbox_ytdownloader = new System.Windows.Forms.GroupBox();
-			this.progressbar_ytprogress = new System.Windows.Forms.ProgressBar();
+			this.progressbar_ytDownloading = new System.Windows.Forms.ProgressBar();
 			this.combobox_ytformat = new System.Windows.Forms.ComboBox();
 			this.button_ytdownload = new System.Windows.Forms.Button();
 			this.folderdialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -66,15 +66,12 @@
 			this.menu_other = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_other_options = new System.Windows.Forms.ToolStripMenuItem();
 			this.timer_listentime = new System.Windows.Forms.Timer(this.components);
-			this.panel_ytDownloading = new System.Windows.Forms.Panel();
-			this.progressBar_ytDownloading = new System.Windows.Forms.ProgressBar();
 			this.label_ytDownloading = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).BeginInit();
 			this.panel_buttons.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackbar_volume)).BeginInit();
 			this.groupbox_ytdownloader.SuspendLayout();
 			this.menu.SuspendLayout();
-			this.panel_ytDownloading.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// filedialog
@@ -272,7 +269,8 @@
 			// 
 			// groupbox_ytdownloader
 			// 
-			this.groupbox_ytdownloader.Controls.Add(this.progressbar_ytprogress);
+			this.groupbox_ytdownloader.Controls.Add(this.label_ytDownloading);
+			this.groupbox_ytdownloader.Controls.Add(this.progressbar_ytDownloading);
 			this.groupbox_ytdownloader.Controls.Add(this.combobox_ytformat);
 			this.groupbox_ytdownloader.Controls.Add(this.button_ytdownload);
 			this.groupbox_ytdownloader.Controls.Add(this.textbox_ytlink);
@@ -282,12 +280,13 @@
 			this.groupbox_ytdownloader.TabIndex = 10;
 			this.groupbox_ytdownloader.TabStop = false;
 			// 
-			// progressbar_ytprogress
+			// progressbar_ytDownloading
 			// 
-			this.progressbar_ytprogress.Location = new System.Drawing.Point(2, 29);
-			this.progressbar_ytprogress.Name = "progressbar_ytprogress";
-			this.progressbar_ytprogress.Size = new System.Drawing.Size(456, 13);
-			this.progressbar_ytprogress.TabIndex = 13;
+			this.progressbar_ytDownloading.Location = new System.Drawing.Point(2, 29);
+			this.progressbar_ytDownloading.MarqueeAnimationSpeed = 50;
+			this.progressbar_ytDownloading.Name = "progressbar_ytDownloading";
+			this.progressbar_ytDownloading.Size = new System.Drawing.Size(456, 13);
+			this.progressbar_ytDownloading.TabIndex = 13;
 			// 
 			// combobox_ytformat
 			// 
@@ -343,21 +342,21 @@
 			this.menu_file_open.Name = "menu_file_open";
 			this.menu_file_open.ShortcutKeyDisplayString = "Ctrl + O";
 			this.menu_file_open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.menu_file_open.Size = new System.Drawing.Size(180, 22);
+			this.menu_file_open.Size = new System.Drawing.Size(171, 22);
 			this.menu_file_open.Text = "Open...";
 			this.menu_file_open.Click += new System.EventHandler(this.menu_file_open_Click);
 			// 
 			// menu_file_separator1
 			// 
 			this.menu_file_separator1.Name = "menu_file_separator1";
-			this.menu_file_separator1.Size = new System.Drawing.Size(177, 6);
+			this.menu_file_separator1.Size = new System.Drawing.Size(168, 6);
 			// 
 			// menu_file_exit
 			// 
 			this.menu_file_exit.Name = "menu_file_exit";
 			this.menu_file_exit.ShortcutKeyDisplayString = "Alt + F4";
 			this.menu_file_exit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-			this.menu_file_exit.Size = new System.Drawing.Size(180, 22);
+			this.menu_file_exit.Size = new System.Drawing.Size(171, 22);
 			this.menu_file_exit.Text = "Exit";
 			this.menu_file_exit.Click += new System.EventHandler(this.menu_file_exit_Click);
 			// 
@@ -375,14 +374,14 @@
 			// menu_favorites_add
 			// 
 			this.menu_favorites_add.Name = "menu_favorites_add";
-			this.menu_favorites_add.Size = new System.Drawing.Size(180, 22);
+			this.menu_favorites_add.Size = new System.Drawing.Size(99, 22);
 			this.menu_favorites_add.Text = "Add";
 			this.menu_favorites_add.Click += new System.EventHandler(this.menu_favorites_add_Click);
 			// 
 			// menu_favorites_separator1
 			// 
 			this.menu_favorites_separator1.Name = "menu_favorites_separator1";
-			this.menu_favorites_separator1.Size = new System.Drawing.Size(177, 6);
+			this.menu_favorites_separator1.Size = new System.Drawing.Size(96, 6);
 			// 
 			// menu_other
 			// 
@@ -397,7 +396,7 @@
 			// menu_other_options
 			// 
 			this.menu_other_options.Name = "menu_other_options";
-			this.menu_other_options.Size = new System.Drawing.Size(180, 22);
+			this.menu_other_options.Size = new System.Drawing.Size(122, 22);
 			this.menu_other_options.Text = "Options";
 			this.menu_other_options.Click += new System.EventHandler(this.menu_other_options_Click);
 			// 
@@ -406,32 +405,16 @@
 			this.timer_listentime.Interval = 1000;
 			this.timer_listentime.Tick += new System.EventHandler(this.timer_listentime_Tick);
 			// 
-			// panel_ytDownloading
-			// 
-			this.panel_ytDownloading.Controls.Add(this.progressBar_ytDownloading);
-			this.panel_ytDownloading.Controls.Add(this.label_ytDownloading);
-			this.panel_ytDownloading.Location = new System.Drawing.Point(131, 53);
-			this.panel_ytDownloading.Name = "panel_ytDownloading";
-			this.panel_ytDownloading.Size = new System.Drawing.Size(200, 100);
-			this.panel_ytDownloading.TabIndex = 12;
-			this.panel_ytDownloading.Visible = false;
-			// 
-			// progressBar_ytDownloading
-			// 
-			this.progressBar_ytDownloading.Location = new System.Drawing.Point(15, 47);
-			this.progressBar_ytDownloading.Name = "progressBar_ytDownloading";
-			this.progressBar_ytDownloading.Size = new System.Drawing.Size(170, 23);
-			this.progressBar_ytDownloading.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-			this.progressBar_ytDownloading.TabIndex = 1;
-			// 
 			// label_ytDownloading
 			// 
 			this.label_ytDownloading.AutoSize = true;
-			this.label_ytDownloading.Location = new System.Drawing.Point(61, 30);
+			this.label_ytDownloading.BackColor = System.Drawing.Color.Transparent;
+			this.label_ytDownloading.Location = new System.Drawing.Point(191, 29);
 			this.label_ytDownloading.Name = "label_ytDownloading";
 			this.label_ytDownloading.Size = new System.Drawing.Size(78, 13);
 			this.label_ytDownloading.TabIndex = 0;
 			this.label_ytDownloading.Text = "Downloading...";
+			this.label_ytDownloading.Visible = false;
 			// 
 			// Main
 			// 
@@ -441,7 +424,6 @@
 			this.BackColor = System.Drawing.Color.Lavender;
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.ClientSize = new System.Drawing.Size(462, 290);
-			this.Controls.Add(this.panel_ytDownloading);
 			this.Controls.Add(this.menu);
 			this.Controls.Add(this.groupbox_ytdownloader);
 			this.Controls.Add(this.button_ytexpand);
@@ -466,8 +448,6 @@
 			this.groupbox_ytdownloader.PerformLayout();
 			this.menu.ResumeLayout(false);
 			this.menu.PerformLayout();
-			this.panel_ytDownloading.ResumeLayout(false);
-			this.panel_ytDownloading.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -498,7 +478,7 @@
         private System.Windows.Forms.Button button_ytdownload;
         private System.Windows.Forms.ComboBox combobox_ytformat;
         private System.Windows.Forms.FolderBrowserDialog folderdialog;
-        private System.Windows.Forms.ProgressBar progressbar_ytprogress;
+        private System.Windows.Forms.ProgressBar progressbar_ytDownloading;
         private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem menu_file;
         private System.Windows.Forms.ToolStripMenuItem menu_file_open;
@@ -508,8 +488,6 @@
         private System.Windows.Forms.ToolStripMenuItem menu_other_options;
         private System.Windows.Forms.ToolStripMenuItem menu_favorites;
         private System.Windows.Forms.Timer timer_listentime;
-        private System.Windows.Forms.Panel panel_ytDownloading;
-        private System.Windows.Forms.ProgressBar progressBar_ytDownloading;
         private System.Windows.Forms.Label label_ytDownloading;
         private System.Windows.Forms.ToolStripMenuItem menu_favorites_add;
         private System.Windows.Forms.ToolStripSeparator menu_favorites_separator1;

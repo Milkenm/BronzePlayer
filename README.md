@@ -28,7 +28,7 @@ Releases are found [here](https://goo.gl/yWPT2H).
 * **1** is a major release, where there was a big big extremely big change in the program.
 * **2**: is a big release, like when new stuff is added.
 * **3**: is when that big stuff is fixed.
-* **x**: replaced with *alpha* (the program is completly broken or some functionalities are WIP) or *beta* (there are known issues that impact main tasks (for example: after playing a song the program crashes)) release.
+* **x**: replaced with *alpha* (the program is completly broken or some functionalities are WIP) or *beta* (there are known issues that impact main tasks (for example: after playing a song the program crashes) release.
 # Other stuff
 ### Typos
 My main language is not English or nothing near that (I'm portuguese if you want to know), and you'll definitly find typing errors everywhere.
@@ -54,3 +54,11 @@ Website I used to edit Markdowns: [StackEdit](https://stackedit.io/)\
 [NYoutubeDL](https://www.nuget.org/packages/NYoutubeDL),
 [MediaToolkit](https://www.nuget.org/packages/MediaToolkit),
 [NAudio](https://www.nuget.org/packages/NAudio/1.9.0-preview2)
+
+
+
+
+
+# License
+If you want to take something, ok, take it, but please add [this](https://github.com/Milkenm/BronzePlayer/blob/master/Files/Definitly%20NOT%20a%20License.txt) to the top (or bottom, who cares) of the file.
+> Not actually a license, but take it as a, a... letter :)

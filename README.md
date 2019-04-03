@@ -60,4 +60,4 @@ Website I used to edit Markdowns: [StackEdit](https://stackedit.io/)\
 
 
 # [License](https://github.com/Milkenm/BronzePlayer/blob/master/LICENSE.txt)
-If you want to take something, ok, take it, but add [this](https://github.com/Milkenm/BronzePlayer/blob/master/LICENSE.txt) at the top (or bottom, who cares) of the file (if it doesn't contain it already).
+If you want to take something, ok, take it, but add [this](https://github.com/Milkenm/BronzePlayer/blob/master/LICENSE.txt) at the top (or bottom, who cares) of the file (if it doesn't contain one already).

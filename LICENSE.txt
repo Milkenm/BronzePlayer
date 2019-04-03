@@ -17,13 +17,13 @@
  *  ║▓▒░  1. The stolen file can be used, because it's a file, and you can edit/share it,    ░▒▓║
  *  ║▓▒░         as long as you keep this license file.                                      ░▒▓║
  *  ║▓▒░  2. Don't delete this license (I made it look like a map so you won't delete it).   ░▒▓║
- *  ║▓▒░  3. No, you cannot reshape the map.                                                 ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
+ *   ║▓▒░ 3. No, you cannot reshape the map.                                                  ░▒▓║
  *    ║▓▒░                                                                                     ░▒▓║
- *    ║▓▒░    *jk, this file was not stolen, chill. - or was it?                               ░▒▓║
  *     ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░                                                             Typed by: Milkenm       ░▒▓║
  *      ║▓▒░                                                                                     ░▒▓║
- *       ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
+ *      ║▓▒░    *jk, this file was not stolen, chill. - or was it?                               ░▒▓║
+ *      ║▓▒░                                                                                     ░▒▓║
+ *     ║▓▒░                                                             Typed by: Milkenm       ░▒▓║
+ *    ║▓▒░                                                                                     ░▒▓║
+ *   ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
  */

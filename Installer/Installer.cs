@@ -16,10 +16,11 @@ namespace Installer
     {
         #region Vars
         // # ================================================================================================================================= #
-        string version = "0.2.0";
-        string regPath = @"Software\Milkenm\Bronze Player";
-        string arch;
+        public static readonly string version = "0.3.0", subVersion = "alpha";
+        string regPath, regPath64 = @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Milkenm\Bronze Player", regPath32 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Milkenm\Bronze Player";
+        string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Milkenm\Bronze Player\";
         bool install = false, newerInstalled = false;
+        bool x64 = Environment.Is64BitOperatingSystem;
         // # ================================================================================================================================= #
         #endregion Vars
 
@@ -96,10 +97,24 @@ namespace Installer
             {
                 InitializeComponent();
 
-                this.Enabled = false;
-                if (Registry.LocalMachine.OpenSubKey(regPath) != null)
+                label_version.Text = "v." + version;
+                if (!String.IsNullOrEmpty(subVersion))
                 {
-                    string[] installedVersion = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Version").ToString().Split('.');
+                    label_version.Text = label_version.Text + "-" + subVersion;
+                }
+
+                this.Enabled = false;
+                if (x64 == true)
+                {
+                    regPath = regPath64;
+                }
+                else
+                {
+                    regPath = regPath32;
+                }
+                if (Registry.GetValue(regPath, "Installed", null) != null)
+                {
+                    string[] installedVersion = Registry.GetValue(regPath, "Version", true).ToString().Split('.');
                     string[] newVersion = version.Split('.');
                     if (installedVersion != null)
                     {
@@ -118,45 +133,38 @@ namespace Installer
                     }
                     if (newerInstalled == true)
                     {
-                        MessageBox.Show("A newer version is installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("A newer version (" + Registry.GetValue(regPath, "Version", true).ToString() + ") is installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.Close();
                     }
                     else if (install == false)
                     {
-                        MessageBox.Show("This version is already installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("This version (" + version + ") is already installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.Close();
                     }
 
-                    if (Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString() == "x32")
-                    {
-                        radioButton_32.Checked = true;
-                        radioButton_64.Enabled = false;
-                    }
-                    else if (Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString() == "x64")
-                    {
-                        radioButton_64.Checked = true;
-                        radioButton_32.Enabled = false;
-                    }
-
-                    button_path.Enabled = false;
+                    textBox_path.Text = Registry.GetValue(regPath, "Path", null).ToString();
                     textBox_path.ReadOnly = true;
-                }
-                this.Enabled = true;
-
-                if (Environment.Is64BitOperatingSystem == true)
-                {
-                    arch = "x64";
-                    radioButton_64.Checked = true;
                 }
                 else
                 {
-                    arch = "x32";
-                    radioButton_32.Checked = true;
-                    radioButton_64.Enabled = false;
+                    #region Get TextBox Directory
+                    if (x64 == true)
+                    {
+                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Milkenm\Bronze Player\";
+                    }
+                    else
+                    {
+                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
+                    }
+                    #endregion Get TextBox Directory
                 }
+                this.Enabled = true;
             }
             #region DE3UG
-            catch { }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
             #endregion
         }
         // # ================================================================================================================================= #
@@ -177,7 +185,10 @@ namespace Installer
                 }
             }
             #region DE3UG
-            catch { }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
             #endregion
         }
         // # ================================================================================================================================= #
@@ -208,28 +219,18 @@ namespace Installer
 
 
                 #region Fresh Install
-                if (Registry.LocalMachine.OpenSubKey(regPath) == null)
+                if (Registry.GetValue(regPath, "Installed", null) == null)
                 {
                     if (Directory.Exists(textBox_path.Text) == false)
                     {
                         Directory.CreateDirectory(textBox_path.Text);
                     }
-
-                    Registry.LocalMachine.CreateSubKey(regPath, true);
-                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Installed", "true", RegistryValueKind.String);
-                    Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Path", textBox_path.Text, RegistryValueKind.String);
-                    if (radioButton_32.Checked == true) // x32
-                    {
-                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x32", RegistryValueKind.String);
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", textBox_path.Text);
-                    }
-                    else if (radioButton_64.Checked == true) // x64
-                    {
-                        Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Platform", "x64", RegistryValueKind.String);
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", textBox_path.Text);
-                    }
+                    
+                    Registry.SetValue(regPath, "Installed", true);
+                    Registry.SetValue(regPath, "Path", textBox_path.Text);
+                    Registry.SetValue(regPath, "Platform", "x32");
+                    ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", textBox_path.Text);
                     System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip");
-                    System.IO.File.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip");
 
                     progressBar.Style = ProgressBarStyle.Blocks;
                 }
@@ -237,13 +238,12 @@ namespace Installer
                 #region Update Install
                 else // If installed
                 {
-                    string path = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Path").ToString();
-                    string arch = Registry.LocalMachine.OpenSubKey(regPath, true).GetValue("Platform").ToString();
+                    string path = Registry.GetValue(regPath, "Path", null).ToString();
 
                     #region Remove Old Installation Files
                     foreach (var filePath in Directory.GetFiles(path))
                     {
-                        if (Path.GetFileNameWithoutExtension(filePath) != "BD" && Path.GetFileNameWithoutExtension(filePath) != "BronzePlayer.exe")
+                        if (Path.GetFileNameWithoutExtension(filePath) != "BronzePlayer.exe")
                         {
                             System.IO.File.Delete(filePath);
                         }
@@ -251,42 +251,38 @@ namespace Installer
                     Thread.Sleep(2000);
                     #endregion Remove Old Installation Files
 
-                    #region Install x32
-                    if (arch == "x32")
-                    {
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32zip", AppDomain.CurrentDomain.BaseDirectory + @"\Files32");
-                        foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\Files32"))
-                        {
-                            string fileName = Path.GetFileName(file);
-                            if (System.IO.File.Exists(path + fileName) == false)
-                            {
-                                System.IO.File.Copy(file, path + fileName);
-                            }
+                    #region Update
+                    ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files32.zip", AppDomain.CurrentDomain.BaseDirectory + @"\Files32");
 
-                            Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32", true);
+                    foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\Files32"))
+                    {
+                        string fileName = Path.GetFileName(file);
+                        #region Update Database
+                        if (fileName == "BD.mdb")
+                        {
+                            if (System.IO.File.Exists(appData + fileName))
+                            {
+                                System.IO.File.Delete(appData + fileName);
+                            }
+                            else if (!Directory.Exists(appData + fileName))
+                            {
+                                Directory.CreateDirectory(appData);
+                            }
+                            System.IO.File.Copy(file, appData + fileName);
+                        }
+                        #endregion Update Database
+                        if (System.IO.File.Exists(path + fileName) == false)
+                        {
+                            System.IO.File.Delete(path + fileName);
+                            System.IO.File.Copy(file, path + fileName);
                         }
                     }
-                    #endregion Install x32
-                    #region Install x64
-                    else if (arch == "x64")
-                    {
 
-                        ZipFile.ExtractToDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Files64.zip", AppDomain.CurrentDomain.BaseDirectory + @"\Files64");
-
-                        foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\Files64"))
-                        {
-                            string fileName = Path.GetFileName(file);
-                            if (System.IO.File.Exists(path + fileName) == false)
-                            {
-                                System.IO.File.Copy(file, path + fileName);
-                            }
-                        }
-
-                        Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files64", true);
-                    }
-                    #endregion Install x64
+                    Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + @"\Files32", true);
+                    #endregion Update
                 }
                 #endregion Update Install
+
 
 
 
@@ -300,8 +296,8 @@ namespace Installer
                     AddDesktopShortcut();
                 }
                 #endregion Create Shortcuts
-
-                Registry.LocalMachine.OpenSubKey(regPath, true).SetValue("Version", version, RegistryValueKind.String);
+                
+                Registry.SetValue(regPath, "Version", version);
                 progressBar.Style = ProgressBarStyle.Blocks;
                 MessageBox.Show("Bronze Player (v" + version + ") has been installed!", "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -316,57 +312,13 @@ namespace Installer
                 #endregion Delete Installation Files
                 Environment.Exit(0);
             }
-            catch { }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message);
+            }
         }
         // # ================================================================================================================================= #
         #endregion Install Button
-
-
-
-        #region 32/64 Picker
-        // # ================================================================================================================================= #
-        private void radioButton_32_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (radioButton_64.Checked == false)
-                {
-                    radioButton_64.Checked = false;
-                    if (arch == "x32")
-                    {
-                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
-                    }
-                    else
-                    {
-                        textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles(x86)") + @"\Milkenm\Bronze Player\";
-                    }
-                }
-            }
-            #region DE3UG
-            catch { }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-
-
-
-        // # ================================================================================================================================= #
-        private void radioButton_64_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (radioButton_32.Checked == false)
-                {
-                    radioButton_32.Checked = false;
-                    textBox_path.Text = Environment.GetEnvironmentVariable("ProgramFiles") + @"\Milkenm\Bronze Player\";
-                }
-            }
-            #region DE3UG
-            catch { }
-            #endregion
-        }
-        // # ================================================================================================================================= #
-        #endregion 32/64 Picker
     }
 }
 
@@ -374,22 +326,30 @@ namespace Installer
 
 /*
  *  ╔═══════════════════════════════════════════════════════════════════════════════════════════╗
- *  ║▓▒░           THIS IS A LICENSE (or not, just something I typed in notepad)             ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
+ *  ║▓▒░           # THE MAP License | 1.0 | Copyright © 2019 Milkenm                        ░▒▓║
  *    ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░This file has been stolen* from https://github.com/Milkenm/BronzePlayer              ░▒▓║
  *     ║▓▒░                                                                                     ░▒▓║
- *    ║▓▒░ This file can be used, because it's a file, and you can share it,                   ░▒▓║
- *   ║▓▒░    and if you keep this little message, you will make me happy.                     ░▒▓║
- *  ║▓▒░     Please don't remove it =) It even has this cute map-shaped box and bad english! ░▒▓║
- *  ║▓▒░   If you received a copy of this file, and can see this message, congrats,          ░▒▓║
- *  ║▓▒░     the person that gave you this file is a nice human!                             ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
+ *      ║▓▒░   This file has been stolen* from https://github.com/Milkenm/BronzePlayer           ░▒▓║
+ *       ║▓▒░  If you received a copy of this file, and can see this message, congrats,           ░▒▓║
+ *        ║▓▒░     the person that gave you this file is a nice human!                             ░▒▓║
+ *        ║▓▒░ Everyone is allowed to copy and distribute verbatim copies of this license document,░▒▓║
+ *        ║▓▒░     but changing it is definitly not allowed.                                       ░▒▓║
+ *       ║▓▒░                                                                                     ░▒▓║
+ *      ║▓▒░                                                                                     ░▒▓║
+ *     ║▓▒░                                                                                     ░▒▓║
  *    ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░    *jk, this file was not stolen, chill. - or was it?                               ░▒▓║
+ *   ║▓▒░ > TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION                   ░▒▓║
+ *  ║▓▒░                                                                                     ░▒▓║
+ *  ║▓▒░  1. The stolen file can be used, because it's a file, and you can edit/share it,    ░▒▓║
+ *  ║▓▒░         as long as you keep this license file.                                      ░▒▓║
+ *  ║▓▒░  2. Don't delete this license (I made it look like a map so you won't delete it).   ░▒▓║
+ *   ║▓▒░ 3. No, you cannot reshape the map.                                                  ░▒▓║
+ *    ║▓▒░                                                                                     ░▒▓║
  *     ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░                                                                                     ░▒▓║
- *    ║▓▒░                                                          Typed by: Milkenm          ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
- *  ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
-*/
+ *      ║▓▒░                                                                                     ░▒▓║
+ *      ║▓▒░    *jk, this file was not stolen, chill. - or was it?                               ░▒▓║
+ *      ║▓▒░                                                                                     ░▒▓║
+ *     ║▓▒░                                                             Typed by: Milkenm       ░▒▓║
+ *    ║▓▒░                                                                                     ░▒▓║
+ *   ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
+ */

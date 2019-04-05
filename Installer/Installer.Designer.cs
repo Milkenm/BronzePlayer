@@ -36,10 +36,7 @@
 			this.checkBox_desktopIcon = new System.Windows.Forms.CheckBox();
 			this.folderDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
-			this.radioButton_32 = new System.Windows.Forms.RadioButton();
-			this.radioButton_64 = new System.Windows.Forms.RadioButton();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.panel1.SuspendLayout();
+			this.label_version = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textBox_path
@@ -61,7 +58,7 @@
 			// 
 			// button_install
 			// 
-			this.button_install.Location = new System.Drawing.Point(269, 52);
+			this.button_install.Location = new System.Drawing.Point(269, 51);
 			this.button_install.Name = "button_install";
 			this.button_install.Size = new System.Drawing.Size(79, 23);
 			this.button_install.TabIndex = 2;
@@ -74,7 +71,7 @@
 			this.checkBox_startShortcut.AutoSize = true;
 			this.checkBox_startShortcut.Checked = true;
 			this.checkBox_startShortcut.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_startShortcut.Location = new System.Drawing.Point(2, 22);
+			this.checkBox_startShortcut.Location = new System.Drawing.Point(2, 28);
 			this.checkBox_startShortcut.Name = "checkBox_startShortcut";
 			this.checkBox_startShortcut.Size = new System.Drawing.Size(121, 17);
 			this.checkBox_startShortcut.TabIndex = 3;
@@ -86,7 +83,7 @@
 			this.checkBox_desktopIcon.AutoSize = true;
 			this.checkBox_desktopIcon.Checked = true;
 			this.checkBox_desktopIcon.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_desktopIcon.Location = new System.Drawing.Point(2, 37);
+			this.checkBox_desktopIcon.Location = new System.Drawing.Point(129, 28);
 			this.checkBox_desktopIcon.Name = "checkBox_desktopIcon";
 			this.checkBox_desktopIcon.Size = new System.Drawing.Size(90, 17);
 			this.checkBox_desktopIcon.TabIndex = 4;
@@ -95,51 +92,30 @@
 			// 
 			// progressBar
 			// 
-			this.progressBar.Location = new System.Drawing.Point(1, 53);
+			this.progressBar.Location = new System.Drawing.Point(1, 52);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(268, 21);
 			this.progressBar.TabIndex = 7;
 			// 
-			// radioButton_32
+			// label_version
 			// 
-			this.radioButton_32.AutoSize = true;
-			this.radioButton_32.Location = new System.Drawing.Point(9, 2);
-			this.radioButton_32.Name = "radioButton_32";
-			this.radioButton_32.Size = new System.Drawing.Size(56, 17);
-			this.radioButton_32.TabIndex = 8;
-			this.radioButton_32.Text = "32 bits";
-			this.radioButton_32.UseVisualStyleBackColor = true;
-			this.radioButton_32.CheckedChanged += new System.EventHandler(this.radioButton_32_CheckedChanged);
-			// 
-			// radioButton_64
-			// 
-			this.radioButton_64.AutoSize = true;
-			this.radioButton_64.Location = new System.Drawing.Point(9, 17);
-			this.radioButton_64.Name = "radioButton_64";
-			this.radioButton_64.Size = new System.Drawing.Size(56, 17);
-			this.radioButton_64.TabIndex = 9;
-			this.radioButton_64.Text = "64 bits";
-			this.radioButton_64.UseVisualStyleBackColor = true;
-			this.radioButton_64.CheckedChanged += new System.EventHandler(this.radioButton_64_CheckedChanged);
-			// 
-			// panel1
-			// 
-			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Controls.Add(this.radioButton_64);
-			this.panel1.Controls.Add(this.radioButton_32);
-			this.panel1.Location = new System.Drawing.Point(270, 18);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(77, 35);
-			this.panel1.TabIndex = 10;
+			this.label_version.AutoSize = true;
+			this.label_version.BackColor = System.Drawing.Color.Transparent;
+			this.label_version.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+			this.label_version.Location = new System.Drawing.Point(2, 59);
+			this.label_version.Name = "label_version";
+			this.label_version.Size = new System.Drawing.Size(41, 13);
+			this.label_version.TabIndex = 8;
+			this.label_version.Text = "version";
 			// 
 			// Installer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(348, 75);
+			this.ClientSize = new System.Drawing.Size(348, 74);
+			this.Controls.Add(this.label_version);
 			this.Controls.Add(this.button_install);
 			this.Controls.Add(this.button_path);
-			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.textBox_path);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.checkBox_desktopIcon);
@@ -148,8 +124,6 @@
 			this.MaximizeBox = false;
 			this.Name = "Installer";
 			this.Text = "Installer";
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -163,8 +137,6 @@
         private System.Windows.Forms.CheckBox checkBox_desktopIcon;
         private System.Windows.Forms.FolderBrowserDialog folderDialog;
         private System.Windows.Forms.ProgressBar progressBar;
-        private System.Windows.Forms.RadioButton radioButton_32;
-        private System.Windows.Forms.RadioButton radioButton_64;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label_version;
     }
 }

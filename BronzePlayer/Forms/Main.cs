@@ -1,10 +1,12 @@
 ﻿#region Using
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 using BronzePlayer.Forms; // [Project] Bronze Player
@@ -26,6 +28,10 @@ namespace BronzePlayer
         bool looping = false, doLoop = false, ytExpanded = false, ignoreSkip = false;
         object listBox_item;
         int listBox_index;
+
+        List<string> ID = new List<string>();
+        List<string> Valor = new List<string>();
+        List<string> PlayList = new List<string>();
         // # ================================================================================================================================= #
         #endregion
 
@@ -49,7 +55,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -72,7 +78,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -98,7 +104,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -135,7 +141,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -165,7 +171,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -174,70 +180,128 @@ namespace BronzePlayer
 
         public void LoadLang()
         {
-            config.Reload();
-            Thread.Sleep(1000);
-            lang.Load(config.lang);
+            try
+            {
+                config.Reload();
+                Thread.Sleep(1000);
+                lang.Load(config.lang);
 
-            // => Controls:
-            button_ytdownload.Text = lang.lang_main__button_ytdownload;
-            checkbox_loop.Text = lang.lang_main__checkbox_loop;
-            // => Menu:
-            menu_file.Text = lang.lang_main__menu_file;
-            menu_file_open.Text = lang.lang_main__menu_file_open;
-            menu_file_exit.Text = lang.lang_main__menu_file_exit;
-            menu_favorites.Text = lang.lang_main__menu_favorites;
-            menu_other.Text = lang.lang_main__menu_other;
-            menu_other_options.Text = lang.lang_main__menu_other_options;
-            // => Labels:
-            label_ytDownloading.Text = lang.lang_main__label_ytdownloading;
+                // => Controls:
+                button_ytdownload.Text = lang.lang_main__button_ytdownload;
+                checkbox_loop.Text = lang.lang_main__checkbox_loop;
+                // => Menu:
+                menu_file.Text = lang.lang_main__menu_file;
+                menu_file_open.Text = lang.lang_main__menu_file_open;
+                menu_file_exit.Text = lang.lang_main__menu_file_exit;
+                menu_favorites.Text = lang.lang_main__menu_favorites;
+                menu_other.Text = lang.lang_main__menu_other;
+                menu_other_options.Text = lang.lang_main__menu_other_options;
+                menu_other_about.Text = lang.lang_main__menu_other_about;
+                // => Labels:
+                label_ytDownloading.Text = lang.lang_main__label_ytdownloading;
 
-            this.Refresh();
+                this.Refresh();
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Scripts.tools.Exception(exception);
+            }
+            #endregion DE3UG
+        }
+
+        
+
+        void ToggleButtons(bool? _play, bool? _pause, bool? _stop, bool? _previousTrack, bool? _nextTrack, bool? _backward, bool? _forward)
+        {
+            try
+            {
+                if (_play != null)
+                {
+                    button_play.Enabled = (bool)_play;
+                }
+                if (_pause != null)
+                {
+                    button_pause.Enabled = (bool)_pause;
+                }
+                if (_stop != null)
+                {
+                    button_stop.Enabled = (bool)_stop;
+                }
+
+                if (_previousTrack != null)
+                {
+                    button_previoustrack.Enabled = (bool)_previousTrack;
+                }
+                if (_nextTrack != null)
+                {
+                    button_nexttrack.Enabled = (bool)_nextTrack;
+                }
+
+                if (_backward != null)
+                {
+                    button_backward.Enabled = (bool)_backward;
+                }
+                if (_forward != null)
+                {
+                    button_forward.Enabled = (bool)_forward;
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Scripts.tools.Exception(exception);
+            }
+            #endregion DE3UG
         }
 
 
 
-        public void Ex(Exception _exception)
+        void LoadFavorites()
         {
-            if (Scripts.config.debug == true)
+            try
             {
-                Scripts.tools.Exception(_exception);
+                menu_favorites.DropDownItems.Clear();
+                
+                var menuItem1 = new ToolStripMenuItem { Text = lang.lang_main__menu_favorites_add };
+                menuItem1.Click += menu_favorites_add_Click;
+                menu_favorites.DropDownItems.Add(menuItem1);
+                var menuItem2 = new ToolStripSeparator();
+                menu_favorites.DropDownItems.Add(menuItem2);
+
+
+                foreach (string id in Scripts.DataBase.Select("SELECT ID FROM Favoritos"))
+                {
+                    ID.Add(id);
+                    string item = Scripts.tools.ReplaceWithCode(Scripts.DataBase.Select("SELECT Valor FROM Favoritos WHERE ID = " + id)[0].ToString(), Scripts.Tools.ReplaceType.Original);
+                    Valor.Add(item);
+                    AddFavoritesItem(Path.GetFileNameWithoutExtension(item));
+                }
             }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Scripts.tools.Exception(exception);
+            }
+            #endregion DE3UG
         }
 
 
 
-        public void ToggleButtons(bool? _play, bool? _pause, bool? _stop, bool? _previousTrack, bool? _nextTrack, bool? _backward, bool? _forward)
+        void AddFavoritesItem(string _name)
         {
-            if (_play != null)
+            try
             {
-                button_play.Enabled = (bool)_play;
+                var item = new ToolStripMenuItem { Text = Scripts.tools.ReplaceWithCode(_name, Scripts.Tools.ReplaceType.Original) };
+                item.MouseDown += new MouseEventHandler(favorites_Click);
+                menu_favorites.DropDownItems.Add(item);
             }
-            if (_pause != null)
+            #region DE3UG
+            catch (Exception exception)
             {
-                button_pause.Enabled = (bool)_pause;
+                Scripts.tools.Exception(exception);
             }
-            if (_stop != null)
-            {
-                button_stop.Enabled = (bool)_stop;
-            }
-
-            if (_previousTrack != null)
-            {
-                button_previoustrack.Enabled = (bool)_previousTrack;
-            }
-            if (_nextTrack != null)
-            {
-                button_nexttrack.Enabled = (bool)_nextTrack;
-            }
-
-            if (_backward != null)
-            {
-                button_backward.Enabled = (bool)_backward;
-            }
-            if (_forward != null)
-            {
-                button_forward.Enabled = (bool)_forward;
-            }
+            #endregion DE3UG
         }
         // # ================================================================================================================================= #
         #endregion
@@ -265,16 +329,9 @@ namespace BronzePlayer
             try
             {
                 InitializeComponent();
-                ToggleButtons(false, false, false, false, false, false, false);
-                trackbar_tempomusica.Enabled = false;
-                this.Size = new Size(478, 284);
-
-                combobox_ytformat.SelectedIndex = 0;
-
-                checkbox_loop.Checked = config.loop;
 
                 #region Load Lang
-                if (config.lang == null || config.lang == "")
+                if (!String.IsNullOrEmpty(config.lang))
                 {
                     config.lang = "en_EN";
                     config.Save();
@@ -283,6 +340,17 @@ namespace BronzePlayer
                 LoadLang();
                 #endregion Load Lang
 
+                ToggleButtons(false, false, false, false, false, false, false);
+                trackbar_tempomusica.Enabled = false;
+                this.Size = new Size(478, 284);
+
+                LoadFavorites();
+
+                combobox_ytformat.SelectedIndex = 0;
+
+                checkbox_loop.Checked = config.loop;
+
+               
                 #region Load Volume Config
                 float volume = config.volume;
 
@@ -328,7 +396,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion DE3UG
         }
@@ -342,11 +410,15 @@ namespace BronzePlayer
                 config.volume = Scripts.jukebox.Volume;
                 config.loop = checkbox_loop.Checked;
                 config.Save();
+
+                Scripts.music.Stop();
+
+                Environment.Exit(0);
             }
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion DE3UG
         }
@@ -366,7 +438,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -382,7 +454,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -395,28 +467,33 @@ namespace BronzePlayer
             {
                 if (filedialog.FileName != null)
                 {
-                    bool empty = false;
-
-                    if (listbox_playlist.Items.Count == 0)
+                    if (!listbox_playlist.Items.Contains(filedialog.FileName))
                     {
-                        empty = true;
+                        listbox_playlist.Items.Add(filedialog.FileName);
+
+                        if (listbox_playlist.Items.Count == 0)
+                        {
+                            listbox_playlist.SelectedIndex = 0;
+                        }
+
+                        if (listbox_playlist.SelectedIndex < listbox_playlist.Items.Count - 1)
+                        {
+                            ToggleButtons(null, null, null, null, true, null, null);
+                        }
+
+                        if (Scripts.music.state != Scripts.Music.State.Playing)
+                        {
+                            listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(filedialog.FileName);
+                            Play(listbox_playlist.Text);
+                        }
                     }
-
-                    listbox_playlist.Items.Add(filedialog.FileName);
-                    if (empty == true)
+                    else
                     {
-                        empty = false;
-                        listbox_playlist.SelectedIndex = 0;
-                    }
-
-                    if (listbox_playlist.SelectedIndex < listbox_playlist.Items.Count - 1)
-                    {
-                        ToggleButtons(null, null, null, null, true, null, null);
-                    }
-
-                    if (Scripts.music.state != Scripts.Music.State.Playing)
-                    {
-                        Play(filedialog.FileName);
+                        if (Scripts.music.state != Scripts.Music.State.Playing)
+                        {
+                            listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(filedialog.FileName);
+                            Play(listbox_playlist.Text);
+                        }
                     }
                 }
 
@@ -428,7 +505,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -445,10 +522,91 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
+
+
+
+
+        private void menu_other_about_Click(object sender, EventArgs e)
+        {
+            var about = new About(this.Location);
+            about.ShowDialog();
+        }
+
+
+
+        #region Favorites
+        // # ================================================================================================================================= #
+        private void menu_favorites_add_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listbox_playlist.Text != null && listbox_playlist.Text != "")
+                {
+                    string nome = Path.GetFileNameWithoutExtension(listbox_playlist.Text);
+                    AddFavoritesItem(nome);
+                    Scripts.DataBase.Insert("INSERT INTO Favoritos(Valor) VALUES('" + Scripts.tools.ReplaceWithCode(listbox_playlist.Text, Scripts.Tools.ReplaceType.Convert) + "')");
+                    LoadFavorites();
+                }
+            }
+            catch (Exception exception)
+            {
+                Scripts.tools.Exception(exception);
+            }
+        }
+
+
+
+        private void favorites_Click(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                var item = (ToolStripMenuItem)sender;
+                var index = item.Owner.Items.IndexOf(item);
+                var actualIndex = item.Owner.Items.IndexOf(item) - 2;
+
+                if (e.Button == MouseButtons.Left)
+                {
+                    if (File.Exists(Valor[actualIndex].ToString()))
+                    {
+                        if (Valor[actualIndex].ToString() != listbox_playlist.Text)
+                        {
+                            if (!listbox_playlist.Items.Contains(Valor[actualIndex]))
+                            {
+                                listbox_playlist.Items.Add(Valor[actualIndex].ToString());
+                                listbox_playlist.SelectedIndex = listbox_playlist.Items.Count - 1;
+                            }
+                            else
+                            {
+                                listbox_playlist.SelectedIndex = listbox_playlist.Items.IndexOf(Valor[actualIndex]);
+                            }
+                            ignoreSkip = true;
+                            Play(Valor[actualIndex].ToString());
+                        }
+                    }
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    Scripts.dataBase.Delete("DELETE * FROM Favoritos WHERE ID = " + ID[actualIndex].ToString());
+
+                    ID.RemoveAt(actualIndex);
+                    Valor.RemoveAt(actualIndex);
+
+                    menu_favorites.DropDownItems.RemoveAt(index);
+                }
+            }
+            #region DE3UG
+            catch (Exception exception)
+            {
+                Scripts.tools.Exception(exception);
+            }
+            #endregion DE3UG
+        }
+        // # ================================================================================================================================= #
+        #endregion Favorites
         // # ================================================================================================================================= #
         #endregion Top Menu
 
@@ -472,7 +630,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -489,7 +647,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -506,7 +664,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -525,7 +683,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -543,7 +701,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -576,7 +734,7 @@ namespace BronzePlayer
             #region D3BUG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -607,7 +765,7 @@ namespace BronzePlayer
             #region D3BUG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -634,7 +792,7 @@ namespace BronzePlayer
             #region D3BUG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -650,7 +808,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -668,7 +826,7 @@ namespace BronzePlayer
                 if (e.Button == MouseButtons.Right)
                 {
                     int index = listbox_playlist.IndexFromPoint(e.Location);
-                    if (index != ListBox.NoMatches)
+                    if (index != System.Windows.Forms.ListBox.NoMatches)
                     {
                         string selectedItem = listbox_playlist.Items[index].ToString();
                         listBox_item = listbox_playlist.Items[index];
@@ -679,7 +837,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -698,7 +856,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -746,7 +904,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -763,12 +921,11 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
-        // # ================================================================================================================================= #
-
+ 
 
 
         #region Drag'n'Drop
@@ -785,7 +942,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -861,7 +1018,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -891,7 +1048,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion DE3UG
         }
@@ -911,7 +1068,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -967,7 +1124,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -989,7 +1146,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion DE3UG
         }
@@ -1013,7 +1170,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -1046,7 +1203,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -1081,7 +1238,7 @@ namespace BronzePlayer
             #region DE3UG
             catch (Exception exception)
             {
-                Ex(exception);
+                Scripts.tools.Exception(exception);
             }
             #endregion
         }
@@ -1089,46 +1246,6 @@ namespace BronzePlayer
         #endregion YouTube Downloader
 
 
-
-        #region Favorites
-        // # ================================================================================================================================= #
-        private void menu_favorites_add_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (listbox_playlist.Text != null && listbox_playlist.Text != "")
-                {
-                    var item = new ToolStripMenuItem { Text = listbox_playlist.Text };
-                    item.Click += new EventHandler(favorites_Click);
-                    menu_favorites.DropDownItems.Add(item);
-                }
-            }
-            catch (Exception exception)
-            {
-                Ex(exception);
-            }
-        }
-
-
-
-        private void favorites_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var item = (ToolStripMenuItem)sender;
-
-                if (File.Exists(item.Text))
-                {
-                    Play(item.Text);
-                }
-            }
-            catch (Exception exception)
-            {
-                Ex(exception);
-            }
-        }
-        // # ================================================================================================================================= #
-        #endregion Favorites
 
 
 
@@ -1157,22 +1274,30 @@ namespace BronzePlayer
 
 /*
  *  ╔═══════════════════════════════════════════════════════════════════════════════════════════╗
- *  ║▓▒░           THIS IS A LICENSE (or not, just something I typed in notepad)             ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
+ *  ║▓▒░           # THE MAP License | 1.0 | Copyright © 2019 Milkenm                        ░▒▓║
  *    ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░This file has been stolen* from https://github.com/Milkenm/BronzePlayer              ░▒▓║
  *     ║▓▒░                                                                                     ░▒▓║
- *    ║▓▒░ This file can be used, because it's a file, and you can share it,                   ░▒▓║
- *   ║▓▒░    and if you keep this little message, you will make me happy.                     ░▒▓║
- *  ║▓▒░     Please don't remove it =) It even has this cute map-shaped box and bad english! ░▒▓║
- *  ║▓▒░   If you received a copy of this file, and can see this message, congrats,          ░▒▓║
- *  ║▓▒░     the person that gave you this file is a nice human!                             ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
+ *      ║▓▒░   This file has been stolen* from https://github.com/Milkenm/BronzePlayer           ░▒▓║
+ *       ║▓▒░  If you received a copy of this file, and can see this message, congrats,           ░▒▓║
+ *        ║▓▒░     the person that gave you this file is a nice human!                             ░▒▓║
+ *        ║▓▒░ Everyone is allowed to copy and distribute verbatim copies of this license document,░▒▓║
+ *        ║▓▒░     but changing it is definitly not allowed.                                       ░▒▓║
+ *       ║▓▒░                                                                                     ░▒▓║
+ *      ║▓▒░                                                                                     ░▒▓║
+ *     ║▓▒░                                                                                     ░▒▓║
  *    ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░    *jk, this file was not stolen, chill. - or was it?                               ░▒▓║
+ *   ║▓▒░ > TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION                   ░▒▓║
+ *  ║▓▒░                                                                                     ░▒▓║
+ *  ║▓▒░  1. The stolen file can be used, because it's a file, and you can edit/share it,    ░▒▓║
+ *  ║▓▒░         as long as you keep this license file.                                      ░▒▓║
+ *  ║▓▒░  2. Don't delete this license (I made it look like a map so you won't delete it).   ░▒▓║
+ *   ║▓▒░ 3. No, you cannot reshape the map.                                                  ░▒▓║
+ *    ║▓▒░                                                                                     ░▒▓║
  *     ║▓▒░                                                                                     ░▒▓║
- *     ║▓▒░                                                                                     ░▒▓║
- *    ║▓▒░                                                          Typed by: Milkenm          ░▒▓║
- *   ║▓▒░                                                                                     ░▒▓║
- *  ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
-*/
+ *      ║▓▒░                                                                                     ░▒▓║
+ *      ║▓▒░    *jk, this file was not stolen, chill. - or was it?                               ░▒▓║
+ *      ║▓▒░                                                                                     ░▒▓║
+ *     ║▓▒░                                                             Typed by: Milkenm       ░▒▓║
+ *    ║▓▒░                                                                                     ░▒▓║
+ *   ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
+ */

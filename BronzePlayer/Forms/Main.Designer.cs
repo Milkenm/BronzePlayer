@@ -51,6 +51,7 @@
 			this.timer_playnext = new System.Windows.Forms.Timer(this.components);
 			this.button_ytexpand = new System.Windows.Forms.Button();
 			this.groupbox_ytdownloader = new System.Windows.Forms.GroupBox();
+			this.label_ytDownloading = new System.Windows.Forms.Label();
 			this.progressbar_ytDownloading = new System.Windows.Forms.ProgressBar();
 			this.combobox_ytformat = new System.Windows.Forms.ComboBox();
 			this.button_ytdownload = new System.Windows.Forms.Button();
@@ -61,12 +62,10 @@
 			this.menu_file_separator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_file_exit = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_favorites = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_favorites_add = new System.Windows.Forms.ToolStripMenuItem();
-			this.menu_favorites_separator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menu_other = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu_other_options = new System.Windows.Forms.ToolStripMenuItem();
+			this.menu_other_about = new System.Windows.Forms.ToolStripMenuItem();
 			this.timer_listentime = new System.Windows.Forms.Timer(this.components);
-			this.label_ytDownloading = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.trackbar_tempomusica)).BeginInit();
 			this.panel_buttons.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackbar_volume)).BeginInit();
@@ -280,6 +279,17 @@
 			this.groupbox_ytdownloader.TabIndex = 10;
 			this.groupbox_ytdownloader.TabStop = false;
 			// 
+			// label_ytDownloading
+			// 
+			this.label_ytDownloading.AutoSize = true;
+			this.label_ytDownloading.BackColor = System.Drawing.Color.Transparent;
+			this.label_ytDownloading.Location = new System.Drawing.Point(191, 29);
+			this.label_ytDownloading.Name = "label_ytDownloading";
+			this.label_ytDownloading.Size = new System.Drawing.Size(78, 13);
+			this.label_ytDownloading.TabIndex = 0;
+			this.label_ytDownloading.Text = "Downloading...";
+			this.label_ytDownloading.Visible = false;
+			// 
 			// progressbar_ytDownloading
 			// 
 			this.progressbar_ytDownloading.Location = new System.Drawing.Point(2, 29);
@@ -362,31 +372,17 @@
 			// 
 			// menu_favorites
 			// 
-			this.menu_favorites.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_favorites_add,
-            this.menu_favorites_separator1});
 			this.menu_favorites.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold);
 			this.menu_favorites.ForeColor = System.Drawing.Color.White;
 			this.menu_favorites.Name = "menu_favorites";
 			this.menu_favorites.Size = new System.Drawing.Size(74, 20);
 			this.menu_favorites.Text = "Favorites";
 			// 
-			// menu_favorites_add
-			// 
-			this.menu_favorites_add.Name = "menu_favorites_add";
-			this.menu_favorites_add.Size = new System.Drawing.Size(99, 22);
-			this.menu_favorites_add.Text = "Add";
-			this.menu_favorites_add.Click += new System.EventHandler(this.menu_favorites_add_Click);
-			// 
-			// menu_favorites_separator1
-			// 
-			this.menu_favorites_separator1.Name = "menu_favorites_separator1";
-			this.menu_favorites_separator1.Size = new System.Drawing.Size(96, 6);
-			// 
 			// menu_other
 			// 
 			this.menu_other.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_other_options});
+            this.menu_other_options,
+            this.menu_other_about});
 			this.menu_other.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.menu_other.ForeColor = System.Drawing.Color.White;
 			this.menu_other.Name = "menu_other";
@@ -400,21 +396,17 @@
 			this.menu_other_options.Text = "Options";
 			this.menu_other_options.Click += new System.EventHandler(this.menu_other_options_Click);
 			// 
+			// menu_other_about
+			// 
+			this.menu_other_about.Name = "menu_other_about";
+			this.menu_other_about.Size = new System.Drawing.Size(122, 22);
+			this.menu_other_about.Text = "About";
+			this.menu_other_about.Click += new System.EventHandler(this.menu_other_about_Click);
+			// 
 			// timer_listentime
 			// 
 			this.timer_listentime.Interval = 1000;
 			this.timer_listentime.Tick += new System.EventHandler(this.timer_listentime_Tick);
-			// 
-			// label_ytDownloading
-			// 
-			this.label_ytDownloading.AutoSize = true;
-			this.label_ytDownloading.BackColor = System.Drawing.Color.Transparent;
-			this.label_ytDownloading.Location = new System.Drawing.Point(191, 29);
-			this.label_ytDownloading.Name = "label_ytDownloading";
-			this.label_ytDownloading.Size = new System.Drawing.Size(78, 13);
-			this.label_ytDownloading.TabIndex = 0;
-			this.label_ytDownloading.Text = "Downloading...";
-			this.label_ytDownloading.Visible = false;
 			// 
 			// Main
 			// 
@@ -479,18 +471,17 @@
         private System.Windows.Forms.ComboBox combobox_ytformat;
         private System.Windows.Forms.FolderBrowserDialog folderdialog;
         private System.Windows.Forms.ProgressBar progressbar_ytDownloading;
-        private System.Windows.Forms.MenuStrip menu;
         private System.Windows.Forms.ToolStripMenuItem menu_file;
         private System.Windows.Forms.ToolStripMenuItem menu_file_open;
         private System.Windows.Forms.ToolStripSeparator menu_file_separator1;
         private System.Windows.Forms.ToolStripMenuItem menu_file_exit;
         private System.Windows.Forms.ToolStripMenuItem menu_other;
         private System.Windows.Forms.ToolStripMenuItem menu_other_options;
-        private System.Windows.Forms.ToolStripMenuItem menu_favorites;
         private System.Windows.Forms.Timer timer_listentime;
         private System.Windows.Forms.Label label_ytDownloading;
-        private System.Windows.Forms.ToolStripMenuItem menu_favorites_add;
-        private System.Windows.Forms.ToolStripSeparator menu_favorites_separator1;
+        private System.Windows.Forms.MenuStrip menu;
+        public System.Windows.Forms.ToolStripMenuItem menu_favorites;
+        private System.Windows.Forms.ToolStripMenuItem menu_other_about;
     }
 }
 

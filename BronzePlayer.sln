@@ -14,39 +14,24 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x32 = Debug|x32
-		Debug|x64 = Debug|x64
 		Release|x32 = Release|x32
-		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Debug|x32.ActiveCfg = Debug|x86
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Debug|x32.Build.0 = Debug|x86
-		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Debug|x64.ActiveCfg = Debug|x64
-		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Debug|x64.Build.0 = Debug|x64
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Release|x32.ActiveCfg = Release|x86
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Release|x32.Build.0 = Release|x86
-		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Release|x64.ActiveCfg = Release|x64
-		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Release|x64.Build.0 = Release|x64
 		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Debug|x32.ActiveCfg = Debug|x86
 		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Debug|x32.Build.0 = Debug|x86
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Debug|x64.Build.0 = Debug|Any CPU
 		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Release|x32.ActiveCfg = Release|x86
 		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Release|x32.Build.0 = Release|x86
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Release|x64.ActiveCfg = Release|Any CPU
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Release|x64.Build.0 = Release|Any CPU
 		{83F665E4-E37D-4682-96C6-E7810578657D}.Debug|x32.ActiveCfg = Debug|x86
 		{83F665E4-E37D-4682-96C6-E7810578657D}.Debug|x32.Build.0 = Debug|x86
-		{83F665E4-E37D-4682-96C6-E7810578657D}.Debug|x64.ActiveCfg = Debug|x86
 		{83F665E4-E37D-4682-96C6-E7810578657D}.Release|x32.ActiveCfg = Release|x86
 		{83F665E4-E37D-4682-96C6-E7810578657D}.Release|x32.Build.0 = Release|x86
-		{83F665E4-E37D-4682-96C6-E7810578657D}.Release|x64.ActiveCfg = Release|x86
 		{280D11FF-17D3-4715-9207-CC366F310E91}.Debug|x32.ActiveCfg = Debug|x86
-		{280D11FF-17D3-4715-9207-CC366F310E91}.Debug|x32.Build.0 = Debug|x86
-		{280D11FF-17D3-4715-9207-CC366F310E91}.Debug|x64.ActiveCfg = Debug|x86
 		{280D11FF-17D3-4715-9207-CC366F310E91}.Release|x32.ActiveCfg = Release|x86
 		{280D11FF-17D3-4715-9207-CC366F310E91}.Release|x32.Build.0 = Release|x86
-		{280D11FF-17D3-4715-9207-CC366F310E91}.Release|x64.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

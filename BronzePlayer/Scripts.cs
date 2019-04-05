@@ -567,7 +567,7 @@ public class Scripts
             {
                 if (state == State.Paused)
                 {
-                    if (audioFile.FileName != _file)
+                    if (audioFile.FileName != _file && !String.IsNullOrEmpty(_file))
                     {
                         audioFile = new AudioFileReader(_file);
                         if (state == State.Playing || state == State.Paused)
@@ -580,14 +580,19 @@ public class Scripts
                     }
                     else
                     {
+                        if (state == State.Playing || state == State.Paused)
+                        {
+                            Stop();
+                        }
                         audioFile.Position = position;
+                        jukebox.Init(audioFile);
                         jukebox.Play();
                         state = State.Playing;
                     }
                 }
                 else
                 {
-                    if (_file != "" && _file != null)
+                    if (!String.IsNullOrEmpty(_file))
                     {
                         audioFile = new AudioFileReader(_file);
                         if (state == State.Playing || state == State.Paused)
@@ -600,7 +605,7 @@ public class Scripts
                     }
                     else
                     {
-                        if (audioFile.FileName != "" && audioFile.FileName != null)
+                        if (!String.IsNullOrEmpty(audioFile.FileName))
                         {
                             if (state == State.Playing || state == State.Paused)
                             {

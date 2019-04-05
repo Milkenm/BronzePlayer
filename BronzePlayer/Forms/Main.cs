@@ -586,6 +586,13 @@ namespace BronzePlayer
                             ignoreSkip = true;
                             Play(Valor[actualIndex].ToString());
                         }
+                        else
+                        {
+                            if (Scripts.music.state == Scripts.Music.State.Paused || Scripts.music.state == Scripts.Music.State.Stopped)
+                            {
+                                Play(null);
+                            }
+                        }
                     }
                 }
                 else if (e.Button == MouseButtons.Right)

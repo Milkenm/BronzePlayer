@@ -1,14 +1,7 @@
 ﻿#region Using
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Installer;
 #endregion Using
 
 namespace BronzePlayer.Forms
@@ -44,10 +37,12 @@ namespace BronzePlayer.Forms
                 labelLink_authors.Links.Add(0, 7, "https://www.github.com/Milkenm");
                 labelLink_authors.LinkClicked += LabelLink_authors_LinkClicked;
 
-                labelLink_version.Text = Installer.Installer.version;
-                if (!String.IsNullOrEmpty(Installer.Installer.subVersion))
+                Main main = new Main(false, null);
+
+                labelLink_version.Text = main.version;
+                if (!String.IsNullOrEmpty(main.subVersion))
                 {
-                    labelLink_version.Text = labelLink_version.Text + "-" + Installer.Installer.subVersion;
+                    labelLink_version.Text = labelLink_version.Text + "-" + main.subVersion;
                 }
             }
             #region DE3UG

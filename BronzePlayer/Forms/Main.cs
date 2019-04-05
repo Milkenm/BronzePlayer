@@ -29,6 +29,8 @@ namespace BronzePlayer
         object listBox_item;
         int listBox_index;
 
+        public string version = "0.3.0", subVersion = "alpha";
+
         List<string> ID = new List<string>();
         List<string> Valor = new List<string>();
         List<string> PlayList = new List<string>();

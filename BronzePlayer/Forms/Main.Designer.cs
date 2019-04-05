@@ -80,7 +80,7 @@
 			// 
 			// trackbar_tempomusica
 			// 
-			this.trackbar_tempomusica.BackColor = System.Drawing.Color.Lavender;
+			this.trackbar_tempomusica.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
 			this.trackbar_tempomusica.Location = new System.Drawing.Point(-4, 185);
 			this.trackbar_tempomusica.Maximum = 0;
 			this.trackbar_tempomusica.Name = "trackbar_tempomusica";
@@ -91,7 +91,7 @@
 			// 
 			// panel_buttons
 			// 
-			this.panel_buttons.BackColor = System.Drawing.Color.Lavender;
+			this.panel_buttons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
 			this.panel_buttons.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panel_buttons.Controls.Add(this.button_play);
 			this.panel_buttons.Controls.Add(this.button_pause);
@@ -192,7 +192,7 @@
 			// 
 			// textbox_ytlink
 			// 
-			this.textbox_ytlink.BackColor = System.Drawing.Color.White;
+			this.textbox_ytlink.BackColor = System.Drawing.Color.Snow;
 			this.textbox_ytlink.Location = new System.Drawing.Point(2, 8);
 			this.textbox_ytlink.Name = "textbox_ytlink";
 			this.textbox_ytlink.Size = new System.Drawing.Size(336, 20);
@@ -211,7 +211,7 @@
 			// 
 			// trackbar_volume
 			// 
-			this.trackbar_volume.BackColor = System.Drawing.Color.Lavender;
+			this.trackbar_volume.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
 			this.trackbar_volume.LargeChange = 10;
 			this.trackbar_volume.Location = new System.Drawing.Point(312, 212);
 			this.trackbar_volume.Maximum = 100;
@@ -223,7 +223,8 @@
 			// checkbox_loop
 			// 
 			this.checkbox_loop.AutoSize = true;
-			this.checkbox_loop.BackColor = System.Drawing.Color.Lavender;
+			this.checkbox_loop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+			this.checkbox_loop.ForeColor = System.Drawing.SystemColors.Control;
 			this.checkbox_loop.Location = new System.Drawing.Point(228, 209);
 			this.checkbox_loop.Name = "checkbox_loop";
 			this.checkbox_loop.Size = new System.Drawing.Size(50, 17);
@@ -282,7 +283,8 @@
 			// label_ytDownloading
 			// 
 			this.label_ytDownloading.AutoSize = true;
-			this.label_ytDownloading.BackColor = System.Drawing.Color.Transparent;
+			this.label_ytDownloading.BackColor = System.Drawing.SystemColors.Control;
+			this.label_ytDownloading.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.label_ytDownloading.Location = new System.Drawing.Point(191, 29);
 			this.label_ytDownloading.Name = "label_ytDownloading";
 			this.label_ytDownloading.Size = new System.Drawing.Size(78, 13);
@@ -292,6 +294,7 @@
 			// 
 			// progressbar_ytDownloading
 			// 
+			this.progressbar_ytDownloading.ForeColor = System.Drawing.Color.DarkOrange;
 			this.progressbar_ytDownloading.Location = new System.Drawing.Point(2, 29);
 			this.progressbar_ytDownloading.MarqueeAnimationSpeed = 50;
 			this.progressbar_ytDownloading.Name = "progressbar_ytDownloading";
@@ -300,6 +303,7 @@
 			// 
 			// combobox_ytformat
 			// 
+			this.combobox_ytformat.BackColor = System.Drawing.Color.Snow;
 			this.combobox_ytformat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.combobox_ytformat.FormattingEnabled = true;
 			this.combobox_ytformat.Items.AddRange(new object[] {
@@ -312,6 +316,7 @@
 			// 
 			// button_ytdownload
 			// 
+			this.button_ytdownload.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.button_ytdownload.Location = new System.Drawing.Point(386, 7);
 			this.button_ytdownload.Name = "button_ytdownload";
 			this.button_ytdownload.Size = new System.Drawing.Size(73, 22);
@@ -322,6 +327,7 @@
 			// 
 			// menu
 			// 
+			this.menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.menu.BackgroundImage = global::BronzePlayer.Tralha.Background_Padron;
 			this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_file,
@@ -413,7 +419,7 @@
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.Lavender;
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.ClientSize = new System.Drawing.Size(462, 290);
 			this.Controls.Add(this.menu);

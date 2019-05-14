@@ -276,7 +276,7 @@
 			this.groupbox_ytdownloader.Controls.Add(this.textbox_ytlink);
 			this.groupbox_ytdownloader.Location = new System.Drawing.Point(1, 245);
 			this.groupbox_ytdownloader.Name = "groupbox_ytdownloader";
-			this.groupbox_ytdownloader.Size = new System.Drawing.Size(460, 44);
+			this.groupbox_ytdownloader.Size = new System.Drawing.Size(460, 45);
 			this.groupbox_ytdownloader.TabIndex = 10;
 			this.groupbox_ytdownloader.TabStop = false;
 			// 

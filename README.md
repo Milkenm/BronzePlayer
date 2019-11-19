@@ -1,9 +1,9 @@
 
 # Bronze Player
-![Release](https://img.shields.io/github/release-pre/Milkenm/BronzePlayer.svg?style=flat-square)
-![Downloads](https://img.shields.io/github/downloads/Milkenm/BronzePlayer/total.svg?style=flat-square)
-![Issues](https://img.shields.io/github/issues/Milkenm/BronzePlayer.svg?style=flat-square)
-![Size](https://img.shields.io/github/repo-size/Milkenm/BronzePlayer.svg?style=flat-square)
+![Release](https://img.shields.io/github/release-pre/Milkenm/BronzePlayer.svg?style=for-the-badge)
+![Downloads](https://img.shields.io/github/downloads/Milkenm/BronzePlayer/total.svg?style=for-the-badge)
+![Issues](https://img.shields.io/github/issues/Milkenm/BronzePlayer.svg?style=for-the-badge)
+![Size](https://img.shields.io/github/repo-size/Milkenm/BronzePlayer.svg?style=for-the-badge)
 
 ### What is Bronze Player?
 Bronze Player is a program I made for school projects and probably will continue making it. Why? Because I never found a good media player where I could create play lists, download from YT, bla bla bla...

@@ -1,11 +1,11 @@
 ﻿#region Using
+
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -18,11 +18,13 @@ using Microsoft.Win32;
 using NAudio.Wave; // [NuGet] NAudio
 
 using NYoutubeDL; // [NuGet] NYouTubeDL
+
 #endregion Using
 
 public class Scripts
 {
     #region Refers
+
     private static readonly string connection_string = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Milkenm\Bronze Player\BD.mdb";
     private static OleDbConnection database_connection = new OleDbConnection(connection_string);
 
@@ -38,46 +40,46 @@ public class Scripts
     public static SoundPlayer soundPlayer = new SoundPlayer();
     public static MediaElement mediaElement = new MediaElement();
     public static WaveOut jukebox = new WaveOut();
+
     #endregion Refers
 
     #region Codes
-    readonly string code_pelica = ":01:"; // '
-    readonly string code_virgula = ":02:"; // ,
-    readonly string code_exclamacao = ":03:"; // !
-    readonly string code_arroba = ":04:"; // @
-    readonly string code_cardinal = ":05:"; // #
-    readonly string code_asterisco = ":06:"; // *
-    readonly string code_libra = ":07:"; // £
-    readonly string code_euro = ":08:"; // €
-    readonly string code_dollar = ":09:"; // $
-    readonly string code_paragrafo = ":10:"; // §
-    readonly string code_percentagem = ":11:"; // %
-    readonly string code_e = ":12:"; // &
-    readonly string code_par_bico_e = ":13:"; // {
-    readonly string code_par_bico_d = ":14:"; // }
-    readonly string code_par_liso_e = ":15:"; // [
-    readonly string code_par_liso_d = ":16:"; // ]
-    readonly string code_par_curvo_e = ":17:"; // (
-    readonly string code_par_curvo_d = ":18:"; // )
-    readonly string code_igual = ":19:"; // =
-    readonly string code_seta_e = ":20:"; // <
-    readonly string code_seta_d = ":21:"; // >
-    readonly string code_setas_e = ":22:"; // «
-    readonly string code_setas_d = ":23:"; // »
-    readonly string code_ponto = ":24:"; // .
-    readonly string code_barra_e = ":25:"; // \
-    readonly string code_barra_d = ":26:"; // /
+
+    private readonly string code_pelica = ":01:"; // '
+    private readonly string code_virgula = ":02:"; // ,
+    private readonly string code_exclamacao = ":03:"; // !
+    private readonly string code_arroba = ":04:"; // @
+    private readonly string code_cardinal = ":05:"; // #
+    private readonly string code_asterisco = ":06:"; // *
+    private readonly string code_libra = ":07:"; // £
+    private readonly string code_euro = ":08:"; // €
+    private readonly string code_dollar = ":09:"; // $
+    private readonly string code_paragrafo = ":10:"; // §
+    private readonly string code_percentagem = ":11:"; // %
+    private readonly string code_e = ":12:"; // &
+    private readonly string code_par_bico_e = ":13:"; // {
+    private readonly string code_par_bico_d = ":14:"; // }
+    private readonly string code_par_liso_e = ":15:"; // [
+    private readonly string code_par_liso_d = ":16:"; // ]
+    private readonly string code_par_curvo_e = ":17:"; // (
+    private readonly string code_par_curvo_d = ":18:"; // )
+    private readonly string code_igual = ":19:"; // =
+    private readonly string code_seta_e = ":20:"; // <
+    private readonly string code_seta_d = ":21:"; // >
+    private readonly string code_setas_e = ":22:"; // «
+    private readonly string code_setas_d = ":23:"; // »
+    private readonly string code_ponto = ":24:"; // .
+    private readonly string code_barra_e = ":25:"; // \
+    private readonly string code_barra_d = ":26:"; // /
+
     #endregion Codes
-
-
-
-
 
     public class DataBase : Scripts
     {
-        
         #region Commands
+
         #region Insert(_query)
+
         public static void Insert(string _query)
         {
             try
@@ -86,22 +88,26 @@ public class Scripts
                 var cmd = new OleDbCommand(_query, database_connection);
                 cmd.ExecuteNonQuery();
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
+
             #endregion DE3UG
+
             finally
             {
                 database_connection.Close();
             }
         }
+
         #endregion Insert(_query)
 
-
-
         #region Select(_query)
+
         public static List<string> Select(string _query)
         {
             try
@@ -121,7 +127,9 @@ public class Scripts
                 }
                 return values;
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 if (config.debug == true)
@@ -130,17 +138,19 @@ public class Scripts
                 }
                 return null;
             }
+
             #endregion DE3UG
+
             finally
             {
                 database_connection.Close();
             }
         }
+
         #endregion Select(_query)
 
-
-
         #region Update(_query)
+
         public void Update(string _query)
         {
             try
@@ -150,7 +160,9 @@ public class Scripts
                 var cmd = new OleDbCommand(_query, database_connection);
                 cmd.ExecuteNonQuery();
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 if (config.debug == true)
@@ -158,17 +170,19 @@ public class Scripts
                     MessageBox.Show(exception.ToString(), "DE3UG - Scripts.DataBase.Update()", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
             #endregion DE3UG
+
             finally
             {
                 database_connection.Close();
             }
         }
+
         #endregion Update(_query)
 
-
-
         #region Delete(_query)
+
         public void Delete(string _query)
         {
             try
@@ -177,32 +191,39 @@ public class Scripts
                 var cmd = new OleDbCommand(_query, database_connection);
                 cmd.ExecuteNonQuery();
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
+
             #endregion DE3UG
+
             finally
             {
                 database_connection.Close();
             }
         }
+
         #endregion Delete(_query)
+
         #endregion Commands
 
         #region Login(_user, _password)
+
         public bool Login(string _user, string _password)
         {
             try
             {
                 database_connection.Open();
 
-                string sql = "SELECT COUNT(*) FROM Login_Funcionario WHERE Login = '" + SQLIFilter(_user) + "' AND Password = '" + SQLIFilter(_password) + "'";
+                var sql = "SELECT COUNT(*) FROM Login_Funcionario WHERE Login = '" + SQLIFilter(_user) + "' AND Password = '" + SQLIFilter(_password) + "'";
 
                 var cmd = new OleDbCommand(sql, database_connection);
 
-                int codigo_ID = Convert.ToInt32(cmd.ExecuteScalar().ToString());
+                var codigo_ID = Convert.ToInt32(cmd.ExecuteScalar().ToString());
 
                 if (codigo_ID > 0)
                 {
@@ -213,21 +234,27 @@ public class Scripts
                     return false;
                 }
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
                 return false;
             }
+
             #endregion DE3UG
+
             finally
             {
                 database_connection.Close();
             }
         }
+
         #endregion Login(_user, _password)
 
         #region SQLIFilter(_string)
+
         public string SQLIFilter(string _string)
         {
             try
@@ -237,22 +264,25 @@ public class Scripts
 
                 return _string;
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
                 return null;
             }
+
             #endregion DE3UG
         }
+
         #endregion SQLIFilter(_string)
     }
-
-
 
     public class FileConverters : Scripts
     {
         #region Mp3ToWav(_indir, _outdir)
+
         public void Mp3ToWav(string _indir, string _outdir)
         {
             try
@@ -261,38 +291,46 @@ public class Scripts
                 var wavestream = WaveFormatConversionStream.CreatePcmStream(mp3);
                 WaveFileWriter.CreateWaveFile(_outdir, wavestream);
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
+
             #endregion DE3UG
         }
+
         #endregion Mp3ToWav(_indir, _outdir)
     }
-
-
 
     public class Tools : Scripts
     {
         #region Random(_min, _max)
+
         public int Random(int _min, int _max)
         {
             try
             {
                 return random.Next(_min, _max);
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
                 return 0;
             }
+
             #endregion DE3UG
         }
-        #endregion
+
+        #endregion Random(_min, _max)
 
         #region YouTubeDownloader
+
         /// https://github.com/BrianAllred/NYoutubeDL/commit/2bd39515eebb8c5fb866687781165804e3b0579f
 
         public async Task YouTubeDownloader(string _link, string _extension, string _path)
@@ -302,11 +340,13 @@ public class Scripts
                 var youtubeDl = new YoutubeDL();
 
                 #region File Name
-                string name = Random(100000, 999999).ToString();
+
+                var name = Random(100000, 999999).ToString();
                 while (File.Exists(_path + @"\" + name + _extension))
                 {
                     name = Random(100000, 999999).ToString();
                 }
+
                 #endregion File Name
 
                 youtubeDl.Options.FilesystemOptions.Output = _path + @"\" + name + _extension;
@@ -319,16 +359,21 @@ public class Scripts
                 await youtubeDl.PrepareDownloadAsync();
                 await youtubeDl.DownloadAsync();
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
+
             #endregion DE3UG
         }
+
         #endregion YouTubeDownloader
 
         #region Exception
+
         public void Exception(Exception _exception)
         {
             try
@@ -340,18 +385,23 @@ public class Scripts
                 {
                     MessageBox.Show(_exception.Message + "\n\n\nMethod: " + frame.GetMethod().Name + "" + "\nLinha: " + frame.GetFileLineNumber(), "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } catch { }
+            }
+            catch { }
         }
+
         #endregion Exception
 
         #region Error
+
         public void Error(string _cause)
         {
             throw new Exception(_cause);
         }
+
         #endregion Error
 
         #region ReplaceWithCode
+
         public enum ReplaceType
         {
             Convert,
@@ -442,8 +492,6 @@ public class Scripts
                     regex = new Regex("[/]");
                     _string = regex.Replace(_string, code_barra_d);
 
-
-
                     return _string;
                 }
                 else
@@ -526,8 +574,6 @@ public class Scripts
                     regex = new Regex(code_barra_d);
                     _string = regex.Replace(_string, "/");
 
-
-
                     return _string;
                 }
             }
@@ -537,18 +583,19 @@ public class Scripts
                 return null;
             }
         }
+
         #endregion ReplaceWithCode
     }
-
-
 
     public class Music : Scripts
     {
         #region State / Vars
+
         public AudioFileReader audioFile;
-        long position;
+        private long position;
 
         public State state = State.Null;
+
         public enum State
         {
             Playing,
@@ -556,18 +603,18 @@ public class Scripts
             Stopped,
             Null,
         }
+
         #endregion State / Vars
 
-
-
         #region Play
+
         public void Play(string _file)
         {
             try
             {
                 if (state == State.Paused)
                 {
-                    if (audioFile.FileName != _file && !String.IsNullOrEmpty(_file))
+                    if (audioFile.FileName != _file && !string.IsNullOrEmpty(_file))
                     {
                         audioFile = new AudioFileReader(_file);
                         if (state == State.Playing || state == State.Paused)
@@ -592,7 +639,7 @@ public class Scripts
                 }
                 else
                 {
-                    if (!String.IsNullOrEmpty(_file))
+                    if (!string.IsNullOrEmpty(_file))
                     {
                         audioFile = new AudioFileReader(_file);
                         if (state == State.Playing || state == State.Paused)
@@ -605,7 +652,7 @@ public class Scripts
                     }
                     else
                     {
-                        if (!String.IsNullOrEmpty(audioFile.FileName))
+                        if (!string.IsNullOrEmpty(audioFile.FileName))
                         {
                             if (state == State.Playing || state == State.Paused)
                             {
@@ -619,16 +666,21 @@ public class Scripts
                     }
                 }
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
+
             #endregion DE3UG
         }
+
         #endregion Play
 
         #region Pause
+
         public void Pause()
         {
             try
@@ -640,16 +692,21 @@ public class Scripts
                     state = State.Paused;
                 }
             }
+
             #region DE3UG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
+
             #endregion DE3UG
         }
+
         #endregion Pause
 
         #region Stop
+
         public void Stop()
         {
             try
@@ -663,13 +720,17 @@ public class Scripts
                     state = State.Stopped;
                 }
             }
+
             #region DEBUG
+
             catch (Exception exception)
             {
                 tools.Exception(exception);
             }
-            #endregion DE3UG
+
+            #endregion DEBUG
         }
+
         #endregion Stop
     }
 }

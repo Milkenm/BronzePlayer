@@ -1,25 +1,25 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace BronzePlayer
 {
-	static class Program
-	{
-		[STAThread]
-		static void Main(string[] _args)
-		{
+    internal static class Program
+    {
+        [STAThread]
+        private static void Main(string[] _args)
+        {
             // => If the program was open by files:
             if (_args != null && _args.Length > 0)
             {
-                string fileName = _args[0];
+                var fileName = _args[0];
 
                 if (File.Exists(fileName)) // => If the file[s] exist[s]:
                 {
                     // => Does stuff ,_,
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    
+
                     Application.Run(new Main(true, fileName)); // => Shows the main form.
                 }
                 else // => If the file[s] do[es] not exist:
@@ -35,5 +35,5 @@ namespace BronzePlayer
                 Application.Run(new Main(false, null));
             }
         }
-	}
+    }
 }

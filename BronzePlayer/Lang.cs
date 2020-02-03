@@ -1,16 +1,21 @@
 ﻿#region Using
+
 using System;
 using System.Collections.Generic;
+
 #endregion Using
 
 public class Lang
 {
     #region Vars
+
     public List<string> langs = new List<string> { "pt_PT", "en_EN" };
     public List<string> langsLong = new List<string> { "Português", "English" };
+
     #endregion Vars
-    
+
     #region Get / Set
+
     public string lang_main__button_ytdownload { get; private set; }
     public string lang_main__checkbox_loop { get; private set; }
     public string lang_main__menu_file { get; private set; }
@@ -34,15 +39,15 @@ public class Lang
     public string lang_about__label_authors { get; set; }
     public string lang_about__label_contributors { get; set; }
     public string lang_about__label_version { get; set; }
+
     #endregion Get / Set
-
-
 
     public void Load(string _local)
     {
         try
         {
             #region pt-PT
+
             if (_local == "pt_PT")
             {
                 lang_main__button_ytdownload = "Download";
@@ -69,9 +74,11 @@ public class Lang
                 lang_about__label_contributors = "Contribuidores: ";
                 lang_about__label_version = "Versão: ";
             }
+
             #endregion pt-PT
 
             #region en-EN
+
             else if (_local == "en_EN")
             {
                 lang_main__button_ytdownload = "Download";
@@ -98,6 +105,7 @@ public class Lang
                 lang_about__label_contributors = "Contributors: ";
                 lang_about__label_version = "Version: ";
             }
+
             #endregion en-EN
         }
         catch (Exception exception)

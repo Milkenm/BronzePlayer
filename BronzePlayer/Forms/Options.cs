@@ -7,41 +7,44 @@ namespace BronzePlayer.Forms
     public partial class Options : Form
     {
         #region Refers
+
         // # ================================================================================================================================= #
-        Config config = new Config();
-        Lang lang = new Lang();
-        Main main = new Main(false, null);
+        private Config config = new Config();
+
+        private Lang lang = new Lang();
+        private Main main = new Main(false, null);
+
         // # ================================================================================================================================= #
+
         #endregion Refers
 
-
-
         #region Vars
+
         // # ================================================================================================================================= #
-        bool initialize = false;
+        private bool initialize = false;
+
         // # ================================================================================================================================= #
+
         #endregion Vars
 
-
-
         #region Functions
-        // # ================================================================================================================================= #
-        void LoadLangsCombobox()
-        {
-            int counter = 0;
 
-            foreach (string value in lang.langsLong)
+        // # ================================================================================================================================= #
+        private void LoadLangsCombobox()
+        {
+            var counter = 0;
+
+            foreach (var value in lang.langsLong)
             {
                 combobox_lang.Items.Add(value + " (" + lang.langs[counter] + ")");
                 counter = counter + 1;
             }
         }
-        // # ================================================================================================================================= #
-
-
 
         // # ================================================================================================================================= #
-        void LoadLang()
+
+        // # ================================================================================================================================= #
+        private void LoadLang()
         {
             config.Reload();
             Thread.Sleep(1000);
@@ -52,21 +55,15 @@ namespace BronzePlayer.Forms
             // => D3BUG
             checkbox_debug.Text = lang.lang_options__groupbox_debug_enabledebug;
 
-            this.Refresh();
+            Refresh();
         }
+
         // # ================================================================================================================================= #
+
         #endregion Functions
 
-
-
-
-
-
-
-
-
-
         #region Load / Unload
+
         // # ================================================================================================================================= #
         public Options()
         {
@@ -84,31 +81,32 @@ namespace BronzePlayer.Forms
             checkbox_debug.Checked = config.debug;
 
             LoadLangsCombobox();
-            foreach (object item in combobox_lang.Items)
+            foreach (var item in combobox_lang.Items)
             {
-                string item2 = item.ToString();
+                var item2 = item.ToString();
 
                 item2 = item2.Replace(" (", null);
                 item2 = item2.Replace(")", null);
 
-                foreach (string value in lang.langsLong)
+                foreach (var value in lang.langsLong)
                 {
                     item2 = item2.Replace(value, null);
                 }
 
                 if (item2 == config.lang)
                 {
-                    int index = combobox_lang.Items.IndexOf(item);
+                    var index = combobox_lang.Items.IndexOf(item);
                     combobox_lang.SelectedIndex = index;
                 }
             }
         }
+
         // # ================================================================================================================================= #
+
         #endregion Load / Unload
 
-
-
         #region Language
+
         // # ================================================================================================================================= #
         private void combobox_lang_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -118,12 +116,12 @@ namespace BronzePlayer.Forms
             }
             else
             {
-                string langCode = combobox_lang.Text;
+                var langCode = combobox_lang.Text;
 
                 langCode = langCode.Replace(" (", null);
                 langCode = langCode.Replace(")", null);
 
-                foreach (string value in lang.langsLong)
+                foreach (var value in lang.langsLong)
                 {
                     langCode = langCode.Replace(value, null);
                 }
@@ -137,7 +135,9 @@ namespace BronzePlayer.Forms
                 MessageBox.Show(lang.lang_options__msgbox_langchange_text, "Bronze Player", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
         // # ================================================================================================================================= #
+
         #endregion Language
 
         private void checkbox_debug_CheckedChanged(object sender, EventArgs e)
@@ -148,7 +148,6 @@ namespace BronzePlayer.Forms
 
         private void Options_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

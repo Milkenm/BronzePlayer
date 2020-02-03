@@ -5,11 +5,7 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BronzePlayer", "BronzePlayer\BronzePlayer.csproj", "{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingGround", "TestingGround\TestingGround.csproj", "{601FD7AD-78D8-4922-8FA1-F11F36AD941D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{83F665E4-E37D-4682-96C6-E7810578657D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkCheck", "FrameworkCheck\FrameworkCheck.csproj", "{280D11FF-17D3-4715-9207-CC366F310E91}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BronzePlayerInstaller", "BronzePlayerInstaller\BronzePlayerInstaller.vdproj", "{4186DECD-618D-4E1B-81EA-4CE4DCD0EE07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +17,9 @@ Global
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Debug|x32.Build.0 = Debug|x86
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Release|x32.ActiveCfg = Release|x86
 		{DE98A1E0-5676-4FFE-B70A-E6BC530FCF5A}.Release|x32.Build.0 = Release|x86
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Debug|x32.ActiveCfg = Debug|x86
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Debug|x32.Build.0 = Debug|x86
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Release|x32.ActiveCfg = Release|x86
-		{601FD7AD-78D8-4922-8FA1-F11F36AD941D}.Release|x32.Build.0 = Release|x86
-		{83F665E4-E37D-4682-96C6-E7810578657D}.Debug|x32.ActiveCfg = Debug|x86
-		{83F665E4-E37D-4682-96C6-E7810578657D}.Debug|x32.Build.0 = Debug|x86
-		{83F665E4-E37D-4682-96C6-E7810578657D}.Release|x32.ActiveCfg = Release|x86
-		{83F665E4-E37D-4682-96C6-E7810578657D}.Release|x32.Build.0 = Release|x86
-		{280D11FF-17D3-4715-9207-CC366F310E91}.Debug|x32.ActiveCfg = Debug|x86
-		{280D11FF-17D3-4715-9207-CC366F310E91}.Release|x32.ActiveCfg = Release|x86
-		{280D11FF-17D3-4715-9207-CC366F310E91}.Release|x32.Build.0 = Release|x86
+		{4186DECD-618D-4E1B-81EA-4CE4DCD0EE07}.Debug|x32.ActiveCfg = Debug
+		{4186DECD-618D-4E1B-81EA-4CE4DCD0EE07}.Release|x32.ActiveCfg = Release
+		{4186DECD-618D-4E1B-81EA-4CE4DCD0EE07}.Release|x32.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

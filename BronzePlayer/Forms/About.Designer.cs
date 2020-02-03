@@ -44,7 +44,7 @@
 			// pictureBox_logo
 			// 
 			this.pictureBox_logo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.pictureBox_logo.Image = global::BronzePlayer.Tralha.PNG_BronzePlayer2_2;
+			this.pictureBox_logo.Image = global::BronzePlayer.Properties.Resources.PNG_BronzePlayer2_2;
 			this.pictureBox_logo.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox_logo.Name = "pictureBox_logo";
 			this.pictureBox_logo.Size = new System.Drawing.Size(128, 128);

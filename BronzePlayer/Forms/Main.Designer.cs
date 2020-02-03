@@ -108,7 +108,7 @@
 			// button_play
 			// 
 			this.button_play.BackColor = System.Drawing.Color.White;
-			this.button_play.BackgroundImage = global::BronzePlayer.Tralha.Button_Play2;
+			this.button_play.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_Play2;
 			this.button_play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_play.Location = new System.Drawing.Point(0, 0);
 			this.button_play.Name = "button_play";
@@ -120,7 +120,7 @@
 			// button_pause
 			// 
 			this.button_pause.BackColor = System.Drawing.Color.White;
-			this.button_pause.BackgroundImage = global::BronzePlayer.Tralha.Button_Pause2;
+			this.button_pause.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_Pause2;
 			this.button_pause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_pause.Location = new System.Drawing.Point(31, 0);
 			this.button_pause.Name = "button_pause";
@@ -132,7 +132,7 @@
 			// button_stop
 			// 
 			this.button_stop.BackColor = System.Drawing.Color.White;
-			this.button_stop.BackgroundImage = global::BronzePlayer.Tralha.Button_Stop2;
+			this.button_stop.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_Stop2;
 			this.button_stop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_stop.Location = new System.Drawing.Point(62, 0);
 			this.button_stop.Name = "button_stop";
@@ -144,7 +144,7 @@
 			// button_previoustrack
 			// 
 			this.button_previoustrack.BackColor = System.Drawing.Color.White;
-			this.button_previoustrack.BackgroundImage = global::BronzePlayer.Tralha.Button_PreviousTrack2;
+			this.button_previoustrack.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_PreviousTrack2;
 			this.button_previoustrack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_previoustrack.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.button_previoustrack.Location = new System.Drawing.Point(99, 0);
@@ -157,7 +157,7 @@
 			// button_backward
 			// 
 			this.button_backward.BackColor = System.Drawing.Color.White;
-			this.button_backward.BackgroundImage = global::BronzePlayer.Tralha.Button_GoBack2;
+			this.button_backward.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_GoBack2;
 			this.button_backward.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_backward.Location = new System.Drawing.Point(130, 0);
 			this.button_backward.Name = "button_backward";
@@ -169,7 +169,7 @@
 			// button_nexttrack
 			// 
 			this.button_nexttrack.BackColor = System.Drawing.Color.White;
-			this.button_nexttrack.BackgroundImage = global::BronzePlayer.Tralha.Button_NextTrack2;
+			this.button_nexttrack.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_NextTrack2;
 			this.button_nexttrack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_nexttrack.Location = new System.Drawing.Point(192, 0);
 			this.button_nexttrack.Name = "button_nexttrack";
@@ -181,7 +181,7 @@
 			// button_forward
 			// 
 			this.button_forward.BackColor = System.Drawing.Color.White;
-			this.button_forward.BackgroundImage = global::BronzePlayer.Tralha.Button_GoForward2;
+			this.button_forward.BackgroundImage = global::BronzePlayer.Properties.Resources.Button_GoForward2;
 			this.button_forward.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.button_forward.Location = new System.Drawing.Point(161, 0);
 			this.button_forward.Name = "button_forward";
@@ -328,7 +328,7 @@
 			// menu
 			// 
 			this.menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.menu.BackgroundImage = global::BronzePlayer.Tralha.Background_Padron;
+			this.menu.BackgroundImage = global::BronzePlayer.Properties.Resources.Background_Padron;
 			this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_file,
             this.menu_favorites,

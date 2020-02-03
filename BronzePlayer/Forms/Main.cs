@@ -1237,7 +1237,7 @@ namespace BronzePlayer
 
         // # ================================================================================================================================= #
         [DllImport("user32.dll")]
-        private static IntPtr SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
         private const int CB_SETITEMHEIGHT = 0x153;
 
